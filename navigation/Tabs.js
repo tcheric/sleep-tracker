@@ -3,6 +3,7 @@ import CalendarScreen from '../screens/CalendarScreen'
 import InputScreen from '../screens/InputScreen'
 import GraphScreen from '../screens/GraphScreen'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { View } from "react-native";
 
 const Tab = createBottomTabNavigator()
 
@@ -12,32 +13,21 @@ const Tabs = () => {
       screenOptions={({ route }) => ({
         tabBarStyle: {
           position: 'absolute',
-          bottom: 10,
-          left: 50,
-          right: 50,
+          bottom: 15,
+          left: 55,
+          right: 55,
           backgroundColor: 'rgb(30,30,30)',
-          height: 60,
+          height: 55,
           borderTopWidth: 0,
-          borderRadius: 0,
-        },
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
-          if (route.name === 'Input') {
-            iconName = focused
-              ? 'add'
-              : 'add-outline';
-          } else if (route.name === 'Calendar') {
-            iconName = 'calendar-outline';
-          } else if (route.name === 'Graph') {
-            iconName = 'stats-chart-outline';
-          }
-          return <Ionicons name={iconName} size={size} color={color} />;
+          borderRadius: 8,
         },
         tabBarShowLabel: false,
         tabBarActiveTintColor: 'red',
         tabBarInactiveTintColor: 'rgb(200,200,200)', 
         headerTitleAlign: 'center',
+        initialRouteName: "Graph"
       })}
+      initialRouteName="Input"
     >
       <Tab.Screen name="Calendar" component={CalendarScreen} 
         options={{
@@ -50,11 +40,34 @@ const Tabs = () => {
             fontSize: 17,
             color: 'white',
           },
+          tabBarIcon: ({color}) => (
+            <Ionicons name='calendar-outline' size={32} color={color} />
+          ),
         }}
       />
       <Tab.Screen name="Input" component={InputScreen}
         options={{
           headerShown: false,
+          tabBarIcon: ({color, focused}) => (
+            <View style={{
+              borderColor: focused ? "red" : "rgb(180,180,180)", 
+              borderWidth: 2,
+              borderRadius: 28,
+              marginTop: -40,
+              width: 56,
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "rgb(16,16,16)", 
+            }} >
+              <Ionicons name='add' size={50} color={color} 
+                style={{
+                  marginHorizontal: -3,
+                  marginVertical: -1,
+                  paddingLeft: 2,
+                }} 
+              />
+            </View>
+          ),
         }}
       />
       <Tab.Screen name="Graph" component={GraphScreen}
@@ -68,6 +81,9 @@ const Tabs = () => {
             fontSize: 17,
             color: 'white',
           },
+          tabBarIcon: ({color}) => (
+            <Ionicons name='stats-chart-outline' size={32} color={color} />
+          ),
         }}
       />
     </Tab.Navigator>

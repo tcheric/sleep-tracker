@@ -16,16 +16,15 @@ const InputScreen = ({navigation}) => {
         name="Start"
         component={InputStart}
         options={{
-          title: "START",
+          title: "STARTED SLEEP",
           headerStyle: {
-            backgroundColor: 'rgb(20,20,20)',
+            backgroundColor: 'rgb(25,25,25)',
             height: 100,
           },
           headerTitleStyle: {
             fontSize: 16,
             color: 'white',
           },
-          headerLeft: () => {return null},
           headerRight: () => (
             <TouchableOpacity  onPress={() => {navigation.navigate("Input", {screen: "End"})}} style={styles.icons}>
               <Ionicons name="chevron-forward-outline" 
@@ -40,9 +39,9 @@ const InputScreen = ({navigation}) => {
         name="End"
         component={InputEnd}
         options={{
-          title: "END",
+          title: "ENDED SLEEP",
           headerStyle: {
-            backgroundColor: 'rgb(20,20,20)',
+            backgroundColor: 'rgb(25,25,25)',
             height: 100,
           },
           headerTitleStyle: {
@@ -52,6 +51,14 @@ const InputScreen = ({navigation}) => {
           headerLeft: () => (
             <TouchableOpacity  onPress={() => {navigation.navigate("Input", {screen: "Start"})}} style={styles.icons}>
               <Ionicons name="chevron-back-outline" 
+                size={23} 
+                color="white" 
+              />
+            </TouchableOpacity >
+          ),
+          headerRight: () => (
+            <TouchableOpacity  onPress={() => alert("Save")}>
+              <Ionicons name="checkmark-outline" 
                 size={23} 
                 color="white" 
               />
@@ -74,7 +81,6 @@ const styles = StyleSheet.create({
     marginHorizontal: -5,
     // backgroundColor: 'red',
   },
-
 });
 
 export default InputScreen
