@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationContainer } from "@react-navigation/native"
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import InputStart from "./InputStart";
@@ -22,7 +21,7 @@ const InputScreen = ({navigation}) => {
             height: 100,
           },
           headerTitleStyle: {
-            fontSize: 16,
+            fontSize: 18,
             color: 'white',
           },
           headerRight: () => (
@@ -45,7 +44,7 @@ const InputScreen = ({navigation}) => {
             height: 100,
           },
           headerTitleStyle: {
-            fontSize: 16,
+            fontSize: 18,
             color: 'white',
           },
           headerLeft: () => (
