@@ -36,23 +36,40 @@ const Tabs = () => {
         tabBarShowLabel: false,
         tabBarActiveTintColor: 'red',
         tabBarInactiveTintColor: 'rgb(200,200,200)', 
+        headerTitleAlign: 'center',
       })}
     >
       <Tab.Screen name="Calendar" component={CalendarScreen} 
         options={{
           title: "CALENDAR",
-          // headerStyle: {
-          //   backgroundColor: 'rgb(20,20,20)',
-          // },
+          headerStyle: {
+            backgroundColor: 'rgb(20,20,20)',
+            shadowColor: "rgba(0,0,0,0)",
+          },
           headerTitleStyle: {
-            fontSize: 16,
-            display: "flex",
-            justifyContent: "space-between"
+            fontSize: 17,
+            color: 'white',
           },
         }}
       />
-      <Tab.Screen name="Input" component={InputScreen}/>
-      <Tab.Screen name="Graph" component={GraphScreen} />
+      <Tab.Screen name="Input" component={InputScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Tab.Screen name="Graph" component={GraphScreen}
+        options={{
+          title: "GRAPH",
+          headerStyle: {
+            backgroundColor: 'rgb(20,20,20)',
+            shadowColor: "rgba(0,0,0,0)",
+          },
+          headerTitleStyle: {
+            fontSize: 17,
+            color: 'white',
+          },
+        }}
+      />
     </Tab.Navigator>
   )
 }
