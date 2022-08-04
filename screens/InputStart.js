@@ -7,6 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const InputStart = () => {
   const [dayOffset, setDayOffset] = useState(0)
+  const [circleVisible, setCircleVisible] = useState(0)
   // const [touchPos, setTouchPos] = useState(0)
 
   const getSelectedDate=()=>{
@@ -42,26 +43,17 @@ const InputStart = () => {
     })
   ).current;
 
-  const circleRef = useRef(null);
-
   const onHourPress = ({ hour }) => {
     
     // sets circle visible and moves to touch location
-    console.log("Clicked")
-    console.log(circleRef.current)
-    // circleRef.current.style.opacity = 1
-    // {{
-    //   transform: [{ translateX: pan.x }, { translateY: pan.y }],
-    //   position: "absolute",
-    //   top: "10%",
-    //   left: "10%",
-    //   marginLeft: -18,
-    //   marginTop: -18,
-    //   padding: 18,
-    //   borderRadius: 18,
-    //   opacity: 0,
-    // }}
+    setCircleVisible(1)
+    // CANT DRAG IT ANYMORE
+  }
 
+  const overwriteStyle = {
+    opacity: circleVisible,
+    top: "6.7%",
+    left: "75%",
   }
 
   return (
@@ -96,8 +88,7 @@ const InputStart = () => {
       </View>
 
       <View style={styles.innerClockContainer}> 
-          {/* <Animated.View style={styles.twelve}> */}
-          <Animated.View style={{
+          <Animated.View style={[{
               transform: [{ translateX: pan.x }, { translateY: pan.y }],
               position: "absolute",
               top: "10%",
@@ -106,16 +97,18 @@ const InputStart = () => {
               marginTop: -18,
               padding: 18,
               borderRadius: 18,
+              backgroundColor: "blue",
+              zIndex: 2,
               opacity: 0,
-            }}
+            }, overwriteStyle]}
             {...panResponder.panHandlers}
-            ref={circleRef}>
+            >
             <View style={styles.hour}></View>
           </Animated.View>
           <TouchableOpacity style={styles.twelve}>
             <View style={styles.hour}></View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.one} onPress={onHourPress(1)}>
+          <TouchableOpacity style={styles.one} onPress={() => onHourPress(1)}>
             <View style={styles.hour}></View>
           </TouchableOpacity>
           <TouchableOpacity style={styles.two}>
