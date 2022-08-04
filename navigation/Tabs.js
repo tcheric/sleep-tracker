@@ -13,7 +13,7 @@ const Tabs = () => {
       screenOptions={({ route }) => ({
         tabBarStyle: {
           position: 'absolute',
-          bottom: 15,
+          bottom: 24,
           left: 55,
           right: 55,
           backgroundColor: 'rgb(30,30,30)',
