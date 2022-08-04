@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import React, { useRef, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Animated, PanResponder } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
@@ -7,19 +7,67 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const InputStart = () => {
   const [dayOffset, setDayOffset] = useState(0)
-  const [touchPos, setTouchPos] = useState(0)
+  // const [touchPos, setTouchPos] = useState(0)
 
   const getSelectedDate=()=>{
     var date = new Date(Date.now() - 86400000 * dayOffset).getDate()
     var month = new Date(Date.now() - 86400000 * dayOffset).getMonth() + 1;
     var dateString = (date < 10) ? ("0" + date.toString()) : date.toString()
     var monthString = (month < 10) ? ("0" + month.toString()) : month.toString()
+    return dateString + '/' + monthString;
+  }
+
+  //  Pan responder for touch tracking
+  const pan = useRef(new Animated.ValueXY()).current;
+  const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        console.log("ON MOVE")
+        pan.setOffset({
+          x: pan.x._value,
+          y: pan.y._value
+        });
+      },
+      onPanResponderMove: Animated.event(
+        [
+          null,
+          { dx: pan.x, dy: pan.y }
+        ],
+        {useNativeDriver: false}
+      ),
+      onPanResponderRelease: () => {
+        pan.flattenOffset();
+      }
+    })
+  ).current;
+
+  const circleRef = useRef(null);
+
+  const onHourPress = ({ hour }) => {
     
-    return dateString + '/' + monthString;//format: dd-mm-yyyy;
+    // sets circle visible and moves to touch location
+    console.log("Clicked")
+    console.log(circleRef.current)
+    // circleRef.current.style.opacity = 1
+    // {{
+    //   transform: [{ translateX: pan.x }, { translateY: pan.y }],
+    //   position: "absolute",
+    //   top: "10%",
+    //   left: "10%",
+    //   marginLeft: -18,
+    //   marginTop: -18,
+    //   padding: 18,
+    //   borderRadius: 18,
+    //   opacity: 0,
+    // }}
+
   }
 
   return (
-    <View style={styles.container}>
+    <Animated.View
+      style={styles.container}
+      >
       
       <View style={styles.dateContainer}>
         <TouchableOpacity 
@@ -28,12 +76,10 @@ const InputStart = () => {
             if (dayOffset <= 6) {
               setDayOffset(dayOffset + 1)
             }
-          }}
-        >
+          }}>
           <Ionicons name="chevron-back-outline" 
             size={20} 
-            color={(dayOffset > 6) ? "rgb(50,50,50)" : "red"}
-          />
+            color={(dayOffset > 6) ? "rgb(50,50,50)" : "red"}/>
         </TouchableOpacity >
         <Text style={styles.date}>{getSelectedDate()}</Text>
         <TouchableOpacity 
@@ -42,20 +88,34 @@ const InputStart = () => {
             if (dayOffset !== 0) {
               setDayOffset(dayOffset - 1)
             }
-          }}
-        >
+          }}>
           <Ionicons name="chevron-forward-outline" 
             size={20} 
-            color={(dayOffset === 0) ? "rgb(150,150,150)" : "red"}
-          />
+            color={(dayOffset === 0) ? "rgb(150,150,150)" : "red"}/>
         </TouchableOpacity >
       </View>
 
-      <View style={styles.outerContainer} onTouchStart={(e) => {setTouchPos(e.nativeEvent.pageX)}} > 
+      <View style={styles.innerClockContainer}> 
+          {/* <Animated.View style={styles.twelve}> */}
+          <Animated.View style={{
+              transform: [{ translateX: pan.x }, { translateY: pan.y }],
+              position: "absolute",
+              top: "10%",
+              left: "10%",
+              marginLeft: -18,
+              marginTop: -18,
+              padding: 18,
+              borderRadius: 18,
+              opacity: 0,
+            }}
+            {...panResponder.panHandlers}
+            ref={circleRef}>
+            <View style={styles.hour}></View>
+          </Animated.View>
           <TouchableOpacity style={styles.twelve}>
             <View style={styles.hour}></View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.one}>
+          <TouchableOpacity style={styles.one} onPress={onHourPress(1)}>
             <View style={styles.hour}></View>
           </TouchableOpacity>
           <TouchableOpacity style={styles.two}>
@@ -90,11 +150,11 @@ const InputStart = () => {
           </TouchableOpacity>
 
         <Text style={styles.text}>AM / PM</Text>
-        <Text style={styles.text}>{touchPos}</Text>
+        {/* <Text style={styles.text}>{touchPos}</Text> */}
       </View>
 
 
-    </View>
+    </Animated.View>
   )
 }
 
@@ -104,6 +164,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     alignItems: 'center',
     justifyContent: 'center',
+    
   },
   text: {
     color: 'red',
@@ -133,7 +194,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  outerContainer: {
+  innerClockContainer: {
     top: -40,
     // backgroundColor:"grey",
     width: "50%",
