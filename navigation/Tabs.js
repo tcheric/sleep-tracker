@@ -3,7 +3,7 @@ import CalendarScreen from '../screens/CalendarScreen'
 import InputScreen from '../screens/InputScreen'
 import GraphScreen from '../screens/GraphScreen'
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 
 const Tab = createBottomTabNavigator()
 
@@ -33,7 +33,7 @@ const Tabs = () => {
         options={{
           title: "CALENDAR",
           headerStyle: {
-            backgroundColor: 'rgb(20,20,20)',
+            backgroundColor: 'rgb(25,25,25)',
             shadowColor: "rgba(0,0,0,0)",
           },
           headerTitleStyle: {
@@ -49,23 +49,20 @@ const Tabs = () => {
         options={{
           headerShown: false,
           tabBarIcon: ({color, focused}) => (
-            <View style={{
-              borderColor: focused ? "red" : "rgb(180,180,180)", 
-              borderWidth: 2,
-              borderRadius: 28,
-              marginTop: -40,
-              width: 56,
-              justifyContent: "center",
-              alignItems: "center",
-              backgroundColor: "rgb(16,16,16)", 
-            }} >
-              <Ionicons name='add' size={50} color={color} 
-                style={{
-                  marginHorizontal: -3,
-                  marginVertical: -1,
-                  paddingLeft: 2,
-                }} 
-              />
+            <View style={styles.plusIconWrapper}>
+              <View style={{
+                borderColor: focused ? "red" : "rgb(180,180,180)", 
+                borderWidth: 2,
+                borderRadius: 28,
+                width: 56,
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "rgb(16,16,16)", 
+              }} >
+                <Ionicons name='add' size={50} color={color} 
+                  style={styles.plusIcon}
+                />
+              </View>
             </View>
           ),
         }}
@@ -74,7 +71,7 @@ const Tabs = () => {
         options={{
           title: "GRAPH",
           headerStyle: {
-            backgroundColor: 'rgb(20,20,20)',
+            backgroundColor: 'rgb(25,25,25)',
             shadowColor: "rgba(0,0,0,0)",
           },
           headerTitleStyle: {
@@ -89,5 +86,25 @@ const Tabs = () => {
     </Tab.Navigator>
   )
 }
+
+const styles = StyleSheet.create({
+  plusIcon: {
+    marginHorizontal: -3,
+    marginVertical: -1,
+    paddingLeft: 2,
+  },
+  plusIconWrapper: {
+    borderColor: "black", 
+    // borderColor: "white", 
+    borderWidth: 6,
+    borderRadius: 33,
+    position: "absolute",
+    bottom: 22,
+    width: 66,
+    height: 66,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
 
 export default Tabs

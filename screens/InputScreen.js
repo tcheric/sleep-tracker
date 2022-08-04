@@ -15,7 +15,7 @@ const InputScreen = ({navigation}) => {
         name="Start"
         component={InputStart}
         options={{
-          title: "STARTED SLEEP",
+          title: "START SLEEP TIME",
           headerStyle: {
             backgroundColor: 'rgb(25,25,25)',
             height: 100,
@@ -38,7 +38,7 @@ const InputScreen = ({navigation}) => {
         name="End"
         component={InputEnd}
         options={{
-          title: "ENDED SLEEP",
+          title: "END SLEEP TIME",
           headerStyle: {
             backgroundColor: 'rgb(25,25,25)',
             height: 100,
@@ -56,7 +56,7 @@ const InputScreen = ({navigation}) => {
             </TouchableOpacity >
           ),
           headerRight: () => (
-            <TouchableOpacity  onPress={() => alert("Save")}>
+            <TouchableOpacity  onPress={() => alert("Save")} style={styles.icons}>
               <Ionicons name="checkmark-outline" 
                 size={23} 
                 color="white" 
