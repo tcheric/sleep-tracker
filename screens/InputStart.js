@@ -19,41 +19,370 @@ const InputStart = () => {
   }
 
   //  Pan responder for touch tracking
-  const pan = useRef(new Animated.ValueXY()).current;
-  const panResponder = useRef(
+  var prObj = { "pans": {}, "panResponders" : {} }
+  for (var i = 0; i < 12; i++) { 
+    prObj["pans"][i] = useRef(new Animated.ValueXY()).current;
+  }
+
+
+  var pr0 = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
         console.log("ON MOVE")
-        pan.setOffset({
-          x: pan.x._value,
-          y: pan.y._value
+        prObj["pans"][0].setOffset({
+          x: prObj["pans"][0].x._value,
+          y: prObj["pans"][0].y._value
         });
       },
       onPanResponderMove: Animated.event(
         [
           null,
-          { dx: pan.x, dy: pan.y }
+          { dx: prObj["pans"][0].x, dy: prObj["pans"][0].y }
         ],
         {useNativeDriver: false}
       ),
-      onPanResponderRelease: () => {
-        pan.flattenOffset();
+      onPanResponderRelease: (e, gesture) => {
+        prObj["pans"][0].flattenOffset();
+        if (gesture.moveY > 627 && gesture.moveY < 680) {
+          console.log("DROPPED")
+        } else  {
+          prObj["pans"][0].x.setValue(0)
+          prObj["pans"][0].y.setValue(0)
+        }
       }
     })
-  ).current;
+  ).current
+  
+  var pr1 = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        console.log("ON MOVE")
+        prObj["pans"][1].setOffset({
+          x: prObj["pans"][1].x._value,
+          y: prObj["pans"][1].y._value
+        });
+      },
+      onPanResponderMove: Animated.event(
+        [
+          null,
+          { dx: prObj["pans"][1].x, dy: prObj["pans"][1].y }
+        ],
+        {useNativeDriver: false}
+      ),
+      onPanResponderRelease: (e, gesture) => {
+        prObj["pans"][1].flattenOffset();
+        if (gesture.moveY > 627 && gesture.moveY < 680) {
+          console.log("DROPPED")
+        } else  {
+          prObj["pans"][1].x.setValue(0)
+          prObj["pans"][1].y.setValue(0)
+        }
+      }
+    })
+  ).current
 
-  const onHourPress = ({ hour }) => {
-    
-    // sets circle visible and moves to touch location
-    setCircleVisible(1)
-    // CANT DRAG IT ANYMORE
-  }
+  var pr2 = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        console.log("ON MOVE")
+        prObj["pans"][2].setOffset({
+          x: prObj["pans"][2].x._value,
+          y: prObj["pans"][2].y._value
+        });
+      },
+      onPanResponderMove: Animated.event(
+        [
+          null,
+          { dx: prObj["pans"][2].x, dy: prObj["pans"][2].y }
+        ],
+        {useNativeDriver: false}
+      ),
+      onPanResponderRelease: (e, gesture) => {
+        prObj["pans"][2].flattenOffset();
+        if (gesture.moveY > 627 && gesture.moveY < 680) {
+          console.log("DROPPED")
+        } else  {
+          prObj["pans"][2].x.setValue(0)
+          prObj["pans"][2].y.setValue(0)
+        }
+      }
+    })
+  ).current
 
+  var pr3 = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        console.log("ON MOVE")
+        prObj["pans"][3].setOffset({
+          x: prObj["pans"][3].x._value,
+          y: prObj["pans"][3].y._value
+        });
+      },
+      onPanResponderMove: Animated.event(
+        [
+          null,
+          { dx: prObj["pans"][3].x, dy: prObj["pans"][3].y }
+        ],
+        {useNativeDriver: false}
+      ),
+      onPanResponderRelease: (e, gesture) => {
+        prObj["pans"][3].flattenOffset();
+        if (gesture.moveY > 627 && gesture.moveY < 680) {
+          console.log("DROPPED")
+        } else  {
+          prObj["pans"][3].x.setValue(0)
+          prObj["pans"][3].y.setValue(0)
+        }
+      }
+    })
+  ).current
+
+  var pr4 = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        console.log("ON MOVE")
+        prObj["pans"][4].setOffset({
+          x: prObj["pans"][4].x._value,
+          y: prObj["pans"][4].y._value
+        });
+      },
+      onPanResponderMove: Animated.event(
+        [
+          null,
+          { dx: prObj["pans"][4].x, dy: prObj["pans"][4].y }
+        ],
+        {useNativeDriver: false}
+      ),
+      onPanResponderRelease: (e, gesture) => {
+        prObj["pans"][4].flattenOffset();
+        if (gesture.moveY > 627 && gesture.moveY < 680) {
+          console.log("DROPPED")
+        } else  {
+          prObj["pans"][4].x.setValue(0)
+          prObj["pans"][4].y.setValue(0)
+        }
+      }
+    })
+  ).current
+
+  var pr5 = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        console.log("ON MOVE")
+        prObj["pans"][5].setOffset({
+          x: prObj["pans"][5].x._value,
+          y: prObj["pans"][5].y._value
+        });
+      },
+      onPanResponderMove: Animated.event(
+        [
+          null,
+          { dx: prObj["pans"][5].x, dy: prObj["pans"][5].y }
+        ],
+        {useNativeDriver: false}
+      ),
+      onPanResponderRelease: (e, gesture) => {
+        prObj["pans"][5].flattenOffset();
+        if (gesture.moveY > 627 && gesture.moveY < 680) {
+          console.log("DROPPED")
+        } else  {
+          prObj["pans"][5].x.setValue(0)
+          prObj["pans"][5].y.setValue(0)
+        }
+      }
+    })
+  ).current
+
+  var pr6 = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        console.log("ON MOVE")
+        prObj["pans"][6].setOffset({
+          x: prObj["pans"][6].x._value,
+          y: prObj["pans"][6].y._value
+        });
+      },
+      onPanResponderMove: Animated.event(
+        [
+          null,
+          { dx: prObj["pans"][6].x, dy: prObj["pans"][6].y }
+        ],
+        {useNativeDriver: false}
+      ),
+      onPanResponderRelease: (e, gesture) => {
+        prObj["pans"][6].flattenOffset();
+        if (gesture.moveY > 627 && gesture.moveY < 680) {
+          console.log("DROPPED")
+        } else  {
+          prObj["pans"][6].x.setValue(0)
+          prObj["pans"][6].y.setValue(0)
+        }
+      }
+    })
+  ).current
+
+  var pr7 = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        console.log("ON MOVE")
+        prObj["pans"][7].setOffset({
+          x: prObj["pans"][7].x._value,
+          y: prObj["pans"][7].y._value
+        });
+      },
+      onPanResponderMove: Animated.event(
+        [
+          null,
+          { dx: prObj["pans"][7].x, dy: prObj["pans"][7].y }
+        ],
+        {useNativeDriver: false}
+      ),
+      onPanResponderRelease: (e, gesture) => {
+        prObj["pans"][7].flattenOffset();
+        if (gesture.moveY > 627 && gesture.moveY < 680) {
+          console.log("DROPPED")
+        } else  {
+          prObj["pans"][7].x.setValue(0)
+          prObj["pans"][7].y.setValue(0)
+        }
+      }
+    })
+  ).current
+
+  var pr8 = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        console.log("ON MOVE")
+        prObj["pans"][8].setOffset({
+          x: prObj["pans"][8].x._value,
+          y: prObj["pans"][8].y._value
+        });
+      },
+      onPanResponderMove: Animated.event(
+        [
+          null,
+          { dx: prObj["pans"][8].x, dy: prObj["pans"][8].y }
+        ],
+        {useNativeDriver: false}
+      ),
+      onPanResponderRelease: (e, gesture) => {
+        prObj["pans"][8].flattenOffset();
+        if (gesture.moveY > 627 && gesture.moveY < 680) {
+          console.log("DROPPED")
+        } else  {
+          prObj["pans"][8].x.setValue(0)
+          prObj["pans"][8].y.setValue(0)
+        }
+      }
+    })
+  ).current
+
+  var pr9 = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        console.log("10 moved")
+        prObj["pans"][9].setOffset({
+          x: prObj["pans"][9].x._value,
+          y: prObj["pans"][9].y._value
+        });
+      },
+      onPanResponderMove: Animated.event(
+        [
+          null,
+          { dx: prObj["pans"][9].x, dy: prObj["pans"][9].y }
+        ],
+        {useNativeDriver: false}
+      ),
+      onPanResponderRelease: (e, gesture) => {
+        prObj["pans"][9].flattenOffset();
+        if (gesture.moveY > 627 && gesture.moveY < 680) {
+          console.log("DROPPED")
+        } else  {
+          prObj["pans"][9].x.setValue(0)
+          prObj["pans"][9].y.setValue(0)
+        }
+      }
+    })
+  ).current
+
+  var pr10 = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        console.log("11 moved")
+        restart()
+        prObj["pans"][10].setOffset({
+          x: prObj["pans"][10].x._value,
+          y: prObj["pans"][10].y._value
+        });
+      },
+      onPanResponderMove: Animated.event(
+        [
+          null,
+          { dx: prObj["pans"][10].x, dy: prObj["pans"][10].y }
+        ],
+        {useNativeDriver: false}
+      ),
+      onPanResponderRelease: (e, gesture) => {
+        prObj["pans"][10].flattenOffset();
+        if (gesture.moveY > 627 && gesture.moveY < 680) {
+          console.log("DROPPED")
+        } else  {
+          prObj["pans"][10].x.setValue(0)
+          prObj["pans"][10].y.setValue(0)
+        }
+      }
+    })
+  ).current
+
+  var pr11 = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        console.log("ON MOVE")
+        prObj["pans"][11].setOffset({
+          x: prObj["pans"][11].x._value,
+          y: prObj["pans"][11].y._value
+        });
+      },
+      onPanResponderMove: Animated.event(
+        [
+          null,
+          { dx: prObj["pans"][11].x, dy: prObj["pans"][11].y }
+        ],
+        {useNativeDriver: false}
+      ),
+      onPanResponderRelease: (e, gesture) => {
+        // prObj["pans"][11].flattenOffset();
+        prObj["pans"][11].flattenOffset();
+        if (gesture.moveY > 627 && gesture.moveY < 680) {
+          console.log("DROPPED")
+        } else  {
+          prObj["pans"][11].x.setValue(0)
+          prObj["pans"][11].y.setValue(0)
+        }
+      }
+    })
+  ).current
+  
   const overwriteStyle = {
-    opacity: circleVisible,
-    top: "6.7%",
-    left: "75%",
+    position: "absolute",
+    marginLeft: -18,
+    marginTop: -18,
+    padding: 18,
+    borderRadius: 18,
+    // backgroundColor: "blue",
+    zIndex: 2,
   }
 
   return (
@@ -88,64 +417,146 @@ const InputStart = () => {
       </View>
 
       <View style={styles.innerClockContainer}> 
-          <Animated.View style={[{
-              transform: [{ translateX: pan.x }, { translateY: pan.y }],
-              position: "absolute",
-              top: "10%",
-              left: "10%",
-              marginLeft: -18,
-              marginTop: -18,
-              padding: 18,
-              borderRadius: 18,
-              backgroundColor: "blue",
-              zIndex: 2,
-              opacity: 0,
-            }, overwriteStyle]}
-            {...panResponder.panHandlers}
-            >
-            <View style={styles.hour}></View>
-          </Animated.View>
-          <TouchableOpacity style={styles.twelve}>
-            <View style={styles.hour}></View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.one} onPress={() => onHourPress(1)}>
-            <View style={styles.hour}></View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.two}>
-            <View style={styles.hour}></View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.three}>
-            <View style={styles.hour}></View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.four}>
-            <View style={styles.hour}></View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.five}>
-            <View style={styles.hour}></View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.six}>
-            <View style={styles.hour}></View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.seven}>
-            <View style={styles.hour}></View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.eight}>
-            <View style={styles.hour}></View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.nine}>
-            <View style={styles.hour}></View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.ten}>
-            <View style={styles.hour}></View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.eleven}>
-            <View style={styles.hour}></View>
-          </TouchableOpacity>
+
+        <Animated.View style={[{
+            transform: [{ translateX: prObj.pans[11].x }, { translateY: prObj.pans[11].y }],
+            top: "0%",
+            left: "50%",
+          }, overwriteStyle]} {...pr11.panHandlers}>
+          <View style={styles.hour}></View>
+        </Animated.View>
+        <TouchableOpacity style={styles.twelve}>
+          <View style={styles.hour}></View>
+        </TouchableOpacity>
+
+        <Animated.View style={[{
+            transform: [{ translateX: prObj.pans[0].x }, { translateY: prObj.pans[0].y }],
+            top: "6.7%",
+            left: "75%",
+          }, overwriteStyle]} {...pr0.panHandlers}>
+          <View style={styles.hour}></View>
+        </Animated.View>
+        <TouchableOpacity style={styles.one}>
+          <View style={styles.hour}></View>
+        </TouchableOpacity>
+
+        <Animated.View style={[{
+            transform: [{ translateX: prObj.pans[1].x }, { translateY: prObj.pans[1].y }],
+            top: "25%",
+            left: "93.3%",
+          }, overwriteStyle]} {...pr1.panHandlers}>
+          <View style={styles.hour}></View>
+        </Animated.View>
+        <TouchableOpacity style={styles.two}>
+          <View style={styles.hour}></View>
+        </TouchableOpacity>
+
+        <Animated.View style={[{
+            transform: [{ translateX: prObj.pans[2].x }, { translateY: prObj.pans[2].y }],
+            top: "50%",
+            left: "100%",
+          }, overwriteStyle]} {...pr2.panHandlers}>
+          <View style={styles.hour}></View>
+        </Animated.View>
+        <TouchableOpacity style={styles.three}>
+          <View style={styles.hour}></View>
+        </TouchableOpacity>
+
+        <Animated.View style={[{
+            transform: [{ translateX: prObj.pans[3].x }, { translateY: prObj.pans[3].y }],
+            top: "75%",
+            left: "93.3%",
+          }, overwriteStyle]} {...pr3.panHandlers}>
+          <View style={styles.hour}></View>
+        </Animated.View>
+        <TouchableOpacity style={styles.four}>
+          <View style={styles.hour}></View>
+        </TouchableOpacity>
+
+        <Animated.View style={[{
+            transform: [{ translateX: prObj.pans[4].x }, { translateY: prObj.pans[4].y }],
+            top: "93.3%",
+            left: "75%",
+          }, overwriteStyle]} {...pr4.panHandlers}>
+          <View style={styles.hour}></View>
+        </Animated.View>
+        <TouchableOpacity style={styles.five}>
+          <View style={styles.hour}></View>
+        </TouchableOpacity>
+
+        <Animated.View style={[{
+            transform: [{ translateX: prObj.pans[5].x }, { translateY: prObj.pans[5].y }],
+            top: "100%",
+            left: "50%",
+          }, overwriteStyle]} {...pr5.panHandlers}>
+          <View style={styles.hour}></View>
+        </Animated.View>
+        <TouchableOpacity style={styles.six}>
+          <View style={styles.hour}></View>
+        </TouchableOpacity>
+
+        <Animated.View style={[{
+            transform: [{ translateX: prObj.pans[6].x }, { translateY: prObj.pans[6].y }],
+            top: "93.3%",
+            left: "25%",
+          }, overwriteStyle]} {...pr6.panHandlers}>
+          <View style={styles.hour}></View>
+        </Animated.View>
+        <TouchableOpacity style={styles.seven}>
+          <View style={styles.hour}></View>
+        </TouchableOpacity>
+
+        <Animated.View style={[{
+            transform: [{ translateX: prObj.pans[7].x }, { translateY: prObj.pans[7].y }],
+            top: "75%",
+            left: "6.7%",
+          }, overwriteStyle]} {...pr7.panHandlers}>
+          <View style={styles.hour}></View>
+        </Animated.View>
+
+        <TouchableOpacity style={styles.eight}>
+          <View style={styles.hour}></View>
+        </TouchableOpacity>
+        <Animated.View style={[{
+            transform: [{ translateX: prObj.pans[8].x }, { translateY: prObj.pans[8].y }],
+            top: "50%",
+            left: "0%",
+          }, overwriteStyle]} {...pr8.panHandlers}>
+          <View style={styles.hour}></View>
+        </Animated.View>
+        <TouchableOpacity style={styles.nine}>
+          <View style={styles.hour}></View>
+        </TouchableOpacity>
+
+        <Animated.View style={[{
+            transform: [{ translateX: prObj.pans[9].x }, { translateY: prObj.pans[9].y }],
+            top: "25%",
+            left: "6.7%",
+          }, overwriteStyle]} {...pr9.panHandlers}>
+          <View style={styles.hour}></View>
+        </Animated.View>
+        <TouchableOpacity style={styles.ten}>
+          <View style={styles.hour}></View>
+        </TouchableOpacity>
+
+        <Animated.View style={[{
+            transform: [{ translateX: prObj.pans[10].x }, { translateY: prObj.pans[10].y }],
+            top: "6.7%",
+            left: "25%",
+          }, overwriteStyle]} {...pr10.panHandlers}>
+          <View style={styles.hour}></View>
+        </Animated.View>
+        <TouchableOpacity style={styles.eleven}>
+          <View style={styles.hour}></View>
+        </TouchableOpacity>
 
         <Text style={styles.text}>AM / PM</Text>
         {/* <Text style={styles.text}>{touchPos}</Text> */}
       </View>
-
+      
+      <View style={styles.dropZone}>
+        <Text style={styles.text}>Drop them here!</Text>
+      </View>
 
     </Animated.View>
   )
@@ -167,7 +578,7 @@ const styles = StyleSheet.create({
   },
   dateContainer: {
     position: "absolute",
-    top: 80,
+    top: 20,
     borderColor: "black",
     borderRadius: 3,
     backgroundColor: "rgb(30,30,30)",
@@ -190,23 +601,20 @@ const styles = StyleSheet.create({
   innerClockContainer: {
     top: -40,
     // backgroundColor:"grey",
-    width: "50%",
+    width: "46%",
     aspectRatio: 1 / 1,
     justifyContent: "center",
     alignItems: "center",
     position: "relative",
   },
-  twelve: {
-    height: 1,
-    width: 1,
-    backgroundColor: "red",
+  dropZone: {
+    width: "100%",
+    backgroundColor: "white",
+    height: 50,
+    zIndex: -1,
     position: "absolute",
-    padding: 5,
-    borderRadius: 10,
-    marginLeft: 5,
-    marginTop: 5,
+    bottom: 100,
   },
- 
 
   hour: {
     // height: 1,
