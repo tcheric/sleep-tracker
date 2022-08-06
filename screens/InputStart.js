@@ -2,9 +2,6 @@ import React, { useRef, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Animated, PanResponder } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-
-
-
 const InputStart = () => {
   const [dayOffset, setDayOffset] = useState(0)
   const [hour, setHour] = useState(0)
@@ -106,7 +103,6 @@ const InputStart = () => {
   for (var i = 0; i < 12; i++) { 
     prObj["pans"][i] = useRef(new Animated.ValueXY()).current;
   }
-
 
   var pr11 = useRef(
     PanResponder.create({
@@ -915,7 +911,8 @@ const styles = StyleSheet.create({
     top: "8%",
     left: "50%",
     height: "25%",
-    width: 1,
+    width: 2,
+    marginLeft: -1,
     backgroundColor: "rgb(30,30,30)",
     position: "absolute",
     zIndex: -2,
@@ -923,7 +920,8 @@ const styles = StyleSheet.create({
   eastBar: {
     top: "50%",
     left: "67%",
-    height: 1,
+    height: 2,
+    marginTop: -1,
     width: "25%",
     backgroundColor: "rgb(30,30,30)",
     position: "absolute",
@@ -933,7 +931,8 @@ const styles = StyleSheet.create({
     top: "67%",
     left: "50%",
     height: "25%",
-    width: 1,
+    width: 2,
+    marginLeft: -1,
     backgroundColor: "rgb(30,30,30)",
     position: "absolute",
     zIndex: -2,
@@ -941,7 +940,8 @@ const styles = StyleSheet.create({
   westBar: {
     top: "50%",
     left: "8%",
-    height: 1,
+    height: 2,
+    marginTop: -1,
     width: "25%",
     backgroundColor: "rgb(30,30,30)",
     position: "absolute",
