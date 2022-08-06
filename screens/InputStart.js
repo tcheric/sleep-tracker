@@ -14,6 +14,20 @@ const InputStart = () => {
   // const [touchPos, setTouchPos] = useState(0)
   var disableMove = 0
 
+  var dropZone00 = {xOffset : 0, yOffset : 0}
+  var dropZone05 = {xOffset : 0, yOffset : 0}
+  var dropZone10 = {xOffset : 0, yOffset : 0}
+  var dropZone15 = {xOffset : 0, yOffset : 0}
+  var dropZone20 = {xOffset : 0, yOffset : 0}
+  var dropZone25 = {xOffset : 0, yOffset : 0}
+  var dropZone30 = {xOffset : 0, yOffset : 0}
+  var dropZone35 = {xOffset : 0, yOffset : 0}
+  var dropZone40 = {xOffset : 0, yOffset : 0}
+  var dropZone45 = {xOffset : 0, yOffset : 0}
+  var dropZone50 = {xOffset : 0, yOffset : 0}
+  var dropZone55 = {xOffset : 0, yOffset : 0}
+
+
   const getSelectedDate = () => {
     var date = new Date(Date.now() - 86400000 * dayOffset).getDate()
     var month = new Date(Date.now() - 86400000 * dayOffset).getMonth() + 1;
@@ -35,6 +49,15 @@ const InputStart = () => {
       return "0" + minute
     } else {
       return minute.toString()
+    }
+  }
+
+  const isInDropZone = ( gesture ) => {
+    if ((gesture.moveY > 223 && gesture.moveY < 290) && (gesture.moveX > 156 && gesture.moveX < 208)) 
+    {
+      return true
+    } else {
+      return false
     }
   }
 
@@ -68,10 +91,13 @@ const InputStart = () => {
       ),
       onPanResponderRelease: (e, gesture) => {
         prObj["pans"][11].flattenOffset();
-        if (gesture.moveY > 627 && gesture.moveY < 680) {
+        // console.log()
+        if (isInDropZone(gesture)) {
           console.log("DROPPED")
           disableMove = 12
+          console.log(gesture.moveX, gesture.moveY)
         } else  {
+          console.log(gesture.moveX, gesture.moveY)
           prObj["pans"][11].x.setValue(0)
           prObj["pans"][11].y.setValue(0)
           disableMove = 0
@@ -474,7 +500,7 @@ const InputStart = () => {
     <Animated.View
       style={styles.container}
       >
-      
+  {/* DATE */}
       <View style={styles.dateContainer}>
         <TouchableOpacity 
           style={styles.icons} 
@@ -504,7 +530,7 @@ const InputStart = () => {
       <View style={styles.outerClockContainer}> 
 
         <View style={styles.innerClockContainer}> 
-
+{/* HOURS */}
           <Animated.View style={[{
               transform: [{ translateX: prObj.pans[11].x }, { translateY: prObj.pans[11].y }],
               top: "0%",
@@ -641,48 +667,93 @@ const InputStart = () => {
           <Text style={styles.text}>{displayHour() + " : " + displayMin()}</Text>
         </View>
 
-        <TouchableOpacity style={[styles.minute, styles.twelve]} >
+{/* MINUTES */}
+        <TouchableOpacity style={[styles.minute, styles.twelve]} onLayout={event => {
+          const layout = event.nativeEvent.layout;
+          dropZone00.xOffset = layout.x
+          dropZone00.yOffset = layout.y
+        }} >
             <Text style={{color:"white"}}>00</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.minute, styles.one]}>
+        <TouchableOpacity style={[styles.minute, styles.one]} onLayout={event => {
+          const layout = event.nativeEvent.layout;
+          dropZone05.xOffset = layout.x
+          dropZone05.yOffset = layout.y
+        }} >
             <Text style={{color:"white"}}>05</Text>
         </TouchableOpacity> 
-        <TouchableOpacity style={[styles.minute, styles.two]}> 
+        <TouchableOpacity style={[styles.minute, styles.two]} onLayout={event => {
+          const layout = event.nativeEvent.layout;
+          dropZone10.xOffset = layout.x
+          dropZone10.yOffset = layout.y
+        }} >
             <Text style={{color:"white"}}>10</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.minute, styles.three]}> 
+        <TouchableOpacity style={[styles.minute, styles.three]} onLayout={event => {
+          const layout = event.nativeEvent.layout;
+          dropZone15.xOffset = layout.x
+          dropZone15.yOffset = layout.y
+        }} > 
           <Text style={{color:"white"}}>15</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.minute, styles.four]}> 
+        <TouchableOpacity style={[styles.minute, styles.four]} onLayout={event => {
+          const layout = event.nativeEvent.layout;
+          dropZone20.xOffset = layout.x
+          dropZone20.yOffset = layout.y
+        }} >  
           <Text style={{color:"white"}}>20</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.minute, styles.five]}> 
+        <TouchableOpacity style={[styles.minute, styles.five]} onLayout={event => {
+          const layout = event.nativeEvent.layout;
+          dropZone25.xOffset = layout.x
+          dropZone25.yOffset = layout.y
+        }} >  
          <Text style={{color:"white"}}>25</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.minute, styles.six]}> 
+        <TouchableOpacity style={[styles.minute, styles.six]} onLayout={event => {
+          const layout = event.nativeEvent.layout;
+          dropZone30.xOffset = layout.x
+          dropZone30.yOffset = layout.y
+        }} >  
           <Text style={{color:"white"}}>30</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.minute, styles.seven]}> 
+        <TouchableOpacity style={[styles.minute, styles.seven]} onLayout={event => {
+          const layout = event.nativeEvent.layout;
+          dropZone35.xOffset = layout.x
+          dropZone35.yOffset = layout.y
+        }} >  
           <Text style={{color:"white"}}>35</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.minute, styles.eight]}> 
+        <TouchableOpacity style={[styles.minute, styles.eight]} onLayout={event => {
+          const layout = event.nativeEvent.layout;
+          dropZone40.xOffset = layout.x
+          dropZone40.yOffset = layout.y
+        }} >  
           <Text style={{color:"white"}}>40</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.minute, styles.nine]}> 
+        <TouchableOpacity style={[styles.minute, styles.nine]} onLayout={event => {
+          const layout = event.nativeEvent.layout;
+          dropZone45.xOffset = layout.x
+          dropZone45.yOffset = layout.y
+        }} >  
           <Text style={{color:"white"}}>45</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.minute, styles.ten]}> 
+        <TouchableOpacity style={[styles.minute, styles.ten]} onLayout={event => {
+          const layout = event.nativeEvent.layout;
+          dropZone50.xOffset = layout.x
+          dropZone50.yOffset = layout.y
+        }} >  
           <Text style={{color:"white"}}>50</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.minute, styles.eleven]}> 
+        <TouchableOpacity style={[styles.minute, styles.eleven]} onLayout={event => {
+          const layout = event.nativeEvent.layout;
+          dropZone55.xOffset = layout.x
+          dropZone55.yOffset = layout.y
+        }} >  
           <Text style={{color:"white"}}>55</Text>
         </TouchableOpacity>
         <View style={styles.minuteCircle}/>
       </View>
-      
-      {/* <View style={styles.dropZone}>
-        <Text style={styles.text}>Drop them here!</Text>
-      </View> */}
 
     </Animated.View>
   )
@@ -703,7 +774,7 @@ const styles = StyleSheet.create({
   },
   dateContainer: {
     position: "absolute",
-    top: 20,
+    top: "12%",
     borderColor: "black",
     borderRadius: 3,
     backgroundColor: "rgb(30,30,30)",
@@ -758,10 +829,10 @@ const styles = StyleSheet.create({
   },
   minute: {
     position: "absolute",
-    zIndex: 1,
+    zIndex: -1,
     top: "0%",
     left: "50%",
-    // backgroundColor: "blue",
+    backgroundColor: "blue",
     marginLeft: -30,
     marginTop: -31,
     padding: 22,
@@ -769,7 +840,7 @@ const styles = StyleSheet.create({
   },
   minuteCircle: {
     position: "absolute",
-    zIndex: -1,
+    zIndex: -2,
     top: "0%",
     left: "0%",
     padding: 22,
