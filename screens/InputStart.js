@@ -9,6 +9,7 @@ const InputStart = () => {
   const [dayOffset, setDayOffset] = useState(0)
   const [hour, setHour] = useState(0)
   const [minute, setMinute] = useState(-1)
+  const [AMPM, setAMPM] = useState("PM")
 
   const hourColor = "rgb(60,60,60)"
 
@@ -501,10 +502,8 @@ const InputStart = () => {
   }
 
   return (
-    <Animated.View
-      style={styles.container}
-      >
-  {/* DATE */}
+    <Animated.View style={styles.container}>
+{/* DATE */}
       <View style={styles.dateContainer}>
         <TouchableOpacity 
           style={styles.icons} 
@@ -530,9 +529,8 @@ const InputStart = () => {
             color={(dayOffset === 0) ? "rgb(150,150,150)" : "red"}/>
         </TouchableOpacity >
       </View>
-      
+{/* CLOCK */}
       <View style={styles.outerClockContainer}> 
-
         <View style={styles.innerClockContainer}> 
 {/* HOURS */}
           <Animated.View style={[{
@@ -764,7 +762,36 @@ const InputStart = () => {
         <View style={styles.southBar}/>
         <View style={styles.westBar}/>
       </View>
-
+{/* AM / PM */}
+      <View style={styles.AMPMContainer}>
+        <TouchableOpacity 
+          style={styles.icons} 
+          onPress={() => {
+            if (AMPM == "AM") {
+              setAMPM("PM")
+            } else {
+              setAMPM("AM")
+            }
+          }}>
+          <Ionicons name="chevron-back-outline" 
+            size={20} 
+            color={"red"}/>
+        </TouchableOpacity >
+        <Text style={styles.date}>{AMPM}</Text>
+        <TouchableOpacity 
+          style={styles.icons} 
+          onPress={() => {
+            if (AMPM == "AM") {
+              setAMPM("PM")
+            } else {
+              setAMPM("AM")
+            }
+          }}>
+          <Ionicons name="chevron-forward-outline" 
+            size={20} 
+            color={"red"}/>
+        </TouchableOpacity >
+      </View>
     </Animated.View>
   )
 }
@@ -798,6 +825,17 @@ const styles = StyleSheet.create({
     marginHorizontal:10,
     color: 'rgb(230,230,230)',
   },
+  AMPMContainer: {
+    position: "absolute",
+    top: "68%",
+    borderColor: "black",
+    borderRadius: 3,
+    backgroundColor: "rgb(30,30,30)",
+    height: 34,
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexDirection: "row",
+  },
   icons: {
     width: 36,
     height: 30,
@@ -821,7 +859,7 @@ const styles = StyleSheet.create({
     bottom: 100,
   },
   outerClockContainer: {
-    top: -40,
+    top: -54,
     // backgroundColor:"grey",
     width: 270,
     aspectRatio: 1 / 1,
