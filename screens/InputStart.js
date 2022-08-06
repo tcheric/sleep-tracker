@@ -14,12 +14,28 @@ const InputStart = () => {
   // const [touchPos, setTouchPos] = useState(0)
   var disableMove = 0
 
-  const getSelectedDate=()=>{
+  const getSelectedDate = () => {
     var date = new Date(Date.now() - 86400000 * dayOffset).getDate()
     var month = new Date(Date.now() - 86400000 * dayOffset).getMonth() + 1;
     var dateString = (date < 10) ? ("0" + date.toString()) : date.toString()
     var monthString = (month < 10) ? ("0" + month.toString()) : month.toString()
     return dateString + '/' + monthString;
+  }
+
+  const displayHour = () => {
+    if (hour < 10) {
+      return "0" + hour
+    } else {
+      return hour.toString()
+    }
+  }
+
+  const displayMin = () => {
+    if (minute < 10) {
+      return "0" + minute
+    } else {
+      return minute.toString()
+    }
   }
 
   //  Pan responder for touch tracking
@@ -622,7 +638,7 @@ const InputStart = () => {
           </TouchableOpacity>
 
           {/* <Text style={styles.text}>AM / PM</Text> */}
-          <Text style={styles.text}>{hour}</Text>
+          <Text style={styles.text}>{displayHour() + " : " + displayMin()}</Text>
         </View>
 
         <TouchableOpacity style={[styles.minute, styles.twelve]} >
@@ -661,17 +677,12 @@ const InputStart = () => {
         <TouchableOpacity style={[styles.minute, styles.eleven]}> 
           <Text style={{color:"white"}}>55</Text>
         </TouchableOpacity>
-
+        <View style={styles.minuteCircle}/>
       </View>
-
-      {/* <View style={styles.eleven}>  </View> */}
-      {/* <View style={styles.one}>  </View> */}
-      {/* <View style={styles.two}>  </View> */}
-
       
-      <View style={styles.dropZone}>
+      {/* <View style={styles.dropZone}>
         <Text style={styles.text}>Drop them here!</Text>
-      </View>
+      </View> */}
 
     </Animated.View>
   )
@@ -686,7 +697,7 @@ const styles = StyleSheet.create({
     
   },
   text: {
-    color: 'red',
+    color: 'rgb(220,220,220)',
     fontSize: 20,
     fontWeight: "400",
   },
@@ -740,10 +751,33 @@ const styles = StyleSheet.create({
   hour: {
     backgroundColor: "red",
     position: "absolute",
-    padding: 7,
-    borderRadius: 14,
-    marginLeft: 11,
-    marginTop: 11,
+    padding: 6,
+    borderRadius: 12,
+    marginLeft: 12,
+    marginTop: 12,
+  },
+  minute: {
+    position: "absolute",
+    zIndex: 1,
+    top: "0%",
+    left: "50%",
+    // backgroundColor: "blue",
+    marginLeft: -30,
+    marginTop: -31,
+    padding: 22,
+    borderRadius: 20,
+  },
+  minuteCircle: {
+    position: "absolute",
+    zIndex: -1,
+    top: "0%",
+    left: "0%",
+    padding: 22,
+    borderRadius: 600,
+    borderWidth: 1,
+    borderColor: "rgb(50,50,50)",
+    height: "100%",
+    width: "100%",
   },
   one: {
     top: "6.7%",
@@ -793,17 +827,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: "50%",
   },
-  minute: {
-    position: "absolute",
-    zIndex: 1,
-    top: "0%",
-    left: "50%",
-    // backgroundColor: "blue",
-    marginLeft: -30,
-    marginTop: -31,
-    padding: 22,
-    borderRadius: 20,
-  }
+
 
 })
 
