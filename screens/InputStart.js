@@ -7,12 +7,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const InputStart = () => {
   const [dayOffset, setDayOffset] = useState(0)
-  const [circleVisible, setCircleVisible] = useState(0)
   const [hour, setHour] = useState(0)
-  const [minute, setMinute] = useState(0)
+  const [minute, setMinute] = useState(-1)
 
-  // const [touchPos, setTouchPos] = useState(0)
-  var disableMove = 0
+  const hourColor = "rgb(60,60,60)"
+
   var dropZoneObj = {
     dropZone00 : {xOffset : 0, yOffset : 0},
     dropZone05 : {xOffset : 0, yOffset : 0},
@@ -45,20 +44,16 @@ const InputStart = () => {
   }
 
   const displayMin = () => {
-    if (minute < 10) {
+    if (minute < 10 && minute > -1) {
       return "0" + minute
+    } else if (minute == -1) {
+      return "00" 
     } else {
       return minute.toString()
     }
   }
 
   const isInDropZone = ( gesture ) => {
-    // console.log("zoneY:")
-    // console.log(dropZone00.yOffset+215-31, dropZone00.yOffset+215+31 )
-    // console.log("dz00",dropZone00.yOffset)
-    // console.log("zoneX:")
-    // console.log(dropZone00.xOffset+79-30, dropZone00.xOffset+79+30)
-
     for (const [dropZoneXX, value] of Object.entries(dropZoneObj)) {
       if ((gesture.moveY > value.yOffset+277-31 && gesture.moveY < value.yOffset+277+31) 
         && (gesture.moveX > value.xOffset+79-30 && gesture.moveX < value.xOffset+79+30)) 
@@ -67,6 +62,42 @@ const InputStart = () => {
       }
     }
     return false
+  }
+
+  const whichDropZone = ( gesture ) => {
+    for (const [dropZoneXX, value] of Object.entries(dropZoneObj)) {
+      if ((gesture.moveY > value.yOffset+277-31 && gesture.moveY < value.yOffset+277+31) 
+        && (gesture.moveX > value.xOffset+79-30 && gesture.moveX < value.xOffset+79+30)) 
+      {
+        if (dropZoneXX === "dropZone00") {
+          return { index: 11, minutes: 0 }
+        } else if (dropZoneXX === "dropZone05") {
+          return { index: 0, minutes: 5 }
+        } else if (dropZoneXX === "dropZone10") {
+          return { index: 1, minutes: 10 }
+        } else if (dropZoneXX === "dropZone15") {
+          return { index: 2, minutes: 15 }
+        } else if (dropZoneXX === "dropZone20") {
+          return { index: 3, minutes: 20 }
+        } else if (dropZoneXX === "dropZone25") {
+          return { index: 4, minutes: 25 }
+        } else if (dropZoneXX === "dropZone30") {
+          return { index: 5, minutes: 30 }
+        } else if (dropZoneXX === "dropZone35") {
+          return { index: 6, minutes: 35 }
+        } else if (dropZoneXX === "dropZone40") {
+          return { index: 7, minutes: 40 }
+        } else if (dropZoneXX === "dropZone45") {
+          return { index: 8, minutes: 45 }
+        } else if (dropZoneXX === "dropZone50") {
+          return { index: 9, minutes: 50 }
+        } else if (dropZoneXX === "dropZone55") {
+          return { index: 10, minutes: 55 }
+        }
+        return dropZoneXX 
+      }
+    }
+    return -1
   }
 
   //  Pan responder for touch tracking
@@ -78,10 +109,7 @@ const InputStart = () => {
 
   var pr11 = useRef(
     PanResponder.create({
-      onMoveShouldSetPanResponder: () => {
-        if (disableMove === 0 || disableMove === 12) return true
-        else return false
-      },
+      onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
         console.log("ON MOVE")
         setHour(12)
@@ -98,42 +126,29 @@ const InputStart = () => {
         {useNativeDriver: false}
       ),
       onPanResponderRelease: (e, gesture) => {
-        prObj["pans"][11].flattenOffset();
-        // console.log()
+        prObj["pans"][11].flattenOffset(); 
         if (isInDropZone(gesture)) {
           console.log("DROPPED")
-          disableMove = 12
-          console.log(gesture.moveX, gesture.moveY)
+          setMinute(whichDropZone(gesture).minutes)
         } else  {
           console.log(gesture.moveX, gesture.moveY)
-          prObj["pans"][11].x.setValue(0)
-          prObj["pans"][11].y.setValue(0)
-          disableMove = 0
         }
+        prObj["pans"][11].x.setValue(0)
+        prObj["pans"][11].y.setValue(0)
       }
     })
   ).current
 
   var pr0 = useRef(
     PanResponder.create({
-      onMoveShouldSetPanResponder: () => {
-        if (disableMove === 0 || disableMove === 1) return true
-        else return false
-      },
+      onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
-        if (!disableMove) {
-          console.log("ON MOVE")
-          setHour(1)
-          prObj["pans"][0].setOffset({
-            x: prObj["pans"][0].x._value,
-            y: prObj["pans"][0].y._value
-          });
-        } else if (disableMove) {
-          prObj["pans"][0].setOffset({
-            x: 0,
-            y: 0,
-          });
-        }
+        console.log("ON MOVE")
+        setHour(1)
+        prObj["pans"][0].setOffset({
+          x: prObj["pans"][0].x._value,
+          y: prObj["pans"][0].y._value
+        });
       },
       onPanResponderMove: Animated.event(
         [
@@ -143,25 +158,22 @@ const InputStart = () => {
         {useNativeDriver: false}
       ),
       onPanResponderRelease: (e, gesture) => {
-        prObj["pans"][0].flattenOffset();
-        if (gesture.moveY > 627 && gesture.moveY < 680) {
+        prObj["pans"][0].flattenOffset(); 
+        if (isInDropZone(gesture)) {
           console.log("DROPPED")
-          disableMove = 1
+          setMinute(whichDropZone(gesture).minutes)
         } else  {
-          prObj["pans"][0].x.setValue(0)
-          prObj["pans"][0].y.setValue(0)
-          disableMove = 0
+          console.log(gesture.moveX, gesture.moveY)
         }
+        prObj["pans"][0].x.setValue(0)
+        prObj["pans"][0].y.setValue(0)
       }
     })
   ).current
   
   var pr1 = useRef(
     PanResponder.create({
-      onMoveShouldSetPanResponder: () => {
-        if (disableMove === 0 || disableMove === 2) return true
-        else return false
-      },
+      onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
         console.log("ON MOVE")
         setHour(2)
@@ -178,23 +190,21 @@ const InputStart = () => {
         {useNativeDriver: false}
       ),
       onPanResponderRelease: (e, gesture) => {
-        prObj["pans"][1].flattenOffset();
-        if (gesture.moveY > 627 && gesture.moveY < 680) {
+        prObj["pans"][1].flattenOffset(); 
+        if (isInDropZone(gesture)) {
           console.log("DROPPED")
+          setMinute(whichDropZone(gesture).minutes)
         } else  {
-          prObj["pans"][1].x.setValue(0)
-          prObj["pans"][1].y.setValue(0)
+          console.log(gesture.moveX, gesture.moveY)
         }
+        prObj["pans"][1].x.setValue(0)
+        prObj["pans"][1].y.setValue(0)
       }
     })
   ).current
-
   var pr2 = useRef(
     PanResponder.create({
-      onMoveShouldSetPanResponder: () => {
-        if (disableMove === 0 || disableMove === 3) return true
-        else return false
-      },
+      onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
         console.log("ON MOVE")
         setHour(3)
@@ -211,23 +221,21 @@ const InputStart = () => {
         {useNativeDriver: false}
       ),
       onPanResponderRelease: (e, gesture) => {
-        prObj["pans"][2].flattenOffset();
-        if (gesture.moveY > 627 && gesture.moveY < 680) {
+        prObj["pans"][2].flattenOffset(); 
+        if (isInDropZone(gesture)) {
           console.log("DROPPED")
+          setMinute(whichDropZone(gesture).minutes)
         } else  {
-          prObj["pans"][2].x.setValue(0)
-          prObj["pans"][2].y.setValue(0)
+          console.log(gesture.moveX, gesture.moveY)
         }
+        prObj["pans"][2].x.setValue(0)
+        prObj["pans"][2].y.setValue(0)
       }
     })
   ).current
-
   var pr3 = useRef(
     PanResponder.create({
-      onMoveShouldSetPanResponder: () => {
-        if (disableMove === 0 || disableMove === 4) return true
-        else return false
-      },
+      onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
         console.log("ON MOVE")
         setHour(4)
@@ -244,23 +252,21 @@ const InputStart = () => {
         {useNativeDriver: false}
       ),
       onPanResponderRelease: (e, gesture) => {
-        prObj["pans"][3].flattenOffset();
-        if (gesture.moveY > 627 && gesture.moveY < 680) {
+        prObj["pans"][3].flattenOffset(); 
+        if (isInDropZone(gesture)) {
           console.log("DROPPED")
+          setMinute(whichDropZone(gesture).minutes)
         } else  {
-          prObj["pans"][3].x.setValue(0)
-          prObj["pans"][3].y.setValue(0)
+          console.log(gesture.moveX, gesture.moveY)
         }
+        prObj["pans"][3].x.setValue(0)
+        prObj["pans"][3].y.setValue(0)
       }
     })
   ).current
-
   var pr4 = useRef(
     PanResponder.create({
-      onMoveShouldSetPanResponder: () => {
-        if (disableMove === 0 || disableMove === 5) return true
-        else return false
-      },
+      onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
         console.log("ON MOVE")
         setHour(5)
@@ -277,23 +283,21 @@ const InputStart = () => {
         {useNativeDriver: false}
       ),
       onPanResponderRelease: (e, gesture) => {
-        prObj["pans"][4].flattenOffset();
-        if (gesture.moveY > 627 && gesture.moveY < 680) {
+        prObj["pans"][4].flattenOffset(); 
+        if (isInDropZone(gesture)) {
           console.log("DROPPED")
+          setMinute(whichDropZone(gesture).minutes)
         } else  {
-          prObj["pans"][4].x.setValue(0)
-          prObj["pans"][4].y.setValue(0)
+          console.log(gesture.moveX, gesture.moveY)
         }
+        prObj["pans"][4].x.setValue(0)
+        prObj["pans"][4].y.setValue(0)
       }
     })
   ).current
-
   var pr5 = useRef(
     PanResponder.create({
-      onMoveShouldSetPanResponder: () => {
-        if (disableMove === 0 || disableMove === 6) return true
-        else return false
-      },
+      onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
         console.log("ON MOVE")
         setHour(6)
@@ -310,23 +314,21 @@ const InputStart = () => {
         {useNativeDriver: false}
       ),
       onPanResponderRelease: (e, gesture) => {
-        prObj["pans"][5].flattenOffset();
-        if (gesture.moveY > 627 && gesture.moveY < 680) {
+        prObj["pans"][5].flattenOffset(); 
+        if (isInDropZone(gesture)) {
           console.log("DROPPED")
+          setMinute(whichDropZone(gesture).minutes)
         } else  {
-          prObj["pans"][5].x.setValue(0)
-          prObj["pans"][5].y.setValue(0)
+          console.log(gesture.moveX, gesture.moveY)
         }
+        prObj["pans"][5].x.setValue(0)
+        prObj["pans"][5].y.setValue(0)
       }
     })
   ).current
-
   var pr6 = useRef(
     PanResponder.create({
-      onMoveShouldSetPanResponder: () => {
-        if (disableMove === 0 || disableMove === 7) return true
-        else return false
-      },
+      onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
         console.log("ON MOVE")
         setHour(7)
@@ -343,23 +345,21 @@ const InputStart = () => {
         {useNativeDriver: false}
       ),
       onPanResponderRelease: (e, gesture) => {
-        prObj["pans"][6].flattenOffset();
-        if (gesture.moveY > 627 && gesture.moveY < 680) {
+        prObj["pans"][6].flattenOffset(); 
+        if (isInDropZone(gesture)) {
           console.log("DROPPED")
+          setMinute(whichDropZone(gesture).minutes)
         } else  {
-          prObj["pans"][6].x.setValue(0)
-          prObj["pans"][6].y.setValue(0)
+          console.log(gesture.moveX, gesture.moveY)
         }
+        prObj["pans"][6].x.setValue(0)
+        prObj["pans"][6].y.setValue(0)
       }
     })
   ).current
-
   var pr7 = useRef(
     PanResponder.create({
-      onMoveShouldSetPanResponder: () => {
-        if (disableMove === 0 || disableMove === 8) return true
-        else return false
-      },
+      onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
         console.log("ON MOVE")
         setHour(8)
@@ -376,23 +376,21 @@ const InputStart = () => {
         {useNativeDriver: false}
       ),
       onPanResponderRelease: (e, gesture) => {
-        prObj["pans"][7].flattenOffset();
-        if (gesture.moveY > 627 && gesture.moveY < 680) {
+        prObj["pans"][7].flattenOffset(); 
+        if (isInDropZone(gesture)) {
           console.log("DROPPED")
+          setMinute(whichDropZone(gesture).minutes)
         } else  {
-          prObj["pans"][7].x.setValue(0)
-          prObj["pans"][7].y.setValue(0)
+          console.log(gesture.moveX, gesture.moveY)
         }
+        prObj["pans"][7].x.setValue(0)
+        prObj["pans"][7].y.setValue(0)
       }
     })
   ).current
-
   var pr8 = useRef(
     PanResponder.create({
-      onMoveShouldSetPanResponder: () => {
-        if (disableMove === 0 || disableMove === 9) return true
-        else return false
-      },
+      onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
         console.log("ON MOVE")
         setHour(9)
@@ -409,25 +407,23 @@ const InputStart = () => {
         {useNativeDriver: false}
       ),
       onPanResponderRelease: (e, gesture) => {
-        prObj["pans"][8].flattenOffset();
-        if (gesture.moveY > 627 && gesture.moveY < 680) {
+        prObj["pans"][8].flattenOffset(); 
+        if (isInDropZone(gesture)) {
           console.log("DROPPED")
+          setMinute(whichDropZone(gesture).minutes)
         } else  {
-          prObj["pans"][8].x.setValue(0)
-          prObj["pans"][8].y.setValue(0)
+          console.log(gesture.moveX, gesture.moveY)
         }
+        prObj["pans"][8].x.setValue(0)
+        prObj["pans"][8].y.setValue(0)
       }
     })
   ).current
-
   var pr9 = useRef(
     PanResponder.create({
-      onMoveShouldSetPanResponder: () => {
-        if (disableMove === 0 || disableMove === 10) return true
-        else return false
-      },
+      onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
-        console.log("10 moved")
+        console.log("ON MOVE")
         setHour(10)
         prObj["pans"][9].setOffset({
           x: prObj["pans"][9].x._value,
@@ -442,25 +438,23 @@ const InputStart = () => {
         {useNativeDriver: false}
       ),
       onPanResponderRelease: (e, gesture) => {
-        prObj["pans"][9].flattenOffset();
-        if (gesture.moveY > 627 && gesture.moveY < 680) {
+        prObj["pans"][9].flattenOffset(); 
+        if (isInDropZone(gesture)) {
           console.log("DROPPED")
+          setMinute(whichDropZone(gesture).minutes)
         } else  {
-          prObj["pans"][9].x.setValue(0)
-          prObj["pans"][9].y.setValue(0)
+          console.log(gesture.moveX, gesture.moveY)
         }
+        prObj["pans"][9].x.setValue(0)
+        prObj["pans"][9].y.setValue(0)
       }
     })
   ).current
-
   var pr10 = useRef(
     PanResponder.create({
-      onMoveShouldSetPanResponder: () => {
-        if (disableMove === 0 || disableMove === 11) return true
-        else return false
-      },
+      onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
-        console.log("11 moved")
+        console.log("ON MOVE")
         setHour(11)
         prObj["pans"][10].setOffset({
           x: prObj["pans"][10].x._value,
@@ -475,25 +469,27 @@ const InputStart = () => {
         {useNativeDriver: false}
       ),
       onPanResponderRelease: (e, gesture) => {
-        prObj["pans"][10].flattenOffset();
-        if (gesture.moveY > 627 && gesture.moveY < 680) {
+        prObj["pans"][10].flattenOffset(); 
+        if (isInDropZone(gesture)) {
           console.log("DROPPED")
+          setMinute(whichDropZone(gesture).minutes)
         } else  {
-          prObj["pans"][10].x.setValue(0)
-          prObj["pans"][10].y.setValue(0)
+          console.log(gesture.moveX, gesture.moveY)
         }
+        prObj["pans"][10].x.setValue(0)
+        prObj["pans"][10].y.setValue(0)
       }
     })
   ).current
 
   const overwriteStyle = {
     position: "absolute",
-    marginLeft: -18,
-    marginTop: -18,
-    padding: 18,
-    borderRadius: 18,
+    marginLeft: -20,
+    marginTop: -20,
+    padding: 20,
+    borderRadius: 20,
     // backgroundColor: "blue",
-    zIndex: 2,
+    zIndex: 5,
   }
 
   const overwriteStyleUnder = {
@@ -544,10 +540,10 @@ const InputStart = () => {
               top: "0%",
               left: "50%",
             }, overwriteStyle]} {...pr11.panHandlers}>
-            <View style={styles.hour}></View>
+            <View style={[styles.hour, {backgroundColor: (hour == 12) ? "red" : hourColor}]}></View>
           </Animated.View>
           <TouchableOpacity style={[styles.twelve, overwriteStyleUnder]}>
-            <View style={styles.hour}></View>
+            <View style={styles.hourUnder}></View>
           </TouchableOpacity>
 
           <Animated.View style={[{
@@ -555,10 +551,10 @@ const InputStart = () => {
               top: "6.7%",
               left: "75%",
             }, overwriteStyle]} {...pr0.panHandlers}>
-            <View style={styles.hour}></View>
+            <View style={[styles.hour, {backgroundColor: (hour == 1) ? "red" : hourColor}]}></View>
           </Animated.View>
           <TouchableOpacity style={[styles.one, overwriteStyleUnder]}>
-            <View style={styles.hour}></View>
+            <View style={styles.hourUnder}></View>
           </TouchableOpacity>
 
           <Animated.View style={[{
@@ -566,10 +562,10 @@ const InputStart = () => {
               top: "25%",
               left: "93.3%",
             }, overwriteStyle]} {...pr1.panHandlers}>
-            <View style={styles.hour}></View>
+            <View style={[styles.hour, {backgroundColor: (hour == 2) ? "red" : hourColor}]}></View>
           </Animated.View>
           <TouchableOpacity style={[styles.two, overwriteStyleUnder]}>
-            <View style={styles.hour}></View>
+            <View style={styles.hourUnder}></View>
           </TouchableOpacity>
 
           <Animated.View style={[{
@@ -577,10 +573,10 @@ const InputStart = () => {
               top: "50%",
               left: "100%",
             }, overwriteStyle]} {...pr2.panHandlers}>
-            <View style={styles.hour}></View>
+            <View style={[styles.hour, {backgroundColor: (hour == 3) ? "red" : hourColor}]}></View>
           </Animated.View>
           <TouchableOpacity style={[styles.three, overwriteStyleUnder]}>
-            <View style={styles.hour}></View>
+            <View style={styles.hourUnder}></View>
           </TouchableOpacity>
 
           <Animated.View style={[{
@@ -588,10 +584,10 @@ const InputStart = () => {
               top: "75%",
               left: "93.3%",
             }, overwriteStyle]} {...pr3.panHandlers}>
-            <View style={styles.hour}></View>
+            <View style={[styles.hour, {backgroundColor: (hour == 4) ? "red" : hourColor}]}></View>
           </Animated.View>
           <TouchableOpacity style={[styles.four, overwriteStyleUnder]}>
-            <View style={styles.hour}></View>
+            <View style={styles.hourUnder}></View>
           </TouchableOpacity>
 
           <Animated.View style={[{
@@ -599,10 +595,10 @@ const InputStart = () => {
               top: "93.3%",
               left: "75%",
             }, overwriteStyle]} {...pr4.panHandlers}>
-            <View style={styles.hour}></View>
+            <View style={[styles.hour, {backgroundColor: (hour == 5) ? "red" : hourColor}]}></View>
           </Animated.View>
           <TouchableOpacity style={[styles.five, overwriteStyleUnder]}>
-            <View style={styles.hour}></View>
+            <View style={styles.hourUnder}></View>
           </TouchableOpacity>
 
           <Animated.View style={[{
@@ -610,10 +606,10 @@ const InputStart = () => {
               top: "100%",
               left: "50%",
             }, overwriteStyle]} {...pr5.panHandlers}>
-            <View style={styles.hour}></View>
+            <View style={[styles.hour, {backgroundColor: (hour == 6) ? "red" : hourColor}]}></View>
           </Animated.View>
           <TouchableOpacity style={[styles.six, overwriteStyleUnder]}>
-            <View style={styles.hour}></View>
+            <View style={styles.hourUnder}></View>
           </TouchableOpacity>
 
           <Animated.View style={[{
@@ -621,10 +617,10 @@ const InputStart = () => {
               top: "93.3%",
               left: "25%",
             }, overwriteStyle]} {...pr6.panHandlers}>
-            <View style={styles.hour}></View>
+            <View style={[styles.hour, {backgroundColor: (hour == 7) ? "red" : hourColor}]}></View>
           </Animated.View>
           <TouchableOpacity style={[styles.seven, overwriteStyleUnder]}>
-            <View style={styles.hour}></View>
+            <View style={styles.hourUnder}></View>
           </TouchableOpacity>
 
           <Animated.View style={[{
@@ -632,21 +628,21 @@ const InputStart = () => {
               top: "75%",
               left: "6.7%",
             }, overwriteStyle]} {...pr7.panHandlers}>
-            <View style={styles.hour}></View>
+            <View style={[styles.hour, {backgroundColor: (hour == 8) ? "red" : hourColor}]}></View>
           </Animated.View>
 
           <TouchableOpacity style={[styles.eight, overwriteStyleUnder]}>
-            <View style={styles.hour}></View>
+            <View style={styles.hourUnder}></View>
           </TouchableOpacity>
           <Animated.View style={[{
               transform: [{ translateX: prObj.pans[8].x }, { translateY: prObj.pans[8].y }],
               top: "50%",
               left: "0%",
             }, overwriteStyle]} {...pr8.panHandlers}>
-            <View style={styles.hour}></View>
+            <View style={[styles.hour, {backgroundColor: (hour == 9) ? "red" : hourColor}]}></View>
           </Animated.View>
           <TouchableOpacity style={[styles.nine, overwriteStyleUnder]}>
-            <View style={styles.hour}></View>
+            <View style={styles.hourUnder}></View>
           </TouchableOpacity>
 
           <Animated.View style={[{
@@ -654,10 +650,10 @@ const InputStart = () => {
               top: "25%",
               left: "6.7%",
             }, overwriteStyle]} {...pr9.panHandlers}>
-            <View style={styles.hour}></View>
+            <View style={[styles.hour, {backgroundColor: (hour == 10) ? "red" : hourColor}]}></View>
           </Animated.View>
           <TouchableOpacity style={[styles.ten, overwriteStyleUnder]}>
-            <View style={styles.hour}></View>
+            <View style={styles.hourUnder}></View>
           </TouchableOpacity>
 
           <Animated.View style={[{
@@ -665,10 +661,10 @@ const InputStart = () => {
               top: "6.7%",
               left: "25%",
             }, overwriteStyle]} {...pr10.panHandlers}>
-            <View style={styles.hour}></View>
+            <View style={[styles.hour, {backgroundColor: (hour == 11) ? "red" : hourColor}]}></View>
           </Animated.View>
           <TouchableOpacity style={[styles.eleven, overwriteStyleUnder]}>
-            <View style={styles.hour}></View>
+            <View style={styles.hourUnder}></View>
           </TouchableOpacity>
 
           {/* <Text style={styles.text}>AM / PM</Text> */}
@@ -681,86 +677,92 @@ const InputStart = () => {
            dropZoneObj.dropZone00.xOffset = layout.x
            dropZoneObj.dropZone00.yOffset = layout.y
         }} >
-            <Text style={{color:"white"}}>00</Text>
+            <Text style={{ color: (minute == 0) ? "red" : "white"}}>00</Text>
+            {/* <Text style={{ color: (minute == 0) ? "white" : "red"}}>00</Text> */}
         </TouchableOpacity>
         <TouchableOpacity style={[styles.minute, styles.one]} onLayout={event => {
           const layout = event.nativeEvent.layout;
            dropZoneObj.dropZone05.xOffset = layout.x
            dropZoneObj.dropZone05.yOffset = layout.y
         }} >
-            <Text style={{color:"white"}}>05</Text>
+            <Text style={{color: (minute == 5) ? "red" : "white"}}>05</Text>
+            {/* <Text style={{color: (minute == 5) ? "white" : "red"}}>05</Text> */}
         </TouchableOpacity> 
         <TouchableOpacity style={[styles.minute, styles.two]} onLayout={event => {
           const layout = event.nativeEvent.layout;
            dropZoneObj.dropZone10.xOffset = layout.x
            dropZoneObj.dropZone10.yOffset = layout.y
         }} >
-            <Text style={{color:"white"}}>10</Text>
+            <Text style={{color: (minute == 10) ? "red" : "white"}}>10</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.minute, styles.three]} onLayout={event => {
           const layout = event.nativeEvent.layout;
            dropZoneObj.dropZone15.xOffset = layout.x
            dropZoneObj.dropZone15.yOffset = layout.y
         }} > 
-          <Text style={{color:"white"}}>15</Text>
+          <Text style={{color: (minute == 15) ? "red" : "white"}}>15</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.minute, styles.four]} onLayout={event => {
           const layout = event.nativeEvent.layout;
            dropZoneObj.dropZone20.xOffset = layout.x
            dropZoneObj.dropZone20.yOffset = layout.y
         }} >  
-          <Text style={{color:"white"}}>20</Text>
+          <Text style={{color: (minute == 20) ? "red" : "white"}}>20</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.minute, styles.five]} onLayout={event => {
           const layout = event.nativeEvent.layout;
            dropZoneObj.dropZone25.xOffset = layout.x
            dropZoneObj.dropZone25.yOffset = layout.y
         }} >  
-         <Text style={{color:"white"}}>25</Text>
+         <Text style={{color: (minute == 25) ? "red" : "white"}}>25</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.minute, styles.six]} onLayout={event => {
           const layout = event.nativeEvent.layout;
            dropZoneObj.dropZone30.xOffset = layout.x
            dropZoneObj.dropZone30.yOffset = layout.y
         }} >  
-          <Text style={{color:"white"}}>30</Text>
+          <Text style={{color: (minute == 30) ? "red" : "white"}}>30</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.minute, styles.seven]} onLayout={event => {
           const layout = event.nativeEvent.layout;
            dropZoneObj.dropZone35.xOffset = layout.x
            dropZoneObj.dropZone35.yOffset = layout.y
         }} >  
-          <Text style={{color:"white"}}>35</Text>
+          <Text style={{color: (minute == 35) ? "red" : "white"}}>35</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.minute, styles.eight]} onLayout={event => {
           const layout = event.nativeEvent.layout;
            dropZoneObj.dropZone40.xOffset = layout.x
            dropZoneObj.dropZone40.yOffset = layout.y
         }} >  
-          <Text style={{color:"white"}}>40</Text>
+          <Text style={{color: (minute == 40) ? "red" : "white"}}>40</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.minute, styles.nine]} onLayout={event => {
           const layout = event.nativeEvent.layout;
            dropZoneObj.dropZone45.xOffset = layout.x
            dropZoneObj.dropZone45.yOffset = layout.y
         }} >  
-          <Text style={{color:"white"}}>45</Text>
+          <Text style={{color: (minute == 45) ? "red" : "white"}}>45</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.minute, styles.ten]} onLayout={event => {
           const layout = event.nativeEvent.layout;
            dropZoneObj.dropZone50.xOffset = layout.x
            dropZoneObj.dropZone50.yOffset = layout.y
         }} >  
-          <Text style={{color:"white"}}>50</Text>
+          <Text style={{color: (minute == 50) ? "red" : "white"}}>50</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.minute, styles.eleven]} onLayout={event => {
           const layout = event.nativeEvent.layout;
            dropZoneObj.dropZone55.xOffset = layout.x
            dropZoneObj.dropZone55.yOffset = layout.y
         }} >  
-          <Text style={{color:"white"}}>55</Text>
+          <Text style={{color: (minute == 55) ? "red" : "white"}}>55</Text>
         </TouchableOpacity>
         <View style={styles.minuteCircle}/>
+        <View style={styles.northBar}/>
+        <View style={styles.eastBar}/>
+        <View style={styles.southBar}/>
+        <View style={styles.westBar}/>
       </View>
 
     </Animated.View>
@@ -777,7 +779,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'rgb(220,220,220)',
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "400",
   },
   dateContainer: {
@@ -821,7 +823,7 @@ const styles = StyleSheet.create({
   outerClockContainer: {
     top: -40,
     // backgroundColor:"grey",
-    width: "75%",
+    width: 270,
     aspectRatio: 1 / 1,
     justifyContent: "center",
     alignItems: "center",
@@ -829,6 +831,19 @@ const styles = StyleSheet.create({
   },
   hour: {
     backgroundColor: "red",
+    // backgroundColor: "rgb(70,70,70)",
+    position: "absolute",
+    // padding: 10,
+    // borderRadius: 12,
+    // marginLeft: 8,
+    // marginTop: 8,
+    padding: 8,
+    borderRadius: 12,
+    marginLeft: 12,
+    marginTop: 12,
+  },
+  hourUnder: {
+    backgroundColor: "white",
     position: "absolute",
     padding: 6,
     borderRadius: 12,
@@ -840,7 +855,7 @@ const styles = StyleSheet.create({
     zIndex: -1,
     top: "0%",
     left: "50%",
-    backgroundColor: "blue",
+    // backgroundColor: "blue",
     marginLeft: -30,
     marginTop: -31,
     padding: 22,
@@ -857,6 +872,42 @@ const styles = StyleSheet.create({
     borderColor: "rgb(50,50,50)",
     height: "100%",
     width: "100%",
+  },
+  northBar: {
+    top: "8%",
+    left: "50%",
+    height: "25%",
+    width: 1,
+    backgroundColor: "rgb(30,30,30)",
+    position: "absolute",
+    zIndex: -2,
+  },
+  eastBar: {
+    top: "50%",
+    left: "67%",
+    height: 1,
+    width: "25%",
+    backgroundColor: "rgb(30,30,30)",
+    position: "absolute",
+    zIndex: -2,
+  },
+  southBar: {
+    top: "67%",
+    left: "50%",
+    height: "25%",
+    width: 1,
+    backgroundColor: "rgb(30,30,30)",
+    position: "absolute",
+    zIndex: -2,
+  },
+  westBar: {
+    top: "50%",
+    left: "8%",
+    height: 1,
+    width: "25%",
+    backgroundColor: "rgb(30,30,30)",
+    position: "absolute",
+    zIndex: -2,
   },
   one: {
     top: "6.7%",
