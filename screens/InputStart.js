@@ -928,8 +928,8 @@ const styles = StyleSheet.create({
   minute: {
     position: "absolute",
     zIndex: -1,
-    top: "0%",
-    left: "50%",
+    top: "0%", // HOW DOES THIS WORK
+    left: "50%", // AND THIS
     // backgroundColor: "blue",
     marginLeft: -30,
     marginTop: -31,

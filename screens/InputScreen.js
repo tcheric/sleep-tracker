@@ -14,16 +14,26 @@ const InputScreen = ({navigation}) => {
   const [t0, setT0] = useState(0)
   const [tn, setTn] = useState(0)
 
-  const childRef = useRef()
+  const startRef = useRef()
+  const endRef = useRef()
 
   const handleStartSubmit = () => {
-    console.log("submit pressed")
+    console.log("t(0) submit pressed")
     // childRef.current.getAlert()
-    var startDate = childRef.current.calculateDate()
-    console.log(startDate)
-    setT0(startDate)
+    var startDate = startRef.current.calculateDate()
+    setT0("start Date:",startDate)
     if (startDate != null) {
       navigation.navigate("Input", {screen: "End"})
+    }
+  }
+
+  const handleEndSubmit = () => {
+    console.log("t(nn) submit pressed")
+    var endDate = endRef.current.calculateDate()
+    console.log("endDate:",endDate)
+    setTn(endDate)
+    if (endDate != null) {
+      navigation.navigate("Calendar")
     }
   }
 
@@ -31,7 +41,6 @@ const InputScreen = ({navigation}) => {
     <Stack.Navigator screenOptions={{headerTitleAlign: 'center', animation: 'none'}}>
       <Stack.Screen
         name="Start"
-        // component={InputStart}
         options={{
           title: "T(0)",
           headerStyle: {
@@ -52,11 +61,10 @@ const InputScreen = ({navigation}) => {
           ),
         }}
       >
-        {() => <InputStart ref={childRef} />}
+        {() => <InputStart ref={startRef} />}
       </Stack.Screen>
       <Stack.Screen
         name="End"
-        component={InputEnd}
         options={{
           title: "T(N)",
           headerStyle: {
@@ -76,7 +84,7 @@ const InputScreen = ({navigation}) => {
             </TouchableOpacity >
           ),
           headerRight: () => (
-            <TouchableOpacity  onPress={() => alert("Save")} style={styles.icons}>
+            <TouchableOpacity  onPress={()=>handleEndSubmit()} style={styles.icons}>
               <Ionicons name="checkmark-outline" 
                 size={23} 
                 color="white" 
@@ -84,7 +92,9 @@ const InputScreen = ({navigation}) => {
             </TouchableOpacity >
           ),
         }}
-      />
+      >
+        {() => <InputEnd ref={endRef} />}
+      </Stack.Screen>
     </Stack.Navigator>
   );
 };
