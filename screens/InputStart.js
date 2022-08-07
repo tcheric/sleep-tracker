@@ -1,15 +1,14 @@
-import React, { useRef, useState } from 'react';
+import React, { forwardRef, useRef, useImperativeHandle, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Animated, PanResponder } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const InputStart = () => {
+const InputStart = forwardRef((props, ref) => {
   const [dayOffset, setDayOffset] = useState(0)
   const [hour, setHour] = useState(0)
   const [minute, setMinute] = useState(-1)
   const [AMPM, setAMPM] = useState("PM")
 
   const hourColor = "rgb(40,40,45)"
-  const barColor = "rgb(25,25,25)"
 
   var dropZoneObj = {
     dropZone00 : {xOffset : 0, yOffset : 0},
@@ -25,6 +24,44 @@ const InputStart = () => {
     dropZone50 : {xOffset : 0, yOffset : 0},
     dropZone55 : {xOffset : 0, yOffset : 0},
   }
+
+  useImperativeHandle(ref, () => ({
+
+    getAlert() {
+      alert("getAlert from Child");
+    },
+
+    calculateDate() {
+      if (minute == -1) {
+        // Should catch error
+        alert("Enter a time")
+        return null
+      }
+      var adjustedHour
+      if (AMPM == "AM") {
+        if (hour == 12) {
+          adjustedHour = 0
+        } else {
+          adjustedHour = hour
+        }
+      } else {
+        if (hour == 12) {
+          adjustedHour = hour
+        } else {
+          adjustedHour = hour + 12
+        }
+      } 
+      var date = new Date(Date.now() - 86400000 * dayOffset).getDate()
+      var month = new Date(Date.now() - 86400000 * dayOffset).getMonth();
+      var year = new Date(Date.now() - 86400000 * dayOffset).getFullYear();
+  
+      var calculatedDate = new Date(year, month, date, adjustedHour, minute)
+  
+      return calculatedDate
+    }
+  }))
+
+  
 
   const getSelectedDate = () => {
     var date = new Date(Date.now() - 86400000 * dayOffset).getDate()
@@ -791,7 +828,7 @@ const InputStart = () => {
       </View>
     </Animated.View>
   )
-}
+})
 
 const styles = StyleSheet.create({
   container: {
