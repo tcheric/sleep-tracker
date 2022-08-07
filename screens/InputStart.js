@@ -8,7 +8,8 @@ const InputStart = () => {
   const [minute, setMinute] = useState(-1)
   const [AMPM, setAMPM] = useState("PM")
 
-  const hourColor = "rgb(60,60,60)"
+  const hourColor = "rgb(40,40,45)"
+  const barColor = "rgb(25,25,25)"
 
   var dropZoneObj = {
     dropZone00 : {xOffset : 0, yOffset : 0},
@@ -809,7 +810,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: "12%",
     borderColor: "black",
-    borderRadius: 3,
+    borderRadius: 50,
     backgroundColor: "rgb(30,30,30)",
     height: 34,
     justifyContent: "space-between",
@@ -825,9 +826,10 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: "68%",
     borderColor: "black",
-    borderRadius: 3,
+    borderRadius: 50,
     backgroundColor: "rgb(30,30,30)",
     height: 34,
+    width: 135,
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
@@ -877,12 +879,14 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   hourUnder: {
-    backgroundColor: "white",
+    backgroundColor: "rgb(30,30,30)",
+    backgroundColor: "red",
     position: "absolute",
     padding: 6,
     borderRadius: 12,
     marginLeft: 12,
     marginTop: 12,
+    zIndex: 0,
   },
   minute: {
     position: "absolute",
@@ -913,7 +917,7 @@ const styles = StyleSheet.create({
     height: "25%",
     width: 2,
     marginLeft: -1,
-    backgroundColor: "rgb(30,30,30)",
+    backgroundColor: "rgb(25,25,25)",
     position: "absolute",
     zIndex: -2,
   },
@@ -923,7 +927,7 @@ const styles = StyleSheet.create({
     height: 2,
     marginTop: -1,
     width: "25%",
-    backgroundColor: "rgb(30,30,30)",
+    backgroundColor: "rgb(25,25,25)",
     position: "absolute",
     zIndex: -2,
   },
@@ -933,7 +937,7 @@ const styles = StyleSheet.create({
     height: "25%",
     width: 2,
     marginLeft: -1,
-    backgroundColor: "rgb(30,30,30)",
+    backgroundColor: "rgb(25,25,25)",
     position: "absolute",
     zIndex: -2,
   },
@@ -943,7 +947,7 @@ const styles = StyleSheet.create({
     height: 2,
     marginTop: -1,
     width: "25%",
-    backgroundColor: "rgb(30,30,30)",
+    backgroundColor: "rgb(25,25,25)",
     position: "absolute",
     zIndex: -2,
   },

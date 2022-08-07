@@ -8,6 +8,16 @@ import InputEnd from "./InputEnd";
 
 const Stack = createNativeStackNavigator();
 
+const handleStartSubmit = () => {
+
+}
+
+const forFade = ({ current }) => ({
+  cardStyle: {
+    opacity: current.progress,
+  },
+});
+
 const InputScreen = ({navigation}) => {
   return (
     <Stack.Navigator screenOptions={{headerTitleAlign: 'center', animation: 'none'}}>
@@ -15,7 +25,7 @@ const InputScreen = ({navigation}) => {
         name="Start"
         component={InputStart}
         options={{
-          title: "START SLEEP TIME",
+          title: "T(0)",
           headerStyle: {
             backgroundColor: 'rgb(25,25,25)',
             height: 100,
@@ -38,7 +48,7 @@ const InputScreen = ({navigation}) => {
         name="End"
         component={InputEnd}
         options={{
-          title: "END SLEEP TIME",
+          title: "T(N)",
           headerStyle: {
             backgroundColor: 'rgb(25,25,25)',
             height: 100,
