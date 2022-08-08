@@ -26,7 +26,7 @@ const Tabs = () => {
         tabBarInactiveTintColor: 'rgb(200,200,200)', 
         headerTitleAlign: 'center',
       })}
-      initialRouteName="Calendar"
+      initialRouteName="Input"
       >
       <Tab.Screen name="Calendar" component={CalendarScreen} 
         options={{
@@ -49,6 +49,7 @@ const Tabs = () => {
         options={{
           lazy: true,
           headerShown: false,
+          // unmountOnBlur: true,
           tabBarIcon: ({color, focused}) => (
             <View style={styles.plusIconWrapper}>
               <View style={{

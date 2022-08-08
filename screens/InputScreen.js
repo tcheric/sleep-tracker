@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -11,8 +11,13 @@ const Stack = createNativeStackNavigator();
 
 const InputScreen = ({navigation}) => {
 
+  // useEffect(() => {
+  //   navigation.navigate("Input", {screen: "Start"})
+  // }, [])
+
   const [t0, setT0] = useState(0)
   const [tn, setTn] = useState(0)
+
 
   const startRef = useRef(null)
   const endRef = useRef(null)
@@ -31,17 +36,24 @@ const InputScreen = ({navigation}) => {
     var endDate = endRef.current.calculateDate()
     console.log("endDate:",endDate)
 
-  // Check end date > start date 
+    // Check end date > start date 
+    if (endDate.getTime() <= t0.getTime()) {
+      alert("T(N) must be after T(0)")
+      console.log(endDate.getTime(), t0.getTime())
+    }
 
     setTn(endDate)
     if (endDate != null) {
       navigation.navigate("Calendar")
     }
     console.log("t0:", t0,"tN:", endDate)
+    alert("Sleep Saved")
+    // Reset state of components IS TOO HARD
   }
 
   return (
-    <Stack.Navigator screenOptions={{headerTitleAlign: 'center', animation: 'none'}}>
+    <Stack.Navigator 
+        screenOptions={{headerTitleAlign: 'center', animation: 'none'}}>
       <Stack.Screen
         name="Start"
         options={{
@@ -96,7 +108,7 @@ const InputScreen = ({navigation}) => {
           ),
         }}
       >
-        {() => <InputEnd ref={endRef} />}
+        {() => <InputEnd ref={endRef} navigation={navigation} />}
       </Stack.Screen>
     </Stack.Navigator>
   );
