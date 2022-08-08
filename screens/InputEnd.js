@@ -7,23 +7,23 @@ const InputEnd = forwardRef((props, ref) => {
   const [hour, setHour] = useState(0)
   const [minute, setMinute] = useState(-1)
   const [AMPM, setAMPM] = useState("PM")
-
+  
   const hourColor = "rgb(40,40,45)"
 
-  var dropZoneObj2 = {
-    dropZone00 : {xOffset : 0, yOffset : 0},
-    dropZone05 : {xOffset : 0, yOffset : 0},
-    dropZone10 : {xOffset : 0, yOffset : 0},
-    dropZone15 : {xOffset : 0, yOffset : 0},
-    dropZone20 : {xOffset : 0, yOffset : 0},
-    dropZone25 : {xOffset : 0, yOffset : 0},
-    dropZone30 : {xOffset : 0, yOffset : 0},
-    dropZone35 : {xOffset : 0, yOffset : 0},
-    dropZone40 : {xOffset : 0, yOffset : 0},
-    dropZone45 : {xOffset : 0, yOffset : 0},
-    dropZone50 : {xOffset : 0, yOffset : 0},
-    dropZone55 : {xOffset : 0, yOffset : 0},
-  }
+  const minuteView0 = useRef(null);
+  const minuteView1 = useRef(null);
+  const minuteView2 = useRef(null);
+  const minuteView3 = useRef(null);
+  const minuteView4 = useRef(null);
+  const minuteView5 = useRef(null);
+  const minuteView6 = useRef(null);
+  const minuteView7 = useRef(null);
+  const minuteView8 = useRef(null);
+  const minuteView9 = useRef(null);
+  const minuteView10 = useRef(null);
+  const minuteView11 = useRef(null);
+
+  var whichDZ = -1
 
   useImperativeHandle(ref, () => ({
     calculateDate() {
@@ -83,60 +83,94 @@ const InputEnd = forwardRef((props, ref) => {
     }
   }
 
-  const isInDropZone = ( gesture ) => {
-    for (const [dropZoneXX, value] of Object.entries(dropZoneObj2)) {
-      console.log("y:", value.yOffset+277-31, value.yOffset+277+31)
-      console.log("x:", value.xOffset+79-30, value.xOffset+79+30)
-      console.log(gesture.moveY > value.yOffset+277-31 && gesture.moveY < value.yOffset+277+31)
-      console.log(gesture.moveX > value.xOffset+79-30 && gesture.moveX < value.xOffset+79+30)
-      console.log(gesture.moveX, value.xOffset+79-30, value.xOffset+79+30)
-      if ((gesture.moveY > value.yOffset+277-31 && gesture.moveY < value.yOffset+277+31) 
-        && (gesture.moveX > value.xOffset+79-30 && gesture.moveX < value.xOffset+79+30)) 
-      {
-        return true
+  const setDropZone = ( gesture ) => {
+    // console.log("1",gesture.moveY, gesture.moveX)
+    var gmY = gesture.moveY
+    var gmX = gesture.moveX
+    var ret = 0
+
+    minuteView0.current.measure((x, y, width, height, pagex, pagey) => {
+      if ((gmY > pagey && gmY < pagey+height) && (gmX > pagex && gmX < pagex+width)) {
+        ret = 1
+        whichDZ = 0
+        console.log("0 DIDNT failed")
       }
+    })
+    minuteView1.current.measure((x, y, width, height, pagex, pagey) => {
+      if ((gmY > pagey && gmY < pagey+height) && (gmX > pagex && gmX < pagex+width)) {
+        ret = 1
+        whichDZ = 5
+      }
+    })     
+    minuteView2.current.measure((x, y, width, height, pagex, pagey) => {
+      if ((gmY > pagey && gmY < pagey+height) && (gmX > pagex && gmX < pagex+width)) {
+        ret = 1
+        whichDZ = 10
+      }
+    })
+    minuteView3.current.measure((x, y, width, height, pagex, pagey) => {
+      if ((gmY > pagey && gmY < pagey+height) && (gmX > pagex && gmX < pagex+width)) {
+        ret = 1
+        whichDZ = 15
+      }     
+    })
+    minuteView4.current.measure((x, y, width, height, pagex, pagey) => {
+      if ((gmY > pagey && gmY < pagey+height) && (gmX > pagex && gmX < pagex+width)) {
+        ret = 1
+        whichDZ = 20
+      }     
+    })
+    minuteView5.current.measure((x, y, width, height, pagex, pagey) => {
+      if ((gmY > pagey && gmY < pagey+height) && (gmX > pagex && gmX < pagex+width)) {
+        ret = 1
+        whichDZ = 25
+      }     
+    })
+    minuteView6.current.measure((x, y, width, height, pagex, pagey) => {
+      if ((gmY > pagey && gmY < pagey+height) && (gmX > pagex && gmX < pagex+width)) {
+        ret = 1
+        whichDZ = 30
+      }     
+    })
+    minuteView7.current.measure((x, y, width, height, pagex, pagey) => {
+      if ((gmY > pagey && gmY < pagey+height) && (gmX > pagex && gmX < pagex+width)) {
+        ret = 1
+        whichDZ = 35
+      }     
+    })
+    minuteView8.current.measure((x, y, width, height, pagex, pagey) => {
+      if ((gmY > pagey && gmY < pagey+height) && (gmX > pagex && gmX < pagex+width)) {
+        ret = 1
+        whichDZ = 40
+      }     
+    })
+    minuteView9.current.measure((x, y, width, height, pagex, pagey) => {
+      if ((gmY > pagey && gmY < pagey+height) && (gmX > pagex && gmX < pagex+width)) {
+        ret = 1
+        whichDZ = 45
+      }     
+    })
+    minuteView10.current.measure((x, y, width, height, pagex, pagey) => {
+      if ((gmY > pagey && gmY < pagey+height) && (gmX > pagex && gmX < pagex+width)) {
+        ret = 1
+        whichDZ = 50
+      }     
+    })
+    minuteView11.current.measure((x, y, width, height, pagex, pagey) => {
+      if ((gmY > pagey && gmY < pagey+height) && (gmX > pagex && gmX < pagex+width)) {
+        ret = 1
+        whichDZ = 55
+      }     
+    })
+
+    if (ret == 1) {
+      return true
+    } else {
+      return false
     }
-    console.log("gesture.moveY" , gesture.moveY, "gesture.moveX" , gesture.moveX)
-    return false
   }
 
-  const whichDropZone = ( gesture ) => {
-    for (const [dropZoneXX, value] of Object.entries(dropZoneObj2)) {
-      if ((gesture.moveY > value.yOffset+277-31 && gesture.moveY < value.yOffset+277+31) 
-        && (gesture.moveX > value.xOffset+79-30 && gesture.moveX < value.xOffset+79+30)) 
-      {
-        if (dropZoneXX === "dropZone00") {
-          return { index: 11, minutes: 0 }
-        } else if (dropZoneXX === "dropZone05") {
-          return { index: 0, minutes: 5 }
-        } else if (dropZoneXX === "dropZone10") {
-          return { index: 1, minutes: 10 }
-        } else if (dropZoneXX === "dropZone15") {
-          return { index: 2, minutes: 15 }
-        } else if (dropZoneXX === "dropZone20") {
-          return { index: 3, minutes: 20 }
-        } else if (dropZoneXX === "dropZone25") {
-          return { index: 4, minutes: 25 }
-        } else if (dropZoneXX === "dropZone30") {
-          return { index: 5, minutes: 30 }
-        } else if (dropZoneXX === "dropZone35") {
-          return { index: 6, minutes: 35 }
-        } else if (dropZoneXX === "dropZone40") {
-          return { index: 7, minutes: 40 }
-        } else if (dropZoneXX === "dropZone45") {
-          return { index: 8, minutes: 45 }
-        } else if (dropZoneXX === "dropZone50") {
-          return { index: 9, minutes: 50 }
-        } else if (dropZoneXX === "dropZone55") {
-          return { index: 10, minutes: 55 }
-        }
-        return dropZoneXX 
-      }
-    }
-    return -1
-  }
-
-  //  Pan responder for touch tracking
+   //  Pan responder for touch tracking
   var prObj = { "pans": {}, "panResponders" : {} }
   for (var i = 0; i < 12; i++) { 
     prObj["pans"][i] = useRef(new Animated.ValueXY()).current;
@@ -146,7 +180,7 @@ const InputEnd = forwardRef((props, ref) => {
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
-        console.log("ON MOVE")
+        // console.log("ON MOVE")
         setHour(12)
         prObj["pans"][11].setOffset({
           x: prObj["pans"][11].x._value,
@@ -162,12 +196,11 @@ const InputEnd = forwardRef((props, ref) => {
       ),
       onPanResponderRelease: (e, gesture) => {
         prObj["pans"][11].flattenOffset(); 
-        if (isInDropZone(gesture)) {
-          console.log("DROPPED")
-          setMinute(whichDropZone(gesture).minutes)
-        } else  {
-          console.log(gesture.moveX, gesture.moveY)
-        }
+        setDropZone(gesture)
+        setTimeout(() => {
+          setMinute(whichDZ)
+          console.log(whichDZ)
+        }, 1); 
         prObj["pans"][11].x.setValue(0)
         prObj["pans"][11].y.setValue(0)
       }
@@ -194,12 +227,10 @@ const InputEnd = forwardRef((props, ref) => {
       ),
       onPanResponderRelease: (e, gesture) => {
         prObj["pans"][0].flattenOffset(); 
-        if (isInDropZone(gesture)) {
-          console.log("DROPPED")
-          setMinute(whichDropZone(gesture).minutes)
-        } else  {
-          console.log(gesture.moveX, gesture.moveY)
-        }
+        setDropZone(gesture)
+        setTimeout(() => {
+          setMinute(whichDZ)
+        }, 1); 
         prObj["pans"][0].x.setValue(0)
         prObj["pans"][0].y.setValue(0)
       }
@@ -226,12 +257,10 @@ const InputEnd = forwardRef((props, ref) => {
       ),
       onPanResponderRelease: (e, gesture) => {
         prObj["pans"][1].flattenOffset(); 
-        if (isInDropZone(gesture)) {
-          console.log("DROPPED")
-          setMinute(whichDropZone(gesture).minutes)
-        } else  {
-          console.log(gesture.moveX, gesture.moveY)
-        }
+        setDropZone(gesture)
+        setTimeout(() => {
+          setMinute(whichDZ)
+        }, 1); 
         prObj["pans"][1].x.setValue(0)
         prObj["pans"][1].y.setValue(0)
       }
@@ -257,12 +286,10 @@ const InputEnd = forwardRef((props, ref) => {
       ),
       onPanResponderRelease: (e, gesture) => {
         prObj["pans"][2].flattenOffset(); 
-        if (isInDropZone(gesture)) {
-          console.log("DROPPED")
-          setMinute(whichDropZone(gesture).minutes)
-        } else  {
-          console.log(gesture.moveX, gesture.moveY)
-        }
+        setDropZone(gesture)
+        setTimeout(() => {
+          setMinute(whichDZ)
+        }, 1); 
         prObj["pans"][2].x.setValue(0)
         prObj["pans"][2].y.setValue(0)
       }
@@ -288,12 +315,10 @@ const InputEnd = forwardRef((props, ref) => {
       ),
       onPanResponderRelease: (e, gesture) => {
         prObj["pans"][3].flattenOffset(); 
-        if (isInDropZone(gesture)) {
-          console.log("DROPPED")
-          setMinute(whichDropZone(gesture).minutes)
-        } else  {
-          console.log(gesture.moveX, gesture.moveY)
-        }
+        setDropZone(gesture)
+        setTimeout(() => {
+          setMinute(whichDZ)
+        }, 1); 
         prObj["pans"][3].x.setValue(0)
         prObj["pans"][3].y.setValue(0)
       }
@@ -319,12 +344,10 @@ const InputEnd = forwardRef((props, ref) => {
       ),
       onPanResponderRelease: (e, gesture) => {
         prObj["pans"][4].flattenOffset(); 
-        if (isInDropZone(gesture)) {
-          console.log("DROPPED")
-          setMinute(whichDropZone(gesture).minutes)
-        } else  {
-          console.log(gesture.moveX, gesture.moveY)
-        }
+        setDropZone(gesture)
+        setTimeout(() => {
+          setMinute(whichDZ)
+        }, 1); 
         prObj["pans"][4].x.setValue(0)
         prObj["pans"][4].y.setValue(0)
       }
@@ -350,12 +373,10 @@ const InputEnd = forwardRef((props, ref) => {
       ),
       onPanResponderRelease: (e, gesture) => {
         prObj["pans"][5].flattenOffset(); 
-        if (isInDropZone(gesture)) {
-          console.log("DROPPED")
-          setMinute(whichDropZone(gesture).minutes)
-        } else  {
-          console.log(gesture.moveX, gesture.moveY)
-        }
+        setDropZone(gesture)
+        setTimeout(() => {
+          setMinute(whichDZ)
+        }, 1); 
         prObj["pans"][5].x.setValue(0)
         prObj["pans"][5].y.setValue(0)
       }
@@ -381,12 +402,10 @@ const InputEnd = forwardRef((props, ref) => {
       ),
       onPanResponderRelease: (e, gesture) => {
         prObj["pans"][6].flattenOffset(); 
-        if (isInDropZone(gesture)) {
-          console.log("DROPPED")
-          setMinute(whichDropZone(gesture).minutes)
-        } else  {
-          console.log(gesture.moveX, gesture.moveY)
-        }
+        setDropZone(gesture)
+        setTimeout(() => {
+          setMinute(whichDZ)
+        }, 1); 
         prObj["pans"][6].x.setValue(0)
         prObj["pans"][6].y.setValue(0)
       }
@@ -412,12 +431,10 @@ const InputEnd = forwardRef((props, ref) => {
       ),
       onPanResponderRelease: (e, gesture) => {
         prObj["pans"][7].flattenOffset(); 
-        if (isInDropZone(gesture)) {
-          console.log("DROPPED")
-          setMinute(whichDropZone(gesture).minutes)
-        } else  {
-          console.log(gesture.moveX, gesture.moveY)
-        }
+        setDropZone(gesture)
+        setTimeout(() => {
+          setMinute(whichDZ)
+        }, 1); 
         prObj["pans"][7].x.setValue(0)
         prObj["pans"][7].y.setValue(0)
       }
@@ -443,12 +460,10 @@ const InputEnd = forwardRef((props, ref) => {
       ),
       onPanResponderRelease: (e, gesture) => {
         prObj["pans"][8].flattenOffset(); 
-        if (isInDropZone(gesture)) {
-          console.log("DROPPED")
-          setMinute(whichDropZone(gesture).minutes)
-        } else  {
-          console.log(gesture.moveX, gesture.moveY)
-        }
+        setDropZone(gesture)
+        setTimeout(() => {
+          setMinute(whichDZ)
+        }, 1); 
         prObj["pans"][8].x.setValue(0)
         prObj["pans"][8].y.setValue(0)
       }
@@ -474,12 +489,10 @@ const InputEnd = forwardRef((props, ref) => {
       ),
       onPanResponderRelease: (e, gesture) => {
         prObj["pans"][9].flattenOffset(); 
-        if (isInDropZone(gesture)) {
-          console.log("DROPPED")
-          setMinute(whichDropZone(gesture).minutes)
-        } else  {
-          console.log(gesture.moveX, gesture.moveY)
-        }
+        setDropZone(gesture)
+        setTimeout(() => {
+          setMinute(whichDZ)
+        }, 1); 
         prObj["pans"][9].x.setValue(0)
         prObj["pans"][9].y.setValue(0)
       }
@@ -505,12 +518,10 @@ const InputEnd = forwardRef((props, ref) => {
       ),
       onPanResponderRelease: (e, gesture) => {
         prObj["pans"][10].flattenOffset(); 
-        if (isInDropZone(gesture)) {
-          console.log("DROPPED")
-          setMinute(whichDropZone(gesture).minutes)
-        } else  {
-          console.log(gesture.moveX, gesture.moveY)
-        }
+        setDropZone(gesture)
+        setTimeout(() => {
+          setMinute(whichDZ)
+        }, 1); 
         prObj["pans"][10].x.setValue(0)
         prObj["pans"][10].y.setValue(0)
       }
@@ -704,88 +715,40 @@ const InputEnd = forwardRef((props, ref) => {
         </View>
 
 {/* MINUTES */}
-        <TouchableOpacity style={styles.twelveM} onLayout={event => {
-          const layout = event.nativeEvent.layout;
-           dropZoneObj2.dropZone00.xOffset = layout.x
-           dropZoneObj2.dropZone00.yOffset = layout.y
-        }} >
+        <TouchableOpacity style={styles.twelveM} ref = {minuteView0}>
             <Text style={{ color: (minute == 0) ? "red" : "white"}}>00</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.oneM}  onLayout={event => {
-          const layout = event.nativeEvent.layout;
-           dropZoneObj2.dropZone05.xOffset = layout.x
-           dropZoneObj2.dropZone05.yOffset = layout.y
-        }} >
+        <TouchableOpacity style={styles.oneM}  ref = {minuteView1}>
             <Text style={{color: (minute == 5) ? "red" : "white"}}>05</Text>
         </TouchableOpacity> 
-        <TouchableOpacity style={styles.twoM} onLayout={event => {
-          const layout = event.nativeEvent.layout;
-           dropZoneObj2.dropZone10.xOffset = layout.x
-           dropZoneObj2.dropZone10.yOffset = layout.y
-        }} >
+        <TouchableOpacity style={styles.twoM} ref = {minuteView2}>
             <Text style={{color: (minute == 10) ? "red" : "white"}}>10</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.threeM} onLayout={event => {
-          const layout = event.nativeEvent.layout;
-           dropZoneObj2.dropZone15.xOffset = layout.x
-           dropZoneObj2.dropZone15.yOffset = layout.y
-        }} > 
+        <TouchableOpacity style={styles.threeM} ref = {minuteView3}>
           <Text style={{color: (minute == 15) ? "red" : "white"}}>15</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.fourM} onLayout={event => {
-          const layout = event.nativeEvent.layout;
-           dropZoneObj2.dropZone20.xOffset = layout.x
-           dropZoneObj2.dropZone20.yOffset = layout.y
-        }} >  
+        <TouchableOpacity style={styles.fourM} ref = {minuteView4}>
           <Text style={{color: (minute == 20) ? "red" : "white"}}>20</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.fiveM} onLayout={event => {
-          const layout = event.nativeEvent.layout;
-           dropZoneObj2.dropZone25.xOffset = layout.x
-           dropZoneObj2.dropZone25.yOffset = layout.y
-        }} >  
+        <TouchableOpacity style={styles.fiveM} ref = {minuteView5}>
          <Text style={{color: (minute == 25) ? "red" : "white"}}>25</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.sixM} onLayout={event => {
-          const layout = event.nativeEvent.layout;
-           dropZoneObj2.dropZone30.xOffset = layout.x
-           dropZoneObj2.dropZone30.yOffset = layout.y
-        }} >  
+        <TouchableOpacity style={styles.sixM} ref = {minuteView6}>
           <Text style={{color: (minute == 30) ? "red" : "white"}}>30</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.sevenM} onLayout={event => {
-          const layout = event.nativeEvent.layout;
-           dropZoneObj2.dropZone35.xOffset = layout.x
-           dropZoneObj2.dropZone35.yOffset = layout.y
-        }} >  
+        <TouchableOpacity style={styles.sevenM} ref = {minuteView7}>
           <Text style={{color: (minute == 35) ? "red" : "white"}}>35</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.eightM} onLayout={event => {
-          const layout = event.nativeEvent.layout;
-           dropZoneObj2.dropZone40.xOffset = layout.x
-           dropZoneObj2.dropZone40.yOffset = layout.y
-        }} >  
+        <TouchableOpacity style={styles.eightM} ref = {minuteView8}>
           <Text style={{color: (minute == 40) ? "red" : "white"}}>40</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.nineM} onLayout={event => {
-          const layout = event.nativeEvent.layout;
-           dropZoneObj2.dropZone45.xOffset = layout.x
-           dropZoneObj2.dropZone45.yOffset = layout.y
-        }} >  
+        <TouchableOpacity style={styles.nineM} ref = {minuteView9}>
           <Text style={{color: (minute == 45) ? "red" : "white"}}>45</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tenM} onLayout={event => {
-          const layout = event.nativeEvent.layout;
-           dropZoneObj2.dropZone50.xOffset = layout.x
-           dropZoneObj2.dropZone50.yOffset = layout.y
-        }} >  
+        <TouchableOpacity style={styles.tenM} ref = {minuteView10}>
           <Text style={{color: (minute == 50) ? "red" : "white"}}>50</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.elevenM} onLayout={event => {
-          const layout = event.nativeEvent.layout;
-           dropZoneObj2.dropZone55.xOffset = layout.x
-           dropZoneObj2.dropZone55.yOffset = layout.y
-        }} >  
+        <TouchableOpacity style={styles.elevenM} ref = {minuteView11}>
           <Text style={{color: (minute == 55) ? "red" : "white"}}>55</Text>
         </TouchableOpacity>
         <View style={styles.minuteCircle}/>
@@ -1050,7 +1013,7 @@ const styles = StyleSheet.create({
     left: "93.3%",
     position: "absolute",
     zIndex: -1,
-    backgroundColor: "blue",
+    // backgroundColor: "blue",
     marginLeft: -30,
     marginTop: -31,
     padding: 22,
@@ -1138,6 +1101,7 @@ const styles = StyleSheet.create({
   },
   elevenM: {
     position: "absolute",
+    // backgroundColor: "blue",
     top: "6.7%",
     left: "25%",
     zIndex: -1,
