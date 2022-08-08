@@ -51,7 +51,6 @@ const InputEnd = forwardRef((props, ref) => {
       var year = new Date(Date.now() - 86400000 * dayOffset).getFullYear();
   
       var calculatedDate = new Date(year, month, date, adjustedHour, minute)
-      alert(saved)
       
       return calculatedDate
     }

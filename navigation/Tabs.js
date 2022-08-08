@@ -25,12 +25,12 @@ const Tabs = () => {
         tabBarActiveTintColor: 'red',
         tabBarInactiveTintColor: 'rgb(200,200,200)', 
         headerTitleAlign: 'center',
-        initialRouteName: "Graph"
       })}
-      initialRouteName="Input"
-    >
+      initialRouteName="Calendar"
+      >
       <Tab.Screen name="Calendar" component={CalendarScreen} 
         options={{
+          lazy: true,
           title: "CALENDAR",
           headerStyle: {
             backgroundColor: 'rgb(25,25,25)',
@@ -47,6 +47,7 @@ const Tabs = () => {
       />
       <Tab.Screen name="Input" component={InputScreen}
         options={{
+          lazy: true,
           headerShown: false,
           tabBarIcon: ({color, focused}) => (
             <View style={styles.plusIconWrapper}>
@@ -69,6 +70,7 @@ const Tabs = () => {
       />
       <Tab.Screen name="Graph" component={GraphScreen}
         options={{
+          lazy: true,
           title: "GRAPH",
           headerStyle: {
             backgroundColor: 'rgb(25,25,25)',

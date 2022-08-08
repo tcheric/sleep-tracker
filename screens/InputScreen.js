@@ -14,14 +14,13 @@ const InputScreen = ({navigation}) => {
   const [t0, setT0] = useState(0)
   const [tn, setTn] = useState(0)
 
-  const startRef = useRef()
-  const endRef = useRef()
+  const startRef = useRef(null)
+  const endRef = useRef(null)
 
   const handleStartSubmit = () => {
     console.log("t(0) submit pressed")
-    // childRef.current.getAlert()
     var startDate = startRef.current.calculateDate()
-    setT0("start Date:",startDate)
+    setT0(startDate)
     if (startDate != null) {
       navigation.navigate("Input", {screen: "End"})
     }
@@ -31,10 +30,14 @@ const InputScreen = ({navigation}) => {
     console.log("t(nn) submit pressed")
     var endDate = endRef.current.calculateDate()
     console.log("endDate:",endDate)
+
+  // Check end date > start date 
+
     setTn(endDate)
     if (endDate != null) {
       navigation.navigate("Calendar")
     }
+    console.log("t0:", t0,"tN:", endDate)
   }
 
   return (
