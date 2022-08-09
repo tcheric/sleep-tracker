@@ -8,7 +8,7 @@ const InputStart = forwardRef((props, ref) => {
   const [minute, setMinute] = useState(-1)
   const [AMPM, setAMPM] = useState("PM")
 
-  const hourColor = "rgb(40,40,45)"
+  const hourColor = "rgb(50,50,55)"
 
   var dropZoneObj = {
     dropZone00 : {xOffset : 0, yOffset : 0},

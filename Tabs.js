@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import CalendarScreen from '../screens/CalendarScreen'
-import InputScreen from '../screens/InputScreen'
-import GraphScreen from '../screens/GraphScreen'
+import CalendarScreen from './screens/CalendarScreen'
+import InputScreen from './screens/InputScreen'
+import GraphScreen from './screens/GraphScreen'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { View, StyleSheet } from "react-native";
 

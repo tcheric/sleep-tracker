@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import InputStart from "./InputStart";
 import InputEnd from "./InputEnd";
@@ -10,10 +10,6 @@ import InputEnd from "./InputEnd";
 const Stack = createNativeStackNavigator();
 
 const InputScreen = ({navigation}) => {
-
-  // useEffect(() => {
-  //   navigation.navigate("Input", {screen: "Start"})
-  // }, [])
 
   const [t0, setT0] = useState(0)
   const [tn, setTn] = useState(0)
@@ -40,6 +36,14 @@ const InputScreen = ({navigation}) => {
     if (endDate.getTime() <= t0.getTime()) {
       alert("T(N) must be after T(0)")
       console.log(endDate.getTime(), t0.getTime())
+      return null
+    }
+
+    if (endDate.getTime() - t0.getTime() > 43200000)  {
+      alert("Sleep interval must be less than 12hr")
+      return null
+    } else {
+      console.log(endDate.getTime() - t0.getTime())
     }
 
     setTn(endDate)
@@ -48,6 +52,7 @@ const InputScreen = ({navigation}) => {
     }
     console.log("t0:", t0,"tN:", endDate)
     alert("Sleep Saved")
+    addSleepEntry()
     // Reset state of components IS TOO HARD
   }
 

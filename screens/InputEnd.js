@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useImperativeHandle, useState, useEffect } from 'react';
+import React, { forwardRef, useRef, useImperativeHandle, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Animated, PanResponder } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -8,7 +8,7 @@ const InputEnd = forwardRef((props, ref) => {
   const [minute, setMinute] = useState(-1)
   const [AMPM, setAMPM] = useState("PM")
 
-  const hourColor = "rgb(40,40,45)"
+  const hourColor = "rgb(50,50,55)"
 
   const minuteView0 = useRef(null);
   const minuteView1 = useRef(null);
