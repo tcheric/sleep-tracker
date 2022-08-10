@@ -18,6 +18,35 @@ const InputScreen = ({navigation}) => {
   const startRef = useRef(null)
   const endRef = useRef(null)
 
+  const addSleepEntry = async ( startTime, endTime ) => {
+    var ogJsonValue = null
+    try {
+      ogJsonValue = await AsyncStorage.getItem('startDate')
+      if (ogJsonValue == null) {
+        // set new storage item
+        const dateObj = new Date(startTime)
+        const stringDate = dateObj.getDate().toString()
+        const stringMonth = dateObj.getMonth().toString()
+        const stringYear = dateObj.getFullYear().toString()
+
+        const newJsonValue = [{ date : "15/08", t0 : startTime, tn : endTime }]
+
+        await AsyncStorage.setItem('startDate', JSON.stringify(newJsonValue))
+
+      } else if (ogJsonValue != null) {
+        JSON.parse(ogJsonValue)
+        // append to existing storage item
+
+        const modJsonValue = null
+
+        await AsyncStorage.setItem('startDate', JSON.stringify(modJsonValue))
+      }
+    } catch (e) {
+      alert("Error - couldn't save data")
+    }
+
+  }
+
   const handleStartSubmit = () => {
     console.log("t(0) submit pressed")
     var startDate = startRef.current.calculateDate()
@@ -51,8 +80,8 @@ const InputScreen = ({navigation}) => {
       navigation.navigate("Calendar")
     }
     console.log("t0:", t0,"tN:", endDate)
+    addSleepEntry(t0, tn)
     alert("Sleep Saved")
-    addSleepEntry()
     // Reset state of components IS TOO HARD
   }
 
