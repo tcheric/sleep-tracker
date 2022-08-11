@@ -131,6 +131,7 @@ const InputScreen = ({navigation}) => {
   const clearAllDebug = async() => {
     try {
       await AsyncStorage.clear()
+      console.log("cleared")
     } catch(e) {
       console.log(e)
     }
