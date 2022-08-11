@@ -18,33 +18,129 @@ const InputScreen = ({navigation}) => {
   const startRef = useRef(null)
   const endRef = useRef(null)
 
-  const addSleepEntry = async ( startTime, endTime ) => {
+  const addByStartDate = async ( startTime, endTime ) => {
     var ogJsonValue = null
+    const dateObj = new Date(startTime)
+    const stringDate = dateObj.getDate().toString()
+    const stringMonth = (dateObj.getMonth()+1).toString()
+    const stringYear = dateObj.getFullYear().toString()
+    const stringStartDate = stringDate + "/" + stringMonth + "/" + stringYear
+    
+    const timeDiffHours = (endTime.getTime() - startTime.getTime()) / 3600000
+    const timeDiffMin = (timeDiffHours - Math.floor(timeDiffHours)) * 60
+
     try {
-      ogJsonValue = await AsyncStorage.getItem('startDate')
+      ogJsonValue = await AsyncStorage.getItem('byStartDate')
       if (ogJsonValue == null) {
         // set new storage item
-        const dateObj = new Date(startTime)
-        const stringDate = dateObj.getDate().toString()
-        const stringMonth = dateObj.getMonth().toString()
-        const stringYear = dateObj.getFullYear().toString()
-
-        const newJsonValue = [{ date : "15/08", t0 : startTime, tn : endTime }]
-
-        await AsyncStorage.setItem('startDate', JSON.stringify(newJsonValue))
+        const newJsonValue = [{ 
+          date : stringStartDate, 
+          t0 : startTime, 
+          tn : endTime, 
+          durationHours : Math.floor(timeDiffHours),
+          durationMin : timeDiffMin
+        }]
+        await AsyncStorage.setItem('byStartDate', JSON.stringify(newJsonValue))
 
       } else if (ogJsonValue != null) {
-        JSON.parse(ogJsonValue)
+        const ogArray = JSON.parse(ogJsonValue)
         // append to existing storage item
+        const modJsonValue = [
+          ...ogArray, 
+          { 
+            date : stringStartDate, 
+            t0 : startTime, 
+            tn : endTime, 
+            durationHours : Math.floor(timeDiffHours),
+            durationMin : timeDiffMin
+          }]
 
-        const modJsonValue = null
-
-        await AsyncStorage.setItem('startDate', JSON.stringify(modJsonValue))
+        await AsyncStorage.setItem('byStartDate', JSON.stringify(modJsonValue))
       }
+      const res = await AsyncStorage.getItem('byStartDate')
+      console.log(res)
     } catch (e) {
       alert("Error - couldn't save data")
+      console.log(e)
     }
+  }
 
+  const addByEndDate = async ( startTime, endTime ) => {
+    var ogJsonValue = null
+    const dateObj = new Date(endTime)
+    const stringDate = dateObj.getDate().toString()
+    const stringMonth = (dateObj.getMonth()+1).toString()
+    const stringYear = dateObj.getFullYear().toString()
+    const stringEndDate = stringDate + "/" + stringMonth + "/" + stringYear
+
+    try {
+      ogJsonValue = await AsyncStorage.getItem('byEndDate')
+      if (ogJsonValue == null) {
+        // set new storage item
+        const newJsonValue = [{ date : stringEndDate, t0 : startTime, tn : endTime }]
+        await AsyncStorage.setItem('byEndDate', JSON.stringify(newJsonValue))
+
+      } else if (ogJsonValue != null) {
+        const ogArray = JSON.parse(ogJsonValue)
+        // append to existing storage item
+        const modJsonValue = [
+          ...ogArray, 
+          { date : stringEndDate, t0 : startTime, tn : endTime }]
+
+        await AsyncStorage.setItem('byEndDate', JSON.stringify(modJsonValue))
+      }
+      const res = await AsyncStorage.getItem('byEndDate')
+      console.log(res)
+    } catch (e) {
+      alert("Error - couldn't save data")
+      console.log(e)
+    }
+  }
+
+  const addByWeek = async ( startTime, endTime ) => {
+    const startOfUniverse = 1659276000000 // 1st Aug 2022 in milliseconds since epoch
+    const weekInMilli = 604800000
+    const startInmilli = startTime.getTime()
+    const weeks = Math.floor((startInmilli - startOfUniverse) / weekInMilli)
+
+    var ogJsonValue = null
+    try {
+      ogJsonValue = await AsyncStorage.getItem('byWeek')
+      if (ogJsonValue == null) {
+        // set new storage item
+        const newJsonValue = [{ week : weeks , t0 : startTime, tn : endTime }]
+        await AsyncStorage.setItem('byWeek', JSON.stringify(newJsonValue))
+
+      } else if (ogJsonValue != null) {
+        const ogArray = JSON.parse(ogJsonValue)
+        // append to existing storage item
+        const modJsonValue = [
+          ...ogArray, 
+          { week : weeks, t0 : startTime, tn : endTime }]
+
+        await AsyncStorage.setItem('byWeek', JSON.stringify(modJsonValue))
+      }
+      const res = await AsyncStorage.getItem('byWeek')
+      console.log(res)
+    } catch (e) {
+      alert("Error - couldn't save data")
+      console.log(e)
+    }
+  }
+
+  const clearAllDebug = async() => {
+    try {
+      await AsyncStorage.clear()
+    } catch(e) {
+      console.log(e)
+    }
+  }
+
+  const addSleepEntry = ( startTime, endTime ) => {
+    // addByStartDate( startTime, endTime )
+    // addByEndDate( startTime, endTime )
+    // addByWeek( startTime, endTime )
+    clearAllDebug()
   }
 
   const handleStartSubmit = () => {
@@ -57,14 +153,13 @@ const InputScreen = ({navigation}) => {
   }
 
   const handleEndSubmit = () => {
-    console.log("t(nn) submit pressed")
+    console.log("t(n) submit pressed")
     var endDate = endRef.current.calculateDate()
-    console.log("endDate:",endDate)
+    // console.log("endDate:",endDate)
 
     // Check end date > start date 
     if (endDate.getTime() <= t0.getTime()) {
       alert("T(N) must be after T(0)")
-      console.log(endDate.getTime(), t0.getTime())
       return null
     }
 
@@ -72,15 +167,15 @@ const InputScreen = ({navigation}) => {
       alert("Sleep interval must be less than 12hr")
       return null
     } else {
-      console.log(endDate.getTime() - t0.getTime())
+      // console.log(endDate.getTime() - t0.getTime())
     }
 
     setTn(endDate)
     if (endDate != null) {
       navigation.navigate("Calendar")
     }
-    console.log("t0:", t0,"tN:", endDate)
-    addSleepEntry(t0, tn)
+    // console.log("t0:", t0,"tN:", endDate)
+    addSleepEntry(t0, endDate)
     alert("Sleep Saved")
     // Reset state of components IS TOO HARD
   }
