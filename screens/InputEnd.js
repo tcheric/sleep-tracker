@@ -30,7 +30,6 @@ const InputEnd = forwardRef((props, ref) => {
   if (isFocused) {
     if (props.flag == 1) {
       console.log("IS FOCUSED and flag set")
-      props.navigation.navigate("Input", {screen: "Start"}) //call this in parent
       props.flagFunc()
     } else {
       console.log("IS FOCUSED and flag not set")

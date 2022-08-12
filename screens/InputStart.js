@@ -31,6 +31,13 @@ const InputStart = forwardRef((props, ref) => {
       alert("getAlert from Child");
     },
 
+    reset() {
+      setDayOffset(0)
+      setHour(0)
+      setMinute(-1)
+      setAMPM("PM")
+    },
+
     calculateDate() {
       if (minute == -1) {
         // Should catch error

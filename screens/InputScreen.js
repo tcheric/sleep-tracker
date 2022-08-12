@@ -188,6 +188,7 @@ const InputScreen = ({navigation}) => {
   const flagFunc = () => {
     navigation.navigate("Input", {screen: "Start"}) //call this in parent
     setFlag(0)
+    startRef.current.reset()
   }
 
   return (
