@@ -799,6 +799,7 @@ const InputEnd = forwardRef((props, ref) => {
             color={"red"}/>
         </TouchableOpacity >
       </View>
+      <Text style={styles.bottomText}>{props.t0}</Text>
     </Animated.View>
   )
 })
@@ -819,34 +820,38 @@ const styles = StyleSheet.create({
   dateContainer: {
     position: "absolute",
     top: "12%",
+    right: "12%",
     borderColor: "black",
-    borderRadius: 50,
     backgroundColor: "rgb(30,30,30)",
-    height: 34,
+    borderRadius: 10,
+    height: 40,
+    width: 125,
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
   },
   date: {
     fontSize: 16,
-    marginHorizontal:10,
+    marginHorizontal: 6,
     color: 'rgb(230,230,230)',
   },
   AMPMContainer: {
     position: "absolute",
-    top: "68%",
+    // top: "68%",
+    top: "12%",
+    left: "12%",
     borderColor: "black",
-    borderRadius: 50,
+    borderRadius: 10,
+    height: 40,
+    width: 125,
     backgroundColor: "rgb(30,30,30)",
-    height: 34,
-    width: 135,
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
   },
   icons: {
-    width: 36,
-    height: 30,
+    width: 30,
+    height: 40,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -1132,6 +1137,12 @@ const styles = StyleSheet.create({
     padding: 22,
     borderRadius: 20,
   },
+  bottomText: {
+    position: "absolute",
+    bottom: "25%",
+    color: "red",
+    fontSize: 13,
+  }
 })
 
 export default InputEnd

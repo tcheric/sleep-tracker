@@ -31,13 +31,14 @@ const Tabs = () => {
       <Tab.Screen name="Calendar" component={CalendarScreen} 
         options={{
           lazy: true,
-          title: "CALENDAR",
+          // title: "CALENDAR",
+          title: "LOG",
           headerStyle: {
             backgroundColor: 'rgb(25,25,25)',
             shadowColor: "rgba(0,0,0,0)",
           },
           headerTitleStyle: {
-            fontSize: 17,
+            fontSize: 19,
             color: 'white',
           },
           tabBarIcon: ({color}) => (
@@ -78,7 +79,7 @@ const Tabs = () => {
             shadowColor: "rgba(0,0,0,0)",
           },
           headerTitleStyle: {
-            fontSize: 17,
+            fontSize: 19,
             color: 'white',
           },
           tabBarIcon: ({color}) => (

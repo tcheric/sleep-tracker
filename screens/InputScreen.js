@@ -14,6 +14,7 @@ const InputScreen = ({navigation}) => {
   const [t0, setT0] = useState(0)
   const [tn, setTn] = useState(0)
   const [flag, setFlag] = useState(0)
+  const [t0String, setT0String] = useState("")
 
 
   const startRef = useRef(null)
@@ -151,6 +152,31 @@ const InputScreen = ({navigation}) => {
     setT0(startDate)
     if (startDate != null) {
       navigation.navigate("Input", {screen: "End"})
+      const min= startDate.getMinutes()
+      const hour = startDate.getHours()
+      const AMPMString = (hour >= 12) ? "PM" : "AM"
+      const date = startDate.getDate()
+      const month = startDate.getDate()
+  
+      var minString
+      if (min < 10) {
+        minString  = "0" + min.toString() 
+      } else {
+        minString = min.toString()
+      }
+  
+      var hourString
+      if (hour == 0) {
+        hourString = "12"
+      } else if (hour >= 13) {
+        hourString = (hour - 12).toString()
+      } else {
+        hourString = hour.toString()
+      }
+      var dateString = (date < 10) ? ("0" + date.toString()) : date.toString()
+      var monthString = (month < 10) ? ("0" + month.toString()) : month.toString()
+  
+      setT0String("T(0) : "+hourString+":"+minString+AMPMString+" ["+dateString+"/"+monthString+"]" )
     }
   }
 
@@ -203,7 +229,7 @@ const InputScreen = ({navigation}) => {
             height: 100,
           },
           headerTitleStyle: {
-            fontSize: 18,
+            fontSize: 20,
             color: 'white',
           },
           headerRight: () => (
@@ -248,7 +274,12 @@ const InputScreen = ({navigation}) => {
           ),
         }}
       >
-        {() => <InputEnd ref={endRef} navigation={navigation} flag={flag} flagFunc={flagFunc}/>}
+        {() => <InputEnd
+          ref={endRef}
+          navigation={navigation}
+          flag={flag}
+          flagFunc={flagFunc}
+          t0={t0String} />}
       </Stack.Screen>
     </Stack.Navigator>
   );
