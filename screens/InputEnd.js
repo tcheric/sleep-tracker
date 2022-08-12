@@ -1,5 +1,6 @@
 import React, { forwardRef, useRef, useImperativeHandle, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Animated, PanResponder } from 'react-native'
+import { useIsFocused } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const InputEnd = forwardRef((props, ref) => {
@@ -24,6 +25,19 @@ const InputEnd = forwardRef((props, ref) => {
   const minuteView11 = useRef(null);
 
   var whichDZ = -1
+
+  const isFocused = useIsFocused();
+  if (isFocused) {
+    if (props.flag == 1) {
+      console.log("IS FOCUSED and flag set")
+      props.navigation.navigate("Input", {screen: "Start"}) //call this in parent
+      props.flagFunc()
+    } else {
+      console.log("IS FOCUSED and flag not set")
+    }
+  } else {
+    console.log("IS NOT FOCUSED")
+  }
 
   useImperativeHandle(ref, () => ({
     calculateDate() {

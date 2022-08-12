@@ -13,6 +13,7 @@ const InputScreen = ({navigation}) => {
 
   const [t0, setT0] = useState(0)
   const [tn, setTn] = useState(0)
+  const [flag, setFlag] = useState(0)
 
 
   const startRef = useRef(null)
@@ -179,6 +180,14 @@ const InputScreen = ({navigation}) => {
     addSleepEntry(t0, endDate)
     alert("Sleep Saved")
     // Reset state of components IS TOO HARD
+
+    // set the var here, pass it to child, run isfocused in input end as perr plan
+    setFlag(1)
+  }
+
+  const flagFunc = () => {
+    navigation.navigate("Input", {screen: "Start"}) //call this in parent
+    setFlag(0)
   }
 
   return (
@@ -238,7 +247,7 @@ const InputScreen = ({navigation}) => {
           ),
         }}
       >
-        {() => <InputEnd ref={endRef} navigation={navigation} />}
+        {() => <InputEnd ref={endRef} navigation={navigation} flag={flag} flagFunc={flagFunc}/>}
       </Stack.Screen>
     </Stack.Navigator>
   );
