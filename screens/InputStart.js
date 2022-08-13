@@ -8,7 +8,7 @@ const InputStart = forwardRef((props, ref) => {
   const [minute, setMinute] = useState(-1)
   const [AMPM, setAMPM] = useState("PM")
 
-  const hourColor = "rgb(50,50,55)"
+  const hourColor = "rgb(55,55,60)"
 
   var dropZoneObj = {
     dropZone00 : {xOffset : 0, yOffset : 0},
@@ -852,7 +852,7 @@ const styles = StyleSheet.create({
   },
   dateContainer: {
     position: "absolute",
-    top: "12%",
+    top: "13%",
     right: "12%",
     borderColor: "black",
     backgroundColor: "rgb(30,30,30)",
@@ -871,7 +871,7 @@ const styles = StyleSheet.create({
   AMPMContainer: {
     position: "absolute",
     // top: "68%",
-    top: "12%",
+    top: "13%",
     left: "12%",
     borderColor: "black",
     borderRadius: 10,
@@ -905,7 +905,7 @@ const styles = StyleSheet.create({
     bottom: 100,
   },
   outerClockContainer: {
-    top: -54,
+    top: -40,
     // backgroundColor:"grey",
     width: 270,
     aspectRatio: 1 / 1,
