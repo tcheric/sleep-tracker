@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import * as SQLite from 'expo-sqlite';
 
 const CalendarScreen = ({navigation}) => {
   const getWeek = async () => {
