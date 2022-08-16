@@ -157,7 +157,7 @@ const InputScreen = ({navigation}) => {
       const hour = startDate.getHours()
       const AMPMString = (hour >= 12) ? "PM" : "AM"
       const date = startDate.getDate()
-      const month = startDate.getDate()
+      const month = startDate.getMonth() + 1
   
       var minString
       if (min < 10) {

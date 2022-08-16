@@ -4,10 +4,60 @@ import InputScreen from './screens/InputScreen'
 import GraphScreen from './screens/GraphScreen'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { View, StyleSheet } from "react-native";
+import { useEffect } from "react"
+import * as SQLite from "expo-sqlite";
 
 const Tab = createBottomTabNavigator()
 
+const db = SQLite.openDatabase("db.db");
+
 const Tabs = () => {
+
+  useEffect(() => {
+    db.transaction((tx) => {
+      tx.executeSql(`
+      CREATE TABLE IF NOT EXISTS Weeks (
+        week INTEGER PRIMARY KEY, 
+        stringRep TEXT, 
+        total INTEGER, 
+        average INTEGER, 
+        startDate TEXT, 
+        endDate TEXT
+        );`, 
+      [],
+      (t, r) => {
+        console.log("1st")
+        console.log(r)
+      },
+      (t, e) => {
+        console.log("2nd e")
+        console.log(e)
+      })
+    });
+    
+    db.transaction((tx) => {
+      tx.executeSql(`
+      CREATE TABLE IF NOT EXISTS Sleeps (
+        t0 INTEGER PRIMARY KEY, 
+        tn INTEGER, 
+        t0String TEXT, 
+        tnString TEXT, 
+        hours INTEGER, 
+        minutes INTEGER, 
+        week INTEGER REFERENCES Weeks(week)
+        );`, 
+      [],
+      (t, r) => {
+        console.log("2nd")
+        console.log(r)
+      },
+      (t, e) => {
+        console.log("2nd e")
+        console.log(e)
+      })
+    });
+  }, []);
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -99,7 +149,6 @@ const styles = StyleSheet.create({
   },
   plusIconWrapper: {
     borderColor: "black", 
-    // borderColor: "white", 
     borderWidth: 6,
     borderRadius: 33,
     position: "absolute",
