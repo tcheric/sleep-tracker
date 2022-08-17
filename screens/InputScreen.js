@@ -9,6 +9,7 @@ import InputStart from "./InputStart";
 import InputEnd from "./InputEnd";
 
 const Stack = createNativeStackNavigator();
+const db = SQLite.openDatabase("db.db");
 
 const InputScreen = ({navigation}) => {
 
@@ -20,6 +21,52 @@ const InputScreen = ({navigation}) => {
 
   const startRef = useRef(null)
   const endRef = useRef(null)
+
+  const insertIntoWeeks = ( startTime, endTime ) => {
+    // insert if weeks doesn;t exiist
+    db.transaction((tx) => {
+      tx.executeSql(`
+      INSERT INTO Weeks 
+        ( week, stringRep, total, average, startDate, endDate ) 
+      VALUES 
+        ( ?, ?, ?, ?, ?, ?, ) 
+        ;`, 
+      [],
+      (t, r) => {
+        console.log("3rd r")
+        console.log(r)
+      },
+      (t, e) => {
+        console.log("3rd e")
+        console.log(e)
+      })
+    });
+
+    // update weeks
+  }
+
+  const insertIntoSleeps = ( startTime, endTime ) => {
+    db.transaction((tx) => {
+      tx.executeSql(`
+      CREATE TABLE IF NOT EXISTS Weeks (
+        week INTEGER PRIMARY KEY, 
+        stringRep TEXT, 
+        total INTEGER, 
+        average INTEGER, 
+        startDate TEXT, 
+        endDate TEXT
+        );`, 
+      [],
+      (t, r) => {
+        console.log("1st")
+        console.log(r)
+      },
+      (t, e) => {
+        console.log("2nd e")
+        console.log(e)
+      })
+    });
+  }
 
   const addByStartDate = async ( startTime, endTime ) => {
     var ogJsonValue = null
@@ -145,6 +192,9 @@ const InputScreen = ({navigation}) => {
     // addByEndDate( startTime, endTime )
     // addByWeek( startTime, endTime )
     clearAllDebug()
+
+    insertIntoSleeps()
+    // insertIntoWeeks()
   }
 
   const handleStartSubmit = () => {

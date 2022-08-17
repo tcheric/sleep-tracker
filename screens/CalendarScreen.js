@@ -1,14 +1,19 @@
-import * as React from 'react'
+import { useEffect } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as SQLite from 'expo-sqlite';
 
+const db = SQLite.openDatabase("db.db");
+
 const CalendarScreen = ({navigation}) => {
-  const getWeek = async () => {
-    // • How to add each week even when sleep isn't added? (andd get stringReps?) hardcode?
 
-  }
-
+  useEffect(() => {
+    db.transaction((tx) => {
+      tx.executeSql(`SELECT * FROM Weeks`, [], (_, { rows }) => {
+        console.log(JSON.stringify(rows))
+      })
+    })
+  }, [])
 
   return (
     <View style={styles.container}>

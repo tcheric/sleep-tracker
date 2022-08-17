@@ -26,11 +26,11 @@ const Tabs = () => {
         );`, 
       [],
       (t, r) => {
-        console.log("1st")
+        console.log("1st r")
         console.log(r)
       },
       (t, e) => {
-        console.log("2nd e")
+        console.log("1st e")
         console.log(e)
       })
     });
@@ -48,7 +48,7 @@ const Tabs = () => {
         );`, 
       [],
       (t, r) => {
-        console.log("2nd")
+        console.log("2nd r")
         console.log(r)
       },
       (t, e) => {
