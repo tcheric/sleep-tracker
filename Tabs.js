@@ -6,58 +6,21 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { View, StyleSheet } from "react-native";
 import { useEffect } from "react"
 import * as SQLite from "expo-sqlite";
+import * as FileSystem from 'expo-file-system'
+import { Asset } from "expo-asset"
+import openLocalDatabase from "./utils/openLocalDatabase";
 
 const Tab = createBottomTabNavigator()
 
 const db = SQLite.openDatabase("db.db");
 
 const Tabs = () => {
+  
+  useEffect(()=> {
+    const db = openLocalDatabase()
+    console.log(db)
 
-  useEffect(() => {
-    db.transaction((tx) => {
-      tx.executeSql(`
-      CREATE TABLE IF NOT EXISTS Weeks (
-        week INTEGER PRIMARY KEY, 
-        stringRep TEXT, 
-        total INTEGER, 
-        average INTEGER, 
-        startDate TEXT, 
-        endDate TEXT
-        );`, 
-      [],
-      (t, r) => {
-        console.log("1st r")
-        console.log(r)
-      },
-      (t, e) => {
-        console.log("1st e")
-        console.log(e)
-      })
-    });
-    
-    db.transaction((tx) => {
-      tx.executeSql(`
-      CREATE TABLE IF NOT EXISTS Sleeps (
-        t0 INTEGER PRIMARY KEY, 
-        tn INTEGER, 
-        t0String TEXT, 
-        tnString TEXT, 
-        hours INTEGER, 
-        minutes INTEGER, 
-        week INTEGER REFERENCES Weeks(week)
-        );`, 
-      [],
-      (t, r) => {
-        console.log("2nd r")
-        console.log(r)
-      },
-      (t, e) => {
-        console.log("2nd e")
-        console.log(e)
-      })
-    });
-  }, []);
-
+  }, [])
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
