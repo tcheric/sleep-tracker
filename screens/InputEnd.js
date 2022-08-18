@@ -29,13 +29,13 @@ const InputEnd = forwardRef((props, ref) => {
   const isFocused = useIsFocused();
   if (isFocused) {
     if (props.flag == 1) {
-      console.log("IS FOCUSED and flag set")
+      // console.log("IS FOCUSED and flag set")
       props.flagFunc()
     } else {
-      console.log("IS FOCUSED and flag not set")
+      // console.log("IS FOCUSED and flag not set")
     }
   } else {
-    console.log("IS NOT FOCUSED")
+    // console.log("IS NOT FOCUSED")
   }
 
   useImperativeHandle(ref, () => ({

@@ -11,15 +11,15 @@ const db2 = SQLite.openDatabase("db.db");
 const CalendarScreen = ({navigation}) => {
 
   useEffect(() => {
-    console.log(db._W)
-    console.log(db2)
+    // console.log(db._W)
+    // console.log(db2)
     
     db._W.transaction((tx) => {
       tx.executeSql(`SELECT * FROM Weeks`, [], (_, { rows }) => {
-        console.log(JSON.stringify(rows))
+        // console.log(JSON.stringify(rows))
       })
       tx.executeSql(`SELECT * FROM Sleeps`, [], (_, { rows }) => {
-        console.log(JSON.stringify(rows))
+        // console.log(JSON.stringify(rows))
       })
     })
   }, [])

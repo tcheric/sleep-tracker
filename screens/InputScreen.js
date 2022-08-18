@@ -24,159 +24,167 @@ const InputScreen = ({navigation}) => {
   const endRef = useRef(null)
 
   const updateWeeks = ( startTime, endTime ) => {
-    // insert if weeks doesn;t exiist (WEEKS SHOULD EXIST)
-    db.transaction((tx) => {
-      tx.executeSql(`
-      INSERT INTO Weeks 
-        ( week, stringRep, total, average, startDate, endDate ) 
-      VALUES 
-        ( ?, ?, ?, ?, ?, ?, ) 
-        ;`, 
-      [],
-      (t, r) => {
-        console.log("3rd r")
-        console.log(r)
-      },
-      (t, e) => {
-        console.log("3rd e")
-        console.log(e)
-      })
-    });
 
-    // update weeks
-  }
+    // UPDATE Weeks( week, stringRep, total, average, startDate, endDate ) 
 
-  const insertIntoSleeps = ( startTime, endTime ) => {
-    db.transaction((tx) => {
-      tx.executeSql(`
-      CREATE TABLE IF NOT EXISTS Weeks (
-        week INTEGER PRIMARY KEY, 
-        stringRep TEXT, 
-        total INTEGER, 
-        average INTEGER, 
-        startDate TEXT, 
-        endDate TEXT
-        );`, 
-      [],
-      (t, r) => {
-        console.log("1st")
-        console.log(r)
-      },
-      (t, e) => {
-        console.log("2nd e")
-        console.log(e)
-      })
-    });
-  }
-
-  const addByStartDate = async ( startTime, endTime ) => {
-    var ogJsonValue = null
-    const dateObj = new Date(startTime)
-    const stringDate = dateObj.getDate().toString()
-    const stringMonth = (dateObj.getMonth()+1).toString()
-    const stringYear = dateObj.getFullYear().toString()
-    const stringStartDate = stringDate + "/" + stringMonth + "/" + stringYear
-    
-    const timeDiffHours = (endTime.getTime() - startTime.getTime()) / 3600000
-    const timeDiffMin = (timeDiffHours - Math.floor(timeDiffHours)) * 60
-
-    try {
-      ogJsonValue = await AsyncStorage.getItem('byStartDate')
-      if (ogJsonValue == null) {
-        // set new storage item
-        const newJsonValue = [{ 
-          date : stringStartDate, 
-          t0 : startTime, 
-          tn : endTime, 
-          durationHours : Math.floor(timeDiffHours),
-          durationMin : timeDiffMin
-        }]
-        await AsyncStorage.setItem('byStartDate', JSON.stringify(newJsonValue))
-
-      } else if (ogJsonValue != null) {
-        const ogArray = JSON.parse(ogJsonValue)
-        // append to existing storage item
-        const modJsonValue = [
-          ...ogArray, 
-          { 
-            date : stringStartDate, 
-            t0 : startTime, 
-            tn : endTime, 
-            durationHours : Math.floor(timeDiffHours),
-            durationMin : timeDiffMin
-          }]
-
-        await AsyncStorage.setItem('byStartDate', JSON.stringify(modJsonValue))
-      }
-      const res = await AsyncStorage.getItem('byStartDate')
-      console.log(res)
-    } catch (e) {
-      alert("Error - couldn't save data")
-      console.log(e)
-    }
-  }
-
-  const addByEndDate = async ( startTime, endTime ) => {
-    var ogJsonValue = null
-    const dateObj = new Date(endTime)
-    const stringDate = dateObj.getDate().toString()
-    const stringMonth = (dateObj.getMonth()+1).toString()
-    const stringYear = dateObj.getFullYear().toString()
-    const stringEndDate = stringDate + "/" + stringMonth + "/" + stringYear
-
-    try {
-      ogJsonValue = await AsyncStorage.getItem('byEndDate')
-      if (ogJsonValue == null) {
-        // set new storage item
-        const newJsonValue = [{ date : stringEndDate, t0 : startTime, tn : endTime }]
-        await AsyncStorage.setItem('byEndDate', JSON.stringify(newJsonValue))
-
-      } else if (ogJsonValue != null) {
-        const ogArray = JSON.parse(ogJsonValue)
-        // append to existing storage item
-        const modJsonValue = [
-          ...ogArray, 
-          { date : stringEndDate, t0 : startTime, tn : endTime }]
-
-        await AsyncStorage.setItem('byEndDate', JSON.stringify(modJsonValue))
-      }
-      const res = await AsyncStorage.getItem('byEndDate')
-      console.log(res)
-    } catch (e) {
-      alert("Error - couldn't save data")
-      console.log(e)
-    }
-  }
-
-  const addByWeek = async ( startTime, endTime ) => {
+    // Calculate week
     const startOfUniverse = 1659276000000 // 1st Aug 2022 in milliseconds since epoch
     const weekInMilli = 604800000
     const startInmilli = startTime.getTime()
-    const weeks = Math.floor((startInmilli - startOfUniverse) / weekInMilli)
+    const week = Math.floor((startInmilli - startOfUniverse) / weekInMilli)
 
-    var ogJsonValue = null
-    try {
-      ogJsonValue = await AsyncStorage.getItem('byWeek')
-      if (ogJsonValue == null) {
-        // set new storage item
-        const newJsonValue = [{ week : weeks , t0 : startTime, tn : endTime }]
-        await AsyncStorage.setItem('byWeek', JSON.stringify(newJsonValue))
+    // Calculate duration (milliseconds)
+    const timeDiffMilli = endTime.getTime() - startTime.getTime()
+    
+    // GET Weeks - for original total and average values
+    var ogTotal 
+    var ogAverage
+    db._W.transaction((tx) => {
+      tx.executeSql(`SELECT total, average FROM Weeks WHERE week=?`, [week], (_, { rows }) => {
+        // console.log(JSON.stringify(rows))
+        // console.log(rows)
+        ogTotal = rows._array[0].total
+        ogAverage = rows._array[0].average
+        // console.log(ogTotal, ogAverage)
+        const newTotal = ogTotal + timeDiffMilli
+        const newAverage = newTotal / 7
 
-      } else if (ogJsonValue != null) {
-        const ogArray = JSON.parse(ogJsonValue)
-        // append to existing storage item
-        const modJsonValue = [
-          ...ogArray, 
-          { week : weeks, t0 : startTime, tn : endTime }]
+        db._W.transaction((tx2) => {
+          tx2.executeSql(`
+            UPDATE Weeks 
+            SET total = ?, average = ?
+            WHERE week=?
+          ;`, 
+          [newTotal, newAverage, week],
+          (t, r) => {
+            console.log("3rd r")
+            console.log(r)
+          },
+          (t, e) => {
+            console.log("3rd e")
+            console.log(e)
+          })
+        });
+      })
+    })
+  }
 
-        await AsyncStorage.setItem('byWeek', JSON.stringify(modJsonValue))
-      }
-      const res = await AsyncStorage.getItem('byWeek')
-      console.log(res)
-    } catch (e) {
-      alert("Error - couldn't save data")
-      console.log(e)
+  const insertIntoSleeps = ( startTime, endTime ) => {
+    // Calculate duration
+    const timeDiffHours = (endTime.getTime() - startTime.getTime()) / 3600000
+    const newMin = Math.round((timeDiffHours - Math.floor(timeDiffHours)) * 60)
+    const newHours = Math.floor(timeDiffHours)
+
+    // Calculate week
+    const startOfUniverse = 1659276000000 // 1st Aug 2022 in milliseconds since epoch
+    const weekInMilli = 604800000
+    const startInmilli = startTime.getTime()
+    const week = Math.floor((startInmilli - startOfUniverse) / weekInMilli)
+
+    // T(0) and T(n)
+    const newt0 = startTime.getTime()
+    const newtn = endTime.getTime()
+
+    // Calculate T(0) and T(n) strings
+    const startDayString = calculateDay(startTime)
+    const endDayString =  calculateDay(endTime)
+    const startHourString = calculateHour(startTime)
+    const endHourString = calculateHour(endTime)
+    const startMinString = calculateMin(startTime)
+    const endMinString = calculateMin(endTime)
+    const startAMPMString = calculateAMPM(startTime)
+    const endAMPMString = calculateAMPM(endTime)
+    const startDateString = calculateDate(startTime)
+    const endDateString = calculateDate(endTime)
+    const newt0String = 
+      `${startDayString} ${startHourString}:${startMinString}${startAMPMString} [${startDateString}]`
+    const newtnString = 
+      `${endDayString} ${endHourString}:${endMinString}${endAMPMString} [${endDateString}]` 
+       
+    console.log(newt0String, newtnString)
+    console.log(newt0, newtn)
+    console.log(newHours, newMin)
+    console.log(week)
+
+    // db._W.transaction((tx) => {
+    //   tx.executeSql(`
+    //   INSERT INTO Sleeps 
+    //     ( t0, tn, t0String, tnString, hours, minutes, week ) 
+    //   VALUES 
+    //     ( ?, ?, ?, ?, ?, ?, ) 
+    //     ;`, 
+    //   [ newt0, newtn, newt0String, newtnString, newHours, newMin, week],
+    //   (t, r) => {
+    //     console.log("4r")
+    //     console.log(r)
+    //   },
+    //   (t, e) => {
+    //     console.log("4e")
+    //     console.log(e)
+    //   })
+    // });
+  }
+
+  const addSleepEntry = ( startTime, endTime ) => {
+    // addByStartDate( startTime, endTime )
+    // addByEndDate( startTime, endTime )
+    // addByWeek( startTime, endTime )
+    // clearAllDebug()
+
+    
+    insertIntoSleeps( startTime, endTime )
+    // updateWeeks( startTime, endTime )
+  }
+
+  const calculateDate = ( time ) => {
+    const dateInt = time.getDate()
+    var dateString = dateInt.toString()
+    if (dateInt < 10) {
+      dateString = "0" + dateString
     }
+    const monthInt = time.getMonth() + 1
+    var monthString = monthInt.toString()
+    if (monthInt < 10) {
+      monthString = "0" + monthString
+    }
+
+    return dateString + "/" + monthString
+  }
+
+  const calculateAMPM = ( time ) => {
+    const hourIndex = time.getHours()
+    if (hourIndex < 12) {
+      return "AM"
+    } else {
+      return "PM"
+    }
+  }
+
+  const calculateDay = ( time ) => {
+    const index = time.getDay()
+    if (index == 0) return "MON"
+    if (index == 1) return "TUE"
+    if (index == 2) return "WED"
+    if (index == 3) return "THU"
+    if (index == 4) return "FRI"
+    if (index == 5) return "SAT"
+    if (index == 6) return "SUN"
+  } 
+
+  const calculateMin = ( time ) => {
+    const minInt = time.getMinutes()
+    var minString = minInt.toString()
+    if (minInt < 10) {
+      minString = "0" + minString
+    }
+    return minString
+  }
+
+  const calculateHour = ( time ) => {
+    const hourIndex = time.getHours()
+    if (hourIndex == 0) return "12"
+    else if (hourIndex < 13) return hourIndex.toString()
+    else return (hourIndex - 12).toString()
   }
 
   const clearAllDebug = async() => {
@@ -188,16 +196,7 @@ const InputScreen = ({navigation}) => {
     }
   }
 
-  const addSleepEntry = ( startTime, endTime ) => {
-    // addByStartDate( startTime, endTime )
-    // addByEndDate( startTime, endTime )
-    // addByWeek( startTime, endTime )
-    clearAllDebug()
 
-    
-    insertIntoSleeps()
-    // insertIntoWeeks()
-  }
 
   const handleStartSubmit = () => {
     console.log("t(0) submit pressed")
