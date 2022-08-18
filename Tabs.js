@@ -12,15 +12,12 @@ import openLocalDatabase from "./utils/openLocalDatabase";
 
 const Tab = createBottomTabNavigator()
 
-const db = SQLite.openDatabase("db.db");
-
 const Tabs = () => {
   
   useEffect(()=> {
-    const db = openLocalDatabase()
-    console.log(db)
-
+    // const db = openLocalDatabase()
   }, [])
+  
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({

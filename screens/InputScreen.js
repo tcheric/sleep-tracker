@@ -4,12 +4,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SQLite from 'expo-sqlite';
+import openLocalDatabase from "../utils/openLocalDatabase";
 
 import InputStart from "./InputStart";
 import InputEnd from "./InputEnd";
 
 const Stack = createNativeStackNavigator();
-const db = SQLite.openDatabase("db.db");
+const db = openLocalDatabase()
 
 const InputScreen = ({navigation}) => {
 
@@ -22,8 +23,8 @@ const InputScreen = ({navigation}) => {
   const startRef = useRef(null)
   const endRef = useRef(null)
 
-  const insertIntoWeeks = ( startTime, endTime ) => {
-    // insert if weeks doesn;t exiist
+  const updateWeeks = ( startTime, endTime ) => {
+    // insert if weeks doesn;t exiist (WEEKS SHOULD EXIST)
     db.transaction((tx) => {
       tx.executeSql(`
       INSERT INTO Weeks 
@@ -193,6 +194,7 @@ const InputScreen = ({navigation}) => {
     // addByWeek( startTime, endTime )
     clearAllDebug()
 
+    
     insertIntoSleeps()
     // insertIntoWeeks()
   }
