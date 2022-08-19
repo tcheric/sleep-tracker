@@ -10,7 +10,16 @@ import InputStart from "./InputStart";
 import InputEnd from "./InputEnd";
 
 const Stack = createNativeStackNavigator();
-const db = openLocalDatabase()
+
+// var db
+// openLocalDatabase()
+//   .then((value) => {
+//     db = value
+//     console.log(db)
+//   })
+//   .catch((err) => {
+//     console.log(err)
+//   })
 
 const InputScreen = ({navigation}) => {
 
@@ -24,7 +33,6 @@ const InputScreen = ({navigation}) => {
   const endRef = useRef(null)
 
   const updateWeeks = ( startTime, endTime ) => {
-
     // UPDATE Weeks( week, stringRep, total, average, startDate, endDate ) 
 
     // Calculate week
@@ -38,38 +46,46 @@ const InputScreen = ({navigation}) => {
     
     // GET Weeks - for original total and average values
     var ogTotal 
-    var ogAverage
-    db._W.transaction((tx) => {
+    var ogAverage 
+    console.log("SELECT Weeks")
+    db.transaction((tx) => {
       tx.executeSql(`SELECT total, average FROM Weeks WHERE week=?`, [week], (_, { rows }) => {
-        // console.log(JSON.stringify(rows))
-        // console.log(rows)
-        ogTotal = rows._array[0].total
-        ogAverage = rows._array[0].average
-        // console.log(ogTotal, ogAverage)
-        const newTotal = ogTotal + timeDiffMilli
-        const newAverage = newTotal / 7
-
-        db._W.transaction((tx2) => {
-          tx2.executeSql(`
-            UPDATE Weeks 
-            SET total = ?, average = ?
-            WHERE week=?
-          ;`, 
-          [newTotal, newAverage, week],
-          (t, r) => {
-            console.log("3rd r")
-            console.log(r)
-          },
-          (t, e) => {
-            console.log("3rd e")
-            console.log(e)
+          // console.log(JSON.stringify(rows))
+          // console.log(rows)
+          ogTotal = rows._array[0].total
+          ogAverage = rows._array[0].average
+          // console.log(ogTotal, ogAverage)
+          const newTotal = ogTotal + timeDiffMilli
+          const newAverage = newTotal / 7
+          console.log("UPDATE Weeks")
+          db.transaction((tx2) => {
+            tx2.executeSql(`
+              UPDATE Weeks 
+              SET total = ?, average = ?
+              WHERE week = ?
+            ;`, 
+            [newTotal, newAverage, week],
+            (t, r) => {
+              console.log("3rd r")
+              console.log(r)
+            },
+            (t, e) => {
+              console.log("3rd e")
+              console.log(e)
+            })
           })
-        });
-      })
+        },
+        (t, e) => {
+          console.log("3.2nd e")
+          console.log(e)
+        }
+      )
     })
   }
 
+
   const insertIntoSleeps = ( startTime, endTime ) => {
+    // INSERT Sleeps( t0, tn, t0String, tnString, hours, minutes, week )
     // Calculate duration
     const timeDiffHours = (endTime.getTime() - startTime.getTime()) / 3600000
     const newMin = Math.round((timeDiffHours - Math.floor(timeDiffHours)) * 60)
@@ -100,29 +116,45 @@ const InputScreen = ({navigation}) => {
       `${startDayString} ${startHourString}:${startMinString}${startAMPMString} [${startDateString}]`
     const newtnString = 
       `${endDayString} ${endHourString}:${endMinString}${endAMPMString} [${endDateString}]` 
-       
+
     console.log(newt0String, newtnString)
     console.log(newt0, newtn)
     console.log(newHours, newMin)
     console.log(week)
 
-    // db._W.transaction((tx) => {
-    //   tx.executeSql(`
-    //   INSERT INTO Sleeps 
-    //     ( t0, tn, t0String, tnString, hours, minutes, week ) 
-    //   VALUES 
-    //     ( ?, ?, ?, ?, ?, ?, ) 
-    //     ;`, 
-    //   [ newt0, newtn, newt0String, newtnString, newHours, newMin, week],
-    //   (t, r) => {
-    //     console.log("4r")
-    //     console.log(r)
-    //   },
-    //   (t, e) => {
-    //     console.log("4e")
-    //     console.log(e)
-    //   })
-    // });
+    console.log("INSERT Sleeps")
+
+    openLocalDatabase()
+      .then((db) => {
+        console.log(db)
+        db.transaction((tx) => {
+        // WRAP BELOW INTO PROMISE
+          // tx.executeSql(`
+          // INSERT INTO Sleeps 
+          //   ( t0, tn, t0String, tnString, hours, minutes, week ) 
+          // VALUES 
+          //   ( ?, ?, ?, ?, ?, ?, ? ) 
+          // ;`, 
+          // [newt0, newtn, newt0String, newtnString, newHours, newMin, week],
+          // (t, r) => {
+          //   console.log("4r")
+          //   console.log(r)
+          //   setTimeout(db.closeAsync(), 2000)
+          // },
+          // (t, e) => {
+          //   console.log("4e")
+          //   console.log(e)
+          //   setTimeout(db.closeAsync(), 2000)
+          // })
+        // PUT CLOSEASYNC HERE
+        })
+
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+
+
   }
 
   const addSleepEntry = ( startTime, endTime ) => {
@@ -256,7 +288,7 @@ const InputScreen = ({navigation}) => {
     }
     // console.log("t0:", t0,"tN:", endDate)
     addSleepEntry(t0, endDate)
-    alert("Sleep Saved")
+    // alert("Sleep Saved")
     // Reset state of components IS TOO HARD
 
     // set the var here, pass it to child, run isfocused in input end as perr plan

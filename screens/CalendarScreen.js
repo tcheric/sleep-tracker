@@ -4,25 +4,48 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as SQLite from 'expo-sqlite';
 import openLocalDatabase from "../utils/openLocalDatabase";
 
-const db = openLocalDatabase()
+// const db = openLocalDatabase()
 const db2 = SQLite.openDatabase("db.db");
+// var db
+
+// openLocalDatabase()
+//   .then((value) => {
+//     db = value
+//     // console.log(db)
+//   })
+//   .catch((err) => {
+//     console.log(err)
+//   })
 
 
 const CalendarScreen = ({navigation}) => {
 
-  useEffect(() => {
-    // console.log(db._W)
-    // console.log(db2)
+  // useEffect(() => {
+  //   openLocalDatabase()
+  //     .then((db) => {
+  //       console.log(db)
+  //       db.transaction((tx) => {
+  //         tx.executeSql(`SELECT * FROM Sleeps`, [], (_, { rows }) => {
+  //           console.log(JSON.stringify(rows))
+  //           console.log(rows)
+  //           // setTimeout(db.closeAsync(), 2000)
+  //         })
+  //       })
+  //     })
+  //     .catch((err) => {
+  //       console.log(err)
+  //     })
+
+  //   // db.transaction((tx) => {
+  //   //   tx.executeSql(`SELECT * FROM Weeks`, [], (_, { rows }) => {
+  //   //     console.log(JSON.stringify(rows))
+  //   //   })
+  //   //   tx.executeSql(`SELECT * FROM Sleeps`, [], (_, { rows }) => {
+  //   //     console.log(JSON.stringify(rows))
+  //   //   })
+  //   // })
     
-    db._W.transaction((tx) => {
-      tx.executeSql(`SELECT * FROM Weeks`, [], (_, { rows }) => {
-        // console.log(JSON.stringify(rows))
-      })
-      tx.executeSql(`SELECT * FROM Sleeps`, [], (_, { rows }) => {
-        // console.log(JSON.stringify(rows))
-      })
-    })
-  }, [])
+  // }, [])
 
   return (
     <View style={styles.container}>
