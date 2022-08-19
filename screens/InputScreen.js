@@ -129,23 +129,23 @@ const InputScreen = ({navigation}) => {
         console.log(db)
         db.transaction((tx) => {
         // WRAP BELOW INTO PROMISE
-          // tx.executeSql(`
-          // INSERT INTO Sleeps 
-          //   ( t0, tn, t0String, tnString, hours, minutes, week ) 
-          // VALUES 
-          //   ( ?, ?, ?, ?, ?, ?, ? ) 
-          // ;`, 
-          // [newt0, newtn, newt0String, newtnString, newHours, newMin, week],
-          // (t, r) => {
-          //   console.log("4r")
-          //   console.log(r)
-          //   setTimeout(db.closeAsync(), 2000)
-          // },
-          // (t, e) => {
-          //   console.log("4e")
-          //   console.log(e)
-          //   setTimeout(db.closeAsync(), 2000)
-          // })
+          tx.executeSql(`
+          INSERT INTO Sleeps 
+            ( t0, tn, t0String, tnString, hours, minutes, week ) 
+          VALUES 
+            ( ?, ?, ?, ?, ?, ?, ? ) 
+          ;`, 
+          [newt0, newtn, newt0String, newtnString, newHours, newMin, week],
+          (t, r) => {
+            console.log("4r")
+            console.log(r)
+            // setTimeout(db.closeAsync(), 2000)
+          },
+          (t, e) => {
+            console.log("4e")
+            console.log(e)
+            // setTimeout(db.closeAsync(), 2000)
+          })
         // PUT CLOSEASYNC HERE
         })
 

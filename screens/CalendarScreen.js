@@ -20,32 +20,32 @@ const db2 = SQLite.openDatabase("db.db");
 
 const CalendarScreen = ({navigation}) => {
 
-  // useEffect(() => {
-  //   openLocalDatabase()
-  //     .then((db) => {
-  //       console.log(db)
-  //       db.transaction((tx) => {
-  //         tx.executeSql(`SELECT * FROM Sleeps`, [], (_, { rows }) => {
-  //           console.log(JSON.stringify(rows))
-  //           console.log(rows)
-  //           // setTimeout(db.closeAsync(), 2000)
-  //         })
-  //       })
-  //     })
-  //     .catch((err) => {
-  //       console.log(err)
-  //     })
+  useEffect(() => {
+    openLocalDatabase()
+      .then((db) => {
+        console.log(db)
+        db.transaction((tx) => {
+          tx.executeSql(`SELECT * FROM Sleeps`, [], (_, { rows }) => {
+            console.log(JSON.stringify(rows))
+            console.log(rows)
+            // setTimeout(db.closeAsync(), 2000)
+          })
+        })
+      })
+      .catch((err) => {
+        console.log(err)
+      })
 
-  //   // db.transaction((tx) => {
-  //   //   tx.executeSql(`SELECT * FROM Weeks`, [], (_, { rows }) => {
-  //   //     console.log(JSON.stringify(rows))
-  //   //   })
-  //   //   tx.executeSql(`SELECT * FROM Sleeps`, [], (_, { rows }) => {
-  //   //     console.log(JSON.stringify(rows))
-  //   //   })
-  //   // })
+    // db.transaction((tx) => {
+    //   tx.executeSql(`SELECT * FROM Weeks`, [], (_, { rows }) => {
+    //     console.log(JSON.stringify(rows))
+    //   })
+    //   tx.executeSql(`SELECT * FROM Sleeps`, [], (_, { rows }) => {
+    //     console.log(JSON.stringify(rows))
+    //   })
+    // })
     
-  // }, [])
+  }, [])
 
   return (
     <View style={styles.container}>
