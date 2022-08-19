@@ -3,6 +3,9 @@ import * as FileSystem from 'expo-file-system'
 import { Asset } from "expo-asset"
 
 async function openLocalDatabase() {
+  const database = SQLite.openDatabase("init.db")
+  database._db.close()
+
   if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite')).exists) {
     await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite');
   }

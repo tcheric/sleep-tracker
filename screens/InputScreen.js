@@ -48,39 +48,46 @@ const InputScreen = ({navigation}) => {
     var ogTotal 
     var ogAverage 
     console.log("SELECT Weeks")
-    db.transaction((tx) => {
-      tx.executeSql(`SELECT total, average FROM Weeks WHERE week=?`, [week], (_, { rows }) => {
-          // console.log(JSON.stringify(rows))
-          // console.log(rows)
-          ogTotal = rows._array[0].total
-          ogAverage = rows._array[0].average
-          // console.log(ogTotal, ogAverage)
-          const newTotal = ogTotal + timeDiffMilli
-          const newAverage = newTotal / 7
-          console.log("UPDATE Weeks")
-          db.transaction((tx2) => {
-            tx2.executeSql(`
-              UPDATE Weeks 
-              SET total = ?, average = ?
-              WHERE week = ?
-            ;`, 
-            [newTotal, newAverage, week],
-            (t, r) => {
-              console.log("3rd r")
-              console.log(r)
+
+    openLocalDatabase()
+      .then((db) => {
+        db.transaction((tx) => {
+          tx.executeSql(`SELECT total, average FROM Weeks WHERE week=?`, [week], (_, { rows }) => {
+              // console.log(JSON.stringify(rows))
+              // console.log(rows)
+              ogTotal = rows._array[0].total
+              ogAverage = rows._array[0].average
+              // console.log(ogTotal, ogAverage)
+              const newTotal = ogTotal + timeDiffMilli
+              const newAverage = newTotal / 7
+              console.log("UPDATE Weeks")
+              db.transaction((tx2) => {
+                tx2.executeSql(`
+                  UPDATE Weeks 
+                  SET total = ?, average = ?
+                  WHERE week = ?
+                ;`, 
+                [newTotal, newAverage, week],
+                (t, r) => {
+                  console.log("3rd r")
+                  console.log(r)
+                },
+                (t, e) => {
+                  console.log("3rd e")
+                  console.log(e)
+                })
+              })
             },
             (t, e) => {
-              console.log("3rd e")
+              console.log("3.2nd e")
               console.log(e)
-            })
-          })
-        },
-        (t, e) => {
-          console.log("3.2nd e")
-          console.log(e)
-        }
-      )
-    })
+            }
+          )
+        })
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
 
@@ -126,7 +133,6 @@ const InputScreen = ({navigation}) => {
 
     openLocalDatabase()
       .then((db) => {
-        console.log(db)
         db.transaction((tx) => {
         // WRAP BELOW INTO PROMISE
           tx.executeSql(`
@@ -148,13 +154,10 @@ const InputScreen = ({navigation}) => {
           })
         // PUT CLOSEASYNC HERE
         })
-
       })
       .catch((err) => {
         console.log(err)
       })
-
-
   }
 
   const addSleepEntry = ( startTime, endTime ) => {
@@ -165,7 +168,7 @@ const InputScreen = ({navigation}) => {
 
     
     insertIntoSleeps( startTime, endTime )
-    // updateWeeks( startTime, endTime )
+    updateWeeks( startTime, endTime )
   }
 
   const calculateDate = ( time ) => {
