@@ -1,52 +1,47 @@
-import { useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { useEffect, useState } from 'react'
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import * as SQLite from 'expo-sqlite';
 import openLocalDatabase from "../utils/openLocalDatabase";
 
-// const db = openLocalDatabase()
-const db2 = SQLite.openDatabase("db.db");
-// var db
-
-// openLocalDatabase()
-//   .then((value) => {
-//     db = value
-//     // console.log(db)
-//   })
-//   .catch((err) => {
-//     console.log(err)
-//   })
-
-
 const CalendarScreen = ({navigation}) => {
+  const [wk, setWk] = useState("")
+  const [items, setItems] = useState([])
 
   useEffect(() => {
-    setTimeout(
-      openLocalDatabase()
-        .then((db) => {
-          console.log(db)
-          db.transaction((tx) => {
-            tx.executeSql(`SELECT * FROM Sleeps`, [], (_, { rows }) => {
-              console.log(JSON.stringify(rows))
-              console.log(rows)
-            })
-            tx.executeSql(`SELECT * FROM Weeks`, [], (_, { rows }) => {
-              console.log(JSON.stringify(rows))
-              console.log(rows)
-            })
+    // Calculate curent week
+    const startOfUniverse = 1659276000000 // 1st Aug 2022 in milliseconds since epoch
+    const weekInMilli = 604800000
+    const nowMilli = new Date().getTime()
+    const week = Math.floor((nowMilli - startOfUniverse) / weekInMilli)
+
+    openLocalDatabase()
+      .then((db) => {
+        console.log(db)
+        db.transaction((tx) => {
+          tx.executeSql(`SELECT * FROM Sleeps WHERE week=?`, [week], (_, { rows }) => {
+            // console.log(JSON.stringify(rows))
+            console.log(rows)
+            // Get all sleeps inn the current week
+          })
+          tx.executeSql(`SELECT * FROM Weeks WHERE week=?`, [week], (_, { rows }) => {
+            // console.log(JSON.stringify(rows))
+            // console.log(rows[0].stringRep)
+            console.log(rows._array[0].stringRep)
+            setWk(rows._array[0].stringRep)
+            // get current week's week and stringRep
           })
         })
-        .catch((err) => {
-          console.log(err)
-        })
-    , 5000)
-
-
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    
   }, [])
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Calendar Screen</Text>
+    <ScrollView style={styles.container}>
+
+{/* DATE CONTAINER */}
       <View style={styles.dateContainer}>
         <TouchableOpacity 
           style={styles.icons} 
@@ -59,7 +54,7 @@ const CalendarScreen = ({navigation}) => {
             size={20} 
             color="red"/>
         </TouchableOpacity >
-        <Text style={styles.date}>100</Text>
+        <Text style={styles.date}>{wk}</Text>
         <TouchableOpacity 
           style={styles.icons} 
           onPress={() => {
@@ -73,7 +68,18 @@ const CalendarScreen = ({navigation}) => {
             {/* color={(dayOffset === 0) ? "rgb(150,150,150)" : "red"}/> */}
         </TouchableOpacity >
       </View>
-    </View>
+{/*PLACEHOLDDER */}
+      {/* <Text style={styles.text}>Calendar Screen</Text> */}
+{/*TEST ITEMS */}
+        <View style={styles.item}></View>
+        <View style={styles.item}></View>
+        <View style={styles.item}></View>
+        <View style={styles.item}></View>
+        <View style={styles.item}></View>
+        <View style={styles.item}></View>
+        <View style={styles.item}></View>
+        <View style={styles.item}></View>
+    </ScrollView>
   );
 };
 
@@ -81,26 +87,28 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'black',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   text: {
     color: 'red',
   },
   dateContainer: {
-    position: "absolute",
-    top: "12%",
+    // position: "absolute",
+    // top: "3%",
+    width: "60%",
+    marginHorizontal: "20%",
+    marginTop: 15,
+    marginBottom: 5,
     borderColor: "black",
-    borderRadius: 50,
+    borderRadius: 10,
     backgroundColor: "rgb(30,30,30)",
-    height: 34,
+    height: 40,
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
   },
   date: {
     fontSize: 16,
-    marginHorizontal:10,
+    marginHorizontal: 0,
     color: 'rgb(230,230,230)',
   },
   icons: {
@@ -109,6 +117,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  item: {
+    width: "100%",
+    height: 90,
+    backgroundColor: "rgb(36, 31, 33)",
+    color: "green",
+    marginVertical: 10,
+  }
 });
 
 export default CalendarScreen

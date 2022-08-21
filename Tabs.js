@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     paddingLeft: 2,
   },
   plusIconWrapper: {
-    borderColor: "black", 
+    borderColor: "rgba(0, 0, 0, 0)", 
     borderWidth: 6,
     borderRadius: 33,
     position: "absolute",
