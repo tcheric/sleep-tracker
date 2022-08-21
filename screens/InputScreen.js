@@ -383,6 +383,7 @@ const styles = StyleSheet.create({
     marginHorizontal: -5,
     // backgroundColor: 'red',
   },
+
 });
 
 export default InputScreen

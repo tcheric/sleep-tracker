@@ -39,51 +39,64 @@ const CalendarScreen = ({navigation}) => {
   }, [])
 
   return (
-    <ScrollView style={styles.container}>
-
-{/* DATE CONTAINER */}
-      <View style={styles.dateContainer}>
-        <TouchableOpacity 
-          style={styles.icons} 
-          onPress={() => {
-            if (dayOffset <= 6) {
-              setDayOffset(dayOffset + 1)
-            }
-          }}>
-          <Ionicons name="chevron-back-outline" 
-            size={20} 
-            color="red"/>
-        </TouchableOpacity >
-        <Text style={styles.date}>{wk}</Text>
-        <TouchableOpacity 
-          style={styles.icons} 
-          onPress={() => {
-            if (dayOffset !== 0) {
-              setDayOffset(dayOffset - 1)
-            }
-          }}>
-          <Ionicons name="chevron-forward-outline" 
-            size={20} 
-            color="red"/>
-            {/* color={(dayOffset === 0) ? "rgb(150,150,150)" : "red"}/> */}
-        </TouchableOpacity >
-      </View>
-{/*PLACEHOLDDER */}
-      {/* <Text style={styles.text}>Calendar Screen</Text> */}
-{/*TEST ITEMS */}
-        <View style={styles.item}></View>
-        <View style={styles.item}></View>
-        <View style={styles.item}></View>
-        <View style={styles.item}></View>
-        <View style={styles.item}></View>
-        <View style={styles.item}></View>
-        <View style={styles.item}></View>
-        <View style={styles.item}></View>
-    </ScrollView>
+    <View style={styles.containsAll}>
+      <View style={styles.redLine}></View>
+      <ScrollView style={styles.container}>
+  {/* DATE CONTAINER */}
+        <View style={styles.dateContainer}>
+          <TouchableOpacity 
+            style={styles.icons} 
+            onPress={() => {
+              if (dayOffset <= 6) {
+                setDayOffset(dayOffset + 1)
+              }
+            }}>
+            <Ionicons name="chevron-back-outline" 
+              size={20} 
+              color="red"/>
+          </TouchableOpacity >
+          <Text style={styles.date}>{wk}</Text>
+          <TouchableOpacity 
+            style={styles.icons} 
+            onPress={() => {
+              if (dayOffset !== 0) {
+                setDayOffset(dayOffset - 1)
+              }
+            }}>
+            <Ionicons name="chevron-forward-outline" 
+              size={20} 
+              color="red"/>
+              {/* color={(dayOffset === 0) ? "rgb(150,150,150)" : "red"}/> */}
+          </TouchableOpacity >
+        </View>
+  {/*PLACEHOLDDER */}
+        {/* <Text style={styles.text}>Calendar Screen</Text> */}
+  {/*TEST ITEMS */}
+          <View style={styles.item}></View>
+          <View style={styles.item}></View>
+          <View style={styles.item}></View>
+          <View style={styles.item}></View>
+          <View style={styles.item}></View>
+          <View style={styles.item}></View>
+          <View style={styles.item}></View>
+          <View style={styles.item}></View>
+      </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  containsAll: {
+    position: "relative",
+    backgroundColor: "green",
+    flex: 1,
+  },
+  redLine: {
+    width: "100%",
+    backgroundColor: "red",
+    height: 1,
+    top: 0,
+  },
   container: {
     flex: 1,
     backgroundColor: 'black',

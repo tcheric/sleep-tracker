@@ -560,6 +560,7 @@ const InputEnd = forwardRef((props, ref) => {
 
   return (
     <Animated.View style={styles.container}>
+      <View style={styles.redLine}></View>
 {/* DATE */}
       <View style={styles.dateContainer}>
         <TouchableOpacity 
@@ -1142,7 +1143,14 @@ const styles = StyleSheet.create({
     bottom: "25%",
     color: "red",
     fontSize: 13,
-  }
+  },
+  redLine: {
+    width: "100%",
+    backgroundColor: "red",
+    height: 1,
+    top: 0,
+    position: "absolute",
+  },
 })
 
 export default InputEnd
