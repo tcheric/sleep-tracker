@@ -72,9 +72,33 @@ const CalendarScreen = ({navigation}) => {
   {/*PLACEHOLDDER */}
         {/* <Text style={styles.text}>Calendar Screen</Text> */}
   {/*TEST ITEMS */}
-          <View style={styles.item}></View>
-          <View style={styles.item}></View>
-          <View style={styles.item}></View>
+          <View style={styles.item}>
+            <Text style={styles.itemText}>T(0): MON 9:45PM [08/08]</Text>
+            <Text style={styles.itemText}>T(N): TUE 6:45AM [09/08]</Text>
+            <Text style={styles.itemText}>9 HR 0 MIN</Text>
+            <View style={styles.bar}></View>
+            <TouchableOpacity style={styles.delete} onPress={() => {alert("PRESSD")}}>
+              <Ionicons name="close-outline" size={42} color="#838383"/>
+            </TouchableOpacity >
+          </View>
+          <View style={styles.item}>
+          <Text style={styles.itemText}>T(0): MON 9:45PM [08/08]</Text>
+            <Text style={styles.itemText}>T(N): TUE 6:45AM [09/08]</Text>
+            <Text style={styles.itemText}>9 HR 0 MIN</Text>
+            <View style={styles.bar}></View>
+            <TouchableOpacity style={styles.delete} onPress={() => {alert("PRESSD")}}>
+              <Ionicons name="close-outline" size={42} color="#838383"/>
+            </TouchableOpacity >
+          </View>
+          <View style={styles.item}>
+          <Text style={styles.itemText}>T(0): MON 9:45PM [08/08]</Text>
+            <Text style={styles.itemText}>T(N): TUE 6:45AM [09/08]</Text>
+            <Text style={styles.itemText}>9 HR 0 MIN</Text>
+            <View style={styles.bar}></View>
+            <TouchableOpacity style={styles.delete} onPress={() => {alert("PRESSD")}}>
+              <Ionicons name="close-outline" size={42} color="#838383"/>
+            </TouchableOpacity >
+          </View>
           <View style={styles.item}></View>
           <View style={styles.item}></View>
           <View style={styles.item}></View>
@@ -105,8 +129,6 @@ const styles = StyleSheet.create({
     color: 'red',
   },
   dateContainer: {
-    // position: "absolute",
-    // top: "3%",
     width: "60%",
     marginHorizontal: "20%",
     marginTop: 15,
@@ -132,10 +154,32 @@ const styles = StyleSheet.create({
   },
   item: {
     width: "100%",
-    height: 90,
+    height: 78,
     backgroundColor: "rgb(36, 31, 33)",
     color: "green",
     marginVertical: 10,
+    paddingVertical: 8,
+    paddingLeft: 8,
+  },
+  itemText: {
+    marginHorizontal: 3,
+    marginVertical: 0,
+    fontSize: 15,
+    letterSpacing: 0.2,
+    color: 'rgb(180,180,180)',
+  },
+  delete: {
+    position: "absolute",
+    top: 18,
+    right: 6,
+  },
+  bar: {
+    position: "absolute",
+    top: 40,
+    right: 62,
+    backgroundColor: "rgb(50,50,50)",
+    height: 1,
+    width: 70,
   }
 });
 
