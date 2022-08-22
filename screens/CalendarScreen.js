@@ -2,41 +2,59 @@ import { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import openLocalDatabase from "../utils/openLocalDatabase";
+import * as SQLite from 'expo-sqlite';
+
+import * as weekStrings from '../asset/weekStrings.json';
+
+
+const db = SQLite.openDatabase("db.db");
+
 
 const CalendarScreen = ({navigation}) => {
   const [wk, setWk] = useState("")
   const [items, setItems] = useState([])
 
   useEffect(() => {
+    getData()
+  }, [])
+
+  const getData = async () => {
     // Calculate curent week
     const startOfUniverse = 1659276000000 // 1st Aug 2022 in milliseconds since epoch
     const weekInMilli = 604800000
     const nowMilli = new Date().getTime()
     const week = Math.floor((nowMilli - startOfUniverse) / weekInMilli)
 
-    openLocalDatabase()
-      .then((db) => {
-        console.log(db)
-        db.transaction((tx) => {
-          tx.executeSql(`SELECT * FROM Sleeps WHERE week=?`, [week], (_, { rows }) => {
-            // console.log(JSON.stringify(rows))
-            console.log(rows)
-            // Get all sleeps inn the current week
-          })
-          tx.executeSql(`SELECT * FROM Weeks WHERE week=?`, [week], (_, { rows }) => {
-            // console.log(JSON.stringify(rows))
-            // console.log(rows[0].stringRep)
-            console.log(rows._array[0].stringRep)
-            setWk(rows._array[0].stringRep)
-            // get current week's week and stringRep
-          })
-        })
+    setWk(weekStrings.weeks[week])
+    db.transaction((tx) => {
+      tx.executeSql(`SELECT * FROM Sleeps WHERE week=?`, [week], (_, { rows }) => {
+        // Get all sleeps in the current week
+        const itemsFromDB = rows._array
+        setItems(itemsFromDB)
       })
-      .catch((err) => {
-        console.log(err)
+      // tx.executeSql(`SELECT * FROM Weeks WHERE week=?`, [week], (_, { rows }) => {
+      //   // console.log(JSON.stringify(rows))
+      //   // console.log(rows[0].stringRep)
+      //   console.log(rows._array[0].stringRep)
+      //   // get current week's stringRep
+      // })
+    })
+  }
+
+  const handlePress = async () => {
+    // Calculate curent week
+    const startOfUniverse = 1659276000000 // 1st Aug 2022 in milliseconds since epoch
+    const weekInMilli = 604800000
+    const nowMilli = new Date().getTime()
+    const week = Math.floor((nowMilli - startOfUniverse) / weekInMilli)
+    db.transaction((tx) => {
+      tx.executeSql(`SELECT * FROM Sleeps WHERE week=?`, [week], (_, { rows }) => {
+        const itemsFromDB = rows._array
+        setItems(itemsFromDB)
       })
-    
-  }, [])
+    })
+    console.log(items)
+  }
 
   return (
     <View style={styles.containsAll}>
@@ -69,9 +87,7 @@ const CalendarScreen = ({navigation}) => {
               {/* color={(dayOffset === 0) ? "rgb(150,150,150)" : "red"}/> */}
           </TouchableOpacity >
         </View>
-  {/*PLACEHOLDDER */}
-        {/* <Text style={styles.text}>Calendar Screen</Text> */}
-  {/*TEST ITEMS */}
+{/*TEST ITEMS */}
           <View style={styles.item}>
             <Text style={styles.itemText}>T(0): MON 9:45PM [08/08]</Text>
             <Text style={styles.itemText}>T(N): TUE 6:45AM [09/08]</Text>
@@ -99,11 +115,7 @@ const CalendarScreen = ({navigation}) => {
               <Ionicons name="close-outline" size={42} color="#838383"/>
             </TouchableOpacity >
           </View>
-          <View style={styles.item}></View>
-          <View style={styles.item}></View>
-          <View style={styles.item}></View>
-          <View style={styles.item}></View>
-          <View style={styles.item}></View>
+          <TouchableOpacity onPress={() => {handlePress()}}><Text>CALL</Text></TouchableOpacity>
       </ScrollView>
     </View>
   );
@@ -155,7 +167,7 @@ const styles = StyleSheet.create({
   item: {
     width: "100%",
     height: 78,
-    backgroundColor: "rgb(36, 31, 33)",
+    backgroundColor: "rgb(24, 21, 22)",
     color: "green",
     marginVertical: 10,
     paddingVertical: 8,

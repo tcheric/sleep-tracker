@@ -10,16 +10,7 @@ import InputStart from "./InputStart";
 import InputEnd from "./InputEnd";
 
 const Stack = createNativeStackNavigator();
-
-// var db
-// openLocalDatabase()
-//   .then((value) => {
-//     db = value
-//     console.log(db)
-//   })
-//   .catch((err) => {
-//     console.log(err)
-//   })
+const db = SQLite.openDatabase("db.db");
 
 const InputScreen = ({navigation}) => {
 
@@ -31,6 +22,30 @@ const InputScreen = ({navigation}) => {
 
   const startRef = useRef(null)
   const endRef = useRef(null)
+
+  useEffect(() => {
+    db.transaction((tx) => {
+      tx.executeSql(`
+      CREATE TABLE IF NOT EXISTS Sleeps (
+        t0 INTEGER PRIMARY KEY, 
+        tn INTEGER, 
+        t0String TEXT, 
+        tnString TEXT, 
+        hours INTEGER, 
+        minutes INTEGER
+        week INTEGER
+        );`, 
+      [],
+      (t, r) => {
+        console.log("CREATE SUCCESS:")
+        console.log(r)
+      },
+      (t, e) => {
+        console.log("CREATE ERROR")
+        console.log(e)
+      })
+    })
+  }, [])
 
   const updateWeeks = ( startTime, endTime ) => {
     // UPDATE Weeks( week, stringRep, total, average, startDate, endDate ) 
@@ -130,34 +145,28 @@ const InputScreen = ({navigation}) => {
     console.log(week)
 
     console.log("INSERT Sleeps")
+    console.log(newt0, newtn, newt0String, newtnString, newHours, newMin, week)
 
-    openLocalDatabase()
-      .then((db) => {
-        db.transaction((tx) => {
-        // WRAP BELOW INTO PROMISE
-          tx.executeSql(`
-          INSERT INTO Sleeps 
-            ( t0, tn, t0String, tnString, hours, minutes, week ) 
-          VALUES 
-            ( ?, ?, ?, ?, ?, ?, ? ) 
-          ;`, 
-          [newt0, newtn, newt0String, newtnString, newHours, newMin, week],
-          (t, r) => {
-            console.log("4r")
-            console.log(r)
-            // setTimeout(db.closeAsync(), 2000)
-          },
-          (t, e) => {
-            console.log("4e")
-            console.log(e)
-            // setTimeout(db.closeAsync(), 2000)
-          })
-        // PUT CLOSEASYNC HERE
-        })
+    db.transaction((tx) => {
+      tx.executeSql(`
+      INSERT INTO Sleeps 
+        ( t0, tn, t0String, tnString, hours, minutes, week ) 
+      VALUES 
+        ( ?, ?, ?, ?, ?, ?, ? ) 
+      ;`, 
+      [newt0, newtn, newt0String, newtnString, newHours, newMin, week],
+      (t, r) => {
+        console.log("INSERT SUCCESS:")
+        console.log(r)
+        // setTimeout(db.closeAsync(), 2000)
+      },
+      (t, e) => {
+        console.log("INSERT ERROR:")
+        console.log(e)
+        // setTimeout(db.closeAsync(), 2000)
       })
-      .catch((err) => {
-        console.log(err)
-      })
+    // PUT CLOSEASYNC HERE
+    })
   }
 
   const addSleepEntry = ( startTime, endTime ) => {
@@ -168,7 +177,7 @@ const InputScreen = ({navigation}) => {
 
     
     insertIntoSleeps( startTime, endTime )
-    updateWeeks( startTime, endTime )
+    // updateWeeks( startTime, endTime )
   }
 
   const calculateDate = ( time ) => {
