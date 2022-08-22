@@ -23,6 +23,12 @@ const InputScreen = ({navigation}) => {
   const startRef = useRef(null)
   const endRef = useRef(null)
 
+  const addSleepEntry = ( startTime, endTime ) => {   
+    insertIntoSleeps( startTime, endTime )
+    updateWeeks( startTime, endTime )
+    // deleteDb()
+  }
+
   useEffect(() => {
     db.transaction((tx) => {
       tx.executeSql(`
@@ -32,7 +38,7 @@ const InputScreen = ({navigation}) => {
         t0String TEXT, 
         tnString TEXT, 
         hours INTEGER, 
-        minutes INTEGER
+        minutes INTEGER,
         week INTEGER
         );`, 
       [],
@@ -44,12 +50,71 @@ const InputScreen = ({navigation}) => {
         console.log("CREATE ERROR")
         console.log(e)
       })
+      tx.executeSql(`
+      CREATE TABLE IF NOT EXISTS Weeks (
+        week INTEGER PRIMARY KEY, 
+        total INTEGER, 
+        average INTEGER, 
+        startDate INTEGER,
+        endDate INTEGER
+        );`, 
+      [],
+      (t, r) => {
+        console.log("CREATE SUCCESS:")
+        console.log(r)
+      },
+      (t, e) => {
+        console.log("CREATE ERROR")
+        console.log(e)
+      })
+
+      // Check if count weeks = 0
+      tx.executeSql(`SELECT COUNT(*) FROM Weeks;`, 
+      [],
+      (t, r) => {
+        console.log("SELECT SUCCESS:")
+        // console.log(r.rows._array[0]["COUNT(*)"])
+        if (r.rows._array[0]["COUNT(*)"] == 0) {
+          const startOfUniverse = 1659276000000 // 1st Aug 2022 in milliseconds since epoch
+          const weekInMilli = 604800000
+          let newSD
+          let newED
+          for (let i = 0; i <= 73; i++) {
+            newSD = startOfUniverse + i * weekInMilli
+            newED = startOfUniverse + (i + 1) * weekInMilli - 1
+            tx.executeSql(`
+            INSERT INTO Weeks 
+              ( week, total, average, startDate, endDate ) 
+            VALUES 
+              ( ?, ?, ?, ?, ?) 
+            ;`, 
+            [ i, 0, 0, newSD, newED ],
+            (t, r) => {
+              console.log("INSERT SUCCESS:")
+              console.log(r)
+            },
+            (t, e) => {
+              console.log("INSERT ERROR")
+              console.log(e)
+            })
+          }
+        }
+      },
+      (t, e) => {
+        console.log("SELECT ERROR")
+        console.log(e)
+      })
     })
   }, [])
 
-  const updateWeeks = ( startTime, endTime ) => {
-    // UPDATE Weeks( week, stringRep, total, average, startDate, endDate ) 
+  const deleteDb = () => {
+    db.closeAsync()
+    db.deleteAsync()
+      .then((res) => console.log("DROP SUCESS:", res))
+      .catch((err) => console.log("DROP ERROR:",err))
+  }
 
+  const updateWeeks = ( startTime, endTime ) => {
     // Calculate week
     const startOfUniverse = 1659276000000 // 1st Aug 2022 in milliseconds since epoch
     const weekInMilli = 604800000
@@ -60,51 +125,44 @@ const InputScreen = ({navigation}) => {
     const timeDiffMilli = endTime.getTime() - startTime.getTime()
     
     // GET Weeks - for original total and average values
-    var ogTotal 
-    var ogAverage 
+    let ogTotal 
+    let ogAverage 
     console.log("SELECT Weeks")
 
-    openLocalDatabase()
-      .then((db) => {
-        db.transaction((tx) => {
-          tx.executeSql(`SELECT total, average FROM Weeks WHERE week=?`, [week], (_, { rows }) => {
-              // console.log(JSON.stringify(rows))
-              // console.log(rows)
-              ogTotal = rows._array[0].total
-              ogAverage = rows._array[0].average
-              // console.log(ogTotal, ogAverage)
-              const newTotal = ogTotal + timeDiffMilli
-              const newAverage = newTotal / 7
-              console.log("UPDATE Weeks")
-              db.transaction((tx2) => {
-                tx2.executeSql(`
-                  UPDATE Weeks 
-                  SET total = ?, average = ?
-                  WHERE week = ?
-                ;`, 
-                [newTotal, newAverage, week],
-                (t, r) => {
-                  console.log("3rd r")
-                  console.log(r)
-                },
-                (t, e) => {
-                  console.log("3rd e")
-                  console.log(e)
-                })
-              })
+    db.transaction((tx) => {
+      tx.executeSql(`SELECT total, average FROM Weeks WHERE week=?`, [week], (_, { rows }) => {
+          console.log("SELECT SUCCESS:")
+          console.log(rows)
+          console.log(rows._array[0].total)
+          ogTotal = rows._array[0].total
+          ogAverage = rows._array[0].average
+          const newTotal = ogTotal + timeDiffMilli
+          const newAverage = newTotal / 7
+          console.log("UPDATE Weeks")
+          db.transaction((tx2) => {
+            tx2.executeSql(`
+              UPDATE Weeks 
+              SET total = ?, average = ?
+              WHERE week = ?
+            ;`, 
+            [newTotal, newAverage, week],
+            (t, r) => {
+              console.log("UPDATE SUCESS:")
+              console.log(r)
             },
             (t, e) => {
-              console.log("3.2nd e")
+              console.log("UPDATE ERROR:")
               console.log(e)
-            }
-          )
-        })
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+            })
+          })
+        },
+        (t, e) => {
+          console.log("SELECT ERROR:")
+          console.log(e)
+        }
+      )
+    })
   }
-
 
   const insertIntoSleeps = ( startTime, endTime ) => {
     // INSERT Sleeps( t0, tn, t0String, tnString, hours, minutes, week )
@@ -169,25 +227,14 @@ const InputScreen = ({navigation}) => {
     })
   }
 
-  const addSleepEntry = ( startTime, endTime ) => {
-    // addByStartDate( startTime, endTime )
-    // addByEndDate( startTime, endTime )
-    // addByWeek( startTime, endTime )
-    // clearAllDebug()
-
-    
-    insertIntoSleeps( startTime, endTime )
-    // updateWeeks( startTime, endTime )
-  }
-
   const calculateDate = ( time ) => {
     const dateInt = time.getDate()
-    var dateString = dateInt.toString()
+    let dateString = dateInt.toString()
     if (dateInt < 10) {
       dateString = "0" + dateString
     }
     const monthInt = time.getMonth() + 1
-    var monthString = monthInt.toString()
+    let monthString = monthInt.toString()
     if (monthInt < 10) {
       monthString = "0" + monthString
     }
@@ -217,7 +264,7 @@ const InputScreen = ({navigation}) => {
 
   const calculateMin = ( time ) => {
     const minInt = time.getMinutes()
-    var minString = minInt.toString()
+    let minString = minInt.toString()
     if (minInt < 10) {
       minString = "0" + minString
     }
@@ -231,20 +278,9 @@ const InputScreen = ({navigation}) => {
     else return (hourIndex - 12).toString()
   }
 
-  const clearAllDebug = async() => {
-    try {
-      await AsyncStorage.clear()
-      console.log("cleared")
-    } catch(e) {
-      console.log(e)
-    }
-  }
-
-
-
   const handleStartSubmit = () => {
     console.log("t(0) submit pressed")
-    var startDate = startRef.current.calculateDate()
+    let startDate = startRef.current.calculateDate()
     setT0(startDate)
     if (startDate != null) {
       navigation.navigate("Input", {screen: "End"})
@@ -254,14 +290,14 @@ const InputScreen = ({navigation}) => {
       const date = startDate.getDate()
       const month = startDate.getMonth() + 1
   
-      var minString
+      let minString
       if (min < 10) {
         minString  = "0" + min.toString() 
       } else {
         minString = min.toString()
       }
   
-      var hourString
+      let hourString
       if (hour == 0) {
         hourString = "12"
       } else if (hour >= 13) {
@@ -269,8 +305,8 @@ const InputScreen = ({navigation}) => {
       } else {
         hourString = hour.toString()
       }
-      var dateString = (date < 10) ? ("0" + date.toString()) : date.toString()
-      var monthString = (month < 10) ? ("0" + month.toString()) : month.toString()
+      let dateString = (date < 10) ? ("0" + date.toString()) : date.toString()
+      let monthString = (month < 10) ? ("0" + month.toString()) : month.toString()
   
       setT0String("T(0) : "+hourString+":"+minString+AMPMString+" ["+dateString+"/"+monthString+"]" )
     }
@@ -278,7 +314,7 @@ const InputScreen = ({navigation}) => {
 
   const handleEndSubmit = () => {
     console.log("t(n) submit pressed")
-    var endDate = endRef.current.calculateDate()
+    let endDate = endRef.current.calculateDate()
     // console.log("endDate:",endDate)
 
     // Check end date > start date 

@@ -47,10 +47,14 @@ const CalendarScreen = ({navigation}) => {
     const weekInMilli = 604800000
     const nowMilli = new Date().getTime()
     const week = Math.floor((nowMilli - startOfUniverse) / weekInMilli)
+    
     db.transaction((tx) => {
       tx.executeSql(`SELECT * FROM Sleeps WHERE week=?`, [week], (_, { rows }) => {
         const itemsFromDB = rows._array
         setItems(itemsFromDB)
+      })
+      tx.executeSql(`SELECT * FROM Weeks WHERE week=?`, [week], (_, { rows }) => {
+        console.log(JSON.stringify(rows._array))
       })
     })
     console.log(items)

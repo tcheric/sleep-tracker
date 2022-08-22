@@ -223,7 +223,7 @@ const InputEnd = forwardRef((props, ref) => {
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
-        console.log("ON MOVE")
+        // console.log("ON MOVE")
         setHour(1)
         prObj["pans"][0].setOffset({
           x: prObj["pans"][0].x._value,
@@ -253,7 +253,7 @@ const InputEnd = forwardRef((props, ref) => {
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
-        console.log("ON MOVE")
+        // console.log("ON MOVE")
         setHour(2)
         prObj["pans"][1].setOffset({
           x: prObj["pans"][1].x._value,
@@ -282,7 +282,7 @@ const InputEnd = forwardRef((props, ref) => {
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
-        console.log("ON MOVE")
+        // console.log("ON MOVE")
         setHour(3)
         prObj["pans"][2].setOffset({
           x: prObj["pans"][2].x._value,
@@ -311,7 +311,7 @@ const InputEnd = forwardRef((props, ref) => {
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
-        console.log("ON MOVE")
+        // console.log("ON MOVE")
         setHour(4)
         prObj["pans"][3].setOffset({
           x: prObj["pans"][3].x._value,
@@ -340,7 +340,7 @@ const InputEnd = forwardRef((props, ref) => {
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
-        console.log("ON MOVE")
+        // console.log("ON MOVE")
         setHour(5)
         prObj["pans"][4].setOffset({
           x: prObj["pans"][4].x._value,
@@ -369,7 +369,7 @@ const InputEnd = forwardRef((props, ref) => {
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
-        console.log("ON MOVE")
+        // console.log("ON MOVE")
         setHour(6)
         prObj["pans"][5].setOffset({
           x: prObj["pans"][5].x._value,
@@ -398,7 +398,7 @@ const InputEnd = forwardRef((props, ref) => {
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
-        console.log("ON MOVE")
+        // console.log("ON MOVE")
         setHour(7)
         prObj["pans"][6].setOffset({
           x: prObj["pans"][6].x._value,
@@ -427,7 +427,7 @@ const InputEnd = forwardRef((props, ref) => {
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
-        console.log("ON MOVE")
+        // console.log("ON MOVE")
         setHour(8)
         prObj["pans"][7].setOffset({
           x: prObj["pans"][7].x._value,
@@ -456,7 +456,7 @@ const InputEnd = forwardRef((props, ref) => {
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
-        console.log("ON MOVE")
+        // console.log("ON MOVE")
         setHour(9)
         prObj["pans"][8].setOffset({
           x: prObj["pans"][8].x._value,
@@ -485,7 +485,7 @@ const InputEnd = forwardRef((props, ref) => {
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
-        console.log("ON MOVE")
+        // console.log("ON MOVE")
         setHour(10)
         prObj["pans"][9].setOffset({
           x: prObj["pans"][9].x._value,
@@ -514,7 +514,7 @@ const InputEnd = forwardRef((props, ref) => {
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
-        console.log("ON MOVE")
+        // console.log("ON MOVE")
         setHour(11)
         prObj["pans"][10].setOffset({
           x: prObj["pans"][10].x._value,
