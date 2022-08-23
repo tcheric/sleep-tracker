@@ -73,7 +73,7 @@ const CalendarScreen = forwardRef((props, ref) => {
   return (
     <View style={styles.containsAll}>
       <View style={styles.redLine}></View>
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} contentContainerStyle={styles.scroll}>
   {/* DATE CONTAINER */}
         <View style={styles.dateContainer}>
           <TouchableOpacity 
@@ -102,8 +102,10 @@ const CalendarScreen = forwardRef((props, ref) => {
           </TouchableOpacity >
         </View>
 {/*TEST ITEMS */}
+        {!items.length && <Text style={styles.text} >NO SLEEPS</Text>}
         {isLoaded && items.map((item, index) => 
           <SleepItem
+            key={item.t0}
             t0String={item.t0String}
             tnString={item.tnString}
             hours={item.hours}
@@ -111,7 +113,7 @@ const CalendarScreen = forwardRef((props, ref) => {
           />
         )}
 
-          <TouchableOpacity onPress={() => {getData()}}><Text>CALL</Text></TouchableOpacity>
+          {/* <TouchableOpacity onPress={() => {getData()}}><Text>CALL</Text></TouchableOpacity> */}
       </ScrollView>
     </View>
   )
@@ -135,6 +137,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'red',
+    marginVertical: 10,
   },
   dateContainer: {
     width: "60%",
@@ -188,6 +191,10 @@ const styles = StyleSheet.create({
     backgroundColor: "rgb(50,50,50)",
     height: 1,
     width: 70,
+  },
+  scroll: {
+    justifyContent: "center",
+    alignItems: "center",
   }
 })
 
