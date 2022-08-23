@@ -1,22 +1,49 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useImperativeHandle, forwardRef, useRef } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import openLocalDatabase from "../utils/openLocalDatabase";
 import * as SQLite from 'expo-sqlite';
-
 import * as weekStrings from '../asset/weekStrings.json';
-
+import SleepItem from '../components/SleepItem.js'
 
 const db = SQLite.openDatabase("db.db");
 
-
-const CalendarScreen = ({navigation}) => {
+const CalendarScreen = forwardRef((props, ref) => {
   const [wk, setWk] = useState("")
   const [items, setItems] = useState([])
+  const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
     getData()
   }, [])
+
+  useImperativeHandle(ref, () => ({
+
+    async getData() {
+      // Calculate curent week
+      const startOfUniverse = 1659276000000 // 1st Aug 2022 in milliseconds since epoch
+      const weekInMilli = 604800000
+      const nowMilli = new Date().getTime()
+      const week = Math.floor((nowMilli - startOfUniverse) / weekInMilli)
+  
+      setWk(weekStrings.weeks[week])
+  
+      db.transaction((tx) => {
+        tx.executeSql(`SELECT * FROM Sleeps WHERE week=?`, [week], (_, { rows }) => {
+          // Get all sleeps in the current week
+          const itemsFromDB = rows._array
+          setItems(items => itemsFromDB)
+          console.log("GET DATA SET IT")
+          // USE UPDATER FUNCTION HERE TO RENDER THE ELEMENTS
+          setIsLoaded(isLoaded => true)
+        })
+        tx.executeSql(`SELECT * FROM Weeks WHERE week=?`, [week], (_, { rows }) => {
+          // console.log(JSON.stringify(rows._array))
+        })
+      })
+      console.log(items)
+    }
+  }))
 
   const getData = async () => {
     // Calculate curent week
@@ -26,35 +53,18 @@ const CalendarScreen = ({navigation}) => {
     const week = Math.floor((nowMilli - startOfUniverse) / weekInMilli)
 
     setWk(weekStrings.weeks[week])
+
     db.transaction((tx) => {
       tx.executeSql(`SELECT * FROM Sleeps WHERE week=?`, [week], (_, { rows }) => {
         // Get all sleeps in the current week
         const itemsFromDB = rows._array
-        setItems(itemsFromDB)
-      })
-      // tx.executeSql(`SELECT * FROM Weeks WHERE week=?`, [week], (_, { rows }) => {
-      //   // console.log(JSON.stringify(rows))
-      //   // console.log(rows[0].stringRep)
-      //   console.log(rows._array[0].stringRep)
-      //   // get current week's stringRep
-      // })
-    })
-  }
-
-  const handlePress = async () => {
-    // Calculate curent week
-    const startOfUniverse = 1659276000000 // 1st Aug 2022 in milliseconds since epoch
-    const weekInMilli = 604800000
-    const nowMilli = new Date().getTime()
-    const week = Math.floor((nowMilli - startOfUniverse) / weekInMilli)
-    
-    db.transaction((tx) => {
-      tx.executeSql(`SELECT * FROM Sleeps WHERE week=?`, [week], (_, { rows }) => {
-        const itemsFromDB = rows._array
-        setItems(itemsFromDB)
+        setItems(items => itemsFromDB)
+        console.log("GET DATA SET IT")
+        // USE UPDATER FUNCTION HERE TO RENDER THE ELEMENTS
+        setIsLoaded(isLoaded => true)
       })
       tx.executeSql(`SELECT * FROM Weeks WHERE week=?`, [week], (_, { rows }) => {
-        console.log(JSON.stringify(rows._array))
+        // console.log(JSON.stringify(rows._array))
       })
     })
     console.log(items)
@@ -92,38 +102,20 @@ const CalendarScreen = ({navigation}) => {
           </TouchableOpacity >
         </View>
 {/*TEST ITEMS */}
-          <View style={styles.item}>
-            <Text style={styles.itemText}>T(0): MON 9:45PM [08/08]</Text>
-            <Text style={styles.itemText}>T(N): TUE 6:45AM [09/08]</Text>
-            <Text style={styles.itemText}>9 HR 0 MIN</Text>
-            <View style={styles.bar}></View>
-            <TouchableOpacity style={styles.delete} onPress={() => {alert("PRESSD")}}>
-              <Ionicons name="close-outline" size={42} color="#838383"/>
-            </TouchableOpacity >
-          </View>
-          <View style={styles.item}>
-          <Text style={styles.itemText}>T(0): MON 9:45PM [08/08]</Text>
-            <Text style={styles.itemText}>T(N): TUE 6:45AM [09/08]</Text>
-            <Text style={styles.itemText}>9 HR 0 MIN</Text>
-            <View style={styles.bar}></View>
-            <TouchableOpacity style={styles.delete} onPress={() => {alert("PRESSD")}}>
-              <Ionicons name="close-outline" size={42} color="#838383"/>
-            </TouchableOpacity >
-          </View>
-          <View style={styles.item}>
-          <Text style={styles.itemText}>T(0): MON 9:45PM [08/08]</Text>
-            <Text style={styles.itemText}>T(N): TUE 6:45AM [09/08]</Text>
-            <Text style={styles.itemText}>9 HR 0 MIN</Text>
-            <View style={styles.bar}></View>
-            <TouchableOpacity style={styles.delete} onPress={() => {alert("PRESSD")}}>
-              <Ionicons name="close-outline" size={42} color="#838383"/>
-            </TouchableOpacity >
-          </View>
-          <TouchableOpacity onPress={() => {handlePress()}}><Text>CALL</Text></TouchableOpacity>
+        {isLoaded && items.map((item, index) => 
+          <SleepItem
+            t0String={item.t0String}
+            tnString={item.tnString}
+            hours={item.hours}
+            minutes={item.minutes}
+          />
+        )}
+
+          <TouchableOpacity onPress={() => {getData()}}><Text>CALL</Text></TouchableOpacity>
       </ScrollView>
     </View>
-  );
-};
+  )
+})
 
 const styles = StyleSheet.create({
   containsAll: {
@@ -197,6 +189,6 @@ const styles = StyleSheet.create({
     height: 1,
     width: 70,
   }
-});
+})
 
 export default CalendarScreen

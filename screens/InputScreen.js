@@ -12,7 +12,7 @@ import InputEnd from "./InputEnd";
 const Stack = createNativeStackNavigator();
 const db = SQLite.openDatabase("db.db");
 
-const InputScreen = ({navigation}) => {
+const InputScreen = ({calRef, navigation}) => {
 
   const [t0, setT0] = useState(0)
   const [tn, setTn] = useState(0)
@@ -132,8 +132,8 @@ const InputScreen = ({navigation}) => {
     db.transaction((tx) => {
       tx.executeSql(`SELECT total, average FROM Weeks WHERE week=?`, [week], (_, { rows }) => {
           console.log("SELECT SUCCESS:")
-          console.log(rows)
-          console.log(rows._array[0].total)
+          // console.log(rows)
+          // console.log(rows._array[0].total)
           ogTotal = rows._array[0].total
           ogAverage = rows._array[0].average
           const newTotal = ogTotal + timeDiffMilli
@@ -217,6 +217,7 @@ const InputScreen = ({navigation}) => {
         console.log("INSERT SUCCESS:")
         console.log(r)
         // setTimeout(db.closeAsync(), 2000)
+        calRef.current.getData()
       },
       (t, e) => {
         console.log("INSERT ERROR:")

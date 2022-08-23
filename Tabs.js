@@ -4,20 +4,14 @@ import InputScreen from './screens/InputScreen'
 import GraphScreen from './screens/GraphScreen'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { View, StyleSheet } from "react-native";
-import { useEffect } from "react"
-import * as SQLite from "expo-sqlite";
-import * as FileSystem from 'expo-file-system'
-import { Asset } from "expo-asset"
-import openLocalDatabase from "./utils/openLocalDatabase";
+import { useEffect, useRef } from "react"
 
 const Tab = createBottomTabNavigator()
 
 const Tabs = () => {
   
-  useEffect(()=> {
-    // const db = openLocalDatabase()
-  }, [])
-  
+  const calendarRef = useRef(null)
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -38,7 +32,7 @@ const Tabs = () => {
       })}
       initialRouteName="Input"
       >
-      <Tab.Screen name="Calendar" component={CalendarScreen} 
+      <Tab.Screen name="Calendar"
         options={{
           lazy: true,
           // title: "CALENDAR",
@@ -55,8 +49,12 @@ const Tabs = () => {
             <Ionicons name='calendar-outline' size={32} color={color} />
           ),
         }}
-      />
-      <Tab.Screen name="Input" component={InputScreen}
+      >
+        {(props) => <CalendarScreen {...props} ref={calendarRef} />}
+        {/* {() => <CalendarScreen ref={calendarRef} navigation={navigation} />} */}
+      </Tab.Screen>
+
+      <Tab.Screen name="Input"
         options={{
           lazy: true,
           headerShown: false,
@@ -79,7 +77,11 @@ const Tabs = () => {
             </View>
           ),
         }}
-      />
+        >
+        {(props) => <InputScreen {...props} calRef={calendarRef} />}
+        {/* {() => <InputScreen calRef={calendarRef} navigation={navigation} />} */}
+      </Tab.Screen>
+
       <Tab.Screen name="Graph" component={GraphScreen}
         options={{
           lazy: true,
@@ -97,6 +99,7 @@ const Tabs = () => {
           ),
         }}
       />
+      
     </Tab.Navigator>
   )
 }
