@@ -159,8 +159,16 @@ const CalendarScreen = forwardRef((props, ref) => {
             onDelete={deleteSleepItem}
           />
         )}
-
-          <TouchableOpacity onPress={() => {refreshPageData()}}><Text>CALL</Text></TouchableOpacity>
+        {/* <SleepItem 
+          t0={123}
+          t0String={"item.t0String"}
+          tnString={"item.tnString"}
+          hours={5}
+          minutes={0}
+          onDelete={()=>{}}
+        /> */}
+          {/* <TouchableOpacity onPress={() => {refreshPageData()}}><Text>CALL</Text></TouchableOpacity> */}
+        <View style={styles.endBar}></View>
       </ScrollView>
     </View>
   )
@@ -231,13 +239,13 @@ const styles = StyleSheet.create({
     top: 18,
     right: 6,
   },
-  bar: {
-    position: "absolute",
-    top: 40,
-    right: 62,
-    backgroundColor: "rgb(50,50,50)",
-    height: 1,
-    width: 70,
+  endBar: {
+    marginTop: 6,
+    marginBottom: 116,
+    backgroundColor: "rgb(25,25,25)",
+    height: 4,
+    width: 110,
+    borderRadius: 10,
   },
   scroll: {
     justifyContent: "center",
