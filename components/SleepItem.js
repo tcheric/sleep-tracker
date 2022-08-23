@@ -4,14 +4,14 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 
 // const [t0, setT0] = useState(0)
 
-const SleepItem = ({ t0String, tnString, hours, minutes }) => {
+const SleepItem = ({ t0, t0String, tnString, hours, minutes, onDelete }) => {
   return (
     <View style={styles.item}>
       <Text style={styles.itemText}>T(0): {t0String}</Text>
       <Text style={styles.itemText}>T(N): {tnString}</Text>
       <Text style={styles.itemText}>{hours} HR {minutes} MIN</Text>
       <View style={styles.bar}></View>
-      <TouchableOpacity style={styles.delete} onPress={() => {alert("PRESSD")}}>
+      <TouchableOpacity style={styles.delete} onPress={()=>onDelete(t0)}>
         <Ionicons name="close-outline" size={42} color="#838383"/>
       </TouchableOpacity >
     </View>

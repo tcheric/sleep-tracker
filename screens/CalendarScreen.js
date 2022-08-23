@@ -14,12 +14,12 @@ const CalendarScreen = forwardRef((props, ref) => {
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
-    getData()
+    refreshPageData()
   }, [])
 
   useImperativeHandle(ref, () => ({
 
-    async getData() {
+    refreshPageData() {
       // Calculate curent week
       const startOfUniverse = 1659276000000 // 1st Aug 2022 in milliseconds since epoch
       const weekInMilli = 604800000
@@ -35,6 +35,8 @@ const CalendarScreen = forwardRef((props, ref) => {
           setItems(items => itemsFromDB)
           console.log("GET DATA SET IT")
           // USE UPDATER FUNCTION HERE TO RENDER THE ELEMENTS
+
+          // SORT BY T(0) HERE AND SET IT TO ITEMS:
           setIsLoaded(isLoaded => true)
         })
         tx.executeSql(`SELECT * FROM Weeks WHERE week=?`, [week], (_, { rows }) => {
@@ -45,7 +47,7 @@ const CalendarScreen = forwardRef((props, ref) => {
     }
   }))
 
-  const getData = async () => {
+  const refreshPageData = () => {
     // Calculate curent week
     const startOfUniverse = 1659276000000 // 1st Aug 2022 in milliseconds since epoch
     const weekInMilli = 604800000
@@ -58,6 +60,8 @@ const CalendarScreen = forwardRef((props, ref) => {
       tx.executeSql(`SELECT * FROM Sleeps WHERE week=?`, [week], (_, { rows }) => {
         // Get all sleeps in the current week
         const itemsFromDB = rows._array
+        // SORT BY T(0) HERE AND SET IT TO ITEMS:
+
         setItems(items => itemsFromDB)
         console.log("GET DATA SET IT")
         // USE UPDATER FUNCTION HERE TO RENDER THE ELEMENTS
@@ -68,6 +72,22 @@ const CalendarScreen = forwardRef((props, ref) => {
       })
     })
     console.log(items)
+  }
+
+  const deleteSleepItem = ( t0delete ) => {
+    console.log("DELETE Sleeps")
+    db.transaction((tx) => {
+      tx.executeSql(`DELETE FROM Sleeps WHERE t0=?`, [t0delete],
+      (t, r) => {
+        console.log("DELETE SUCCESS:")
+        console.log(r)
+      },
+      (t, e) => {
+        console.log("DELETE ERROR:")
+        console.log(e)
+      })
+    })
+    refreshPageData()
   }
 
   return (
@@ -106,14 +126,16 @@ const CalendarScreen = forwardRef((props, ref) => {
         {isLoaded && items.map((item, index) => 
           <SleepItem
             key={item.t0}
+            t0={item.t0}
             t0String={item.t0String}
             tnString={item.tnString}
             hours={item.hours}
             minutes={item.minutes}
+            onDelete={deleteSleepItem}
           />
         )}
 
-          {/* <TouchableOpacity onPress={() => {getData()}}><Text>CALL</Text></TouchableOpacity> */}
+          <TouchableOpacity onPress={() => {refreshPageData()}}><Text>CALL</Text></TouchableOpacity>
       </ScrollView>
     </View>
   )

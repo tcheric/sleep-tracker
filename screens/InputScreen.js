@@ -217,7 +217,7 @@ const InputScreen = ({calRef, navigation}) => {
         console.log("INSERT SUCCESS:")
         console.log(r)
         // setTimeout(db.closeAsync(), 2000)
-        calRef.current.getData()
+        calRef.current.refreshPageData()
       },
       (t, e) => {
         console.log("INSERT ERROR:")
