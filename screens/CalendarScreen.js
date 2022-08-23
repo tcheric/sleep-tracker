@@ -9,27 +9,35 @@ import SleepItem from '../components/SleepItem.js'
 const db = SQLite.openDatabase("db.db");
 
 const CalendarScreen = forwardRef((props, ref) => {
-  const [wk, setWk] = useState("")
+  const [wk, setWk] = useState(()=>{
+    // Calculate curent week
+    const startOfUniverse = 1659276000000 // 1st Aug 2022 in milliseconds since epoch
+    const weekInMilli = 604800000
+    const nowMilli = new Date().getTime()
+    const week = Math.floor((nowMilli - startOfUniverse) / weekInMilli)
+    return week
+  })
+  const [wkString, setWkString] = useState("")
   const [items, setItems] = useState([])
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
     refreshPageData()
-  }, [])
+  }, [wk])
 
   useImperativeHandle(ref, () => ({
 
     refreshPageData() {
       // Calculate curent week
-      const startOfUniverse = 1659276000000 // 1st Aug 2022 in milliseconds since epoch
-      const weekInMilli = 604800000
-      const nowMilli = new Date().getTime()
-      const week = Math.floor((nowMilli - startOfUniverse) / weekInMilli)
+      // const startOfUniverse = 1659276000000 // 1st Aug 2022 in milliseconds since epoch
+      // const weekInMilli = 604800000
+      // const nowMilli = new Date().getTime()
+      // const week = Math.floor((nowMilli - startOfUniverse) / weekInMilli)
   
-      setWk(weekStrings.weeks[week])
+      setWkString(weekStrings.weeks[wk])
   
       db.transaction((tx) => {
-        tx.executeSql(`SELECT * FROM Sleeps WHERE week=?`, [week], (_, { rows }) => {
+        tx.executeSql(`SELECT * FROM Sleeps WHERE week=?`, [wk], (_, { rows }) => {
           // Get all sleeps in the current week
           const itemsFromDB = rows._array
           setItems(items => itemsFromDB)
@@ -39,7 +47,7 @@ const CalendarScreen = forwardRef((props, ref) => {
           // SORT BY T(0) HERE AND SET IT TO ITEMS:
           setIsLoaded(isLoaded => true)
         })
-        tx.executeSql(`SELECT * FROM Weeks WHERE week=?`, [week], (_, { rows }) => {
+        tx.executeSql(`SELECT * FROM Weeks WHERE week=?`, [wk], (_, { rows }) => {
           // console.log(JSON.stringify(rows._array))
         })
       })
@@ -49,25 +57,25 @@ const CalendarScreen = forwardRef((props, ref) => {
 
   const refreshPageData = () => {
     // Calculate curent week
-    const startOfUniverse = 1659276000000 // 1st Aug 2022 in milliseconds since epoch
-    const weekInMilli = 604800000
-    const nowMilli = new Date().getTime()
-    const week = Math.floor((nowMilli - startOfUniverse) / weekInMilli)
+    // const startOfUniverse = 1659276000000 // 1st Aug 2022 in milliseconds since epoch
+    // const weekInMilli = 604800000
+    // const nowMilli = new Date().getTime()
+    // const week = Math.floor((nowMilli - startOfUniverse) / weekInMilli)
 
-    setWk(weekStrings.weeks[week])
+    setWkString(weekStrings.weeks[wk])
 
     db.transaction((tx) => {
-      tx.executeSql(`SELECT * FROM Sleeps WHERE week=?`, [week], (_, { rows }) => {
+      tx.executeSql(`SELECT * FROM Sleeps WHERE week=?`, [wk], (_, { rows }) => {
         // Get all sleeps in the current week
         const itemsFromDB = rows._array
         // SORT BY T(0) HERE AND SET IT TO ITEMS:
-
+        console.log(itemsFromDB)
         setItems(items => itemsFromDB)
         console.log("GET DATA SET IT")
         // USE UPDATER FUNCTION HERE TO RENDER THE ELEMENTS
         setIsLoaded(isLoaded => true)
       })
-      tx.executeSql(`SELECT * FROM Weeks WHERE week=?`, [week], (_, { rows }) => {
+      tx.executeSql(`SELECT * FROM Weeks WHERE week=?`, [wk], (_, { rows }) => {
         // console.log(JSON.stringify(rows._array))
       })
     })
@@ -81,6 +89,8 @@ const CalendarScreen = forwardRef((props, ref) => {
       (t, r) => {
         console.log("DELETE SUCCESS:")
         console.log(r)
+        // UPDATE week data: select from wweeks
+
       },
       (t, e) => {
         console.log("DELETE ERROR:")
@@ -88,6 +98,29 @@ const CalendarScreen = forwardRef((props, ref) => {
       })
     })
     refreshPageData()
+  }
+
+  const changeWeek = ( direction ) => {
+    // Calculate curent week
+    const currWeek = getCurrWeek()
+
+    if (direction == "previous") {
+      if (wk > 0) {
+        setWk(wk => wk - 1)
+      }
+    } else if (direction == "next") {
+      if (wk < currWeek) {
+        setWk(wk => wk + 1)
+      }
+      // CHANGE COLOR ARROW
+    }
+  }
+
+  const getCurrWeek = () => {
+    const startOfUniverse = 1659276000000 // 1st Aug 2022 in milliseconds since epoch
+    const weekInMilli = 604800000
+    const nowMilli = new Date().getTime()
+    return Math.floor((nowMilli - startOfUniverse) / weekInMilli)
   }
 
   return (
@@ -98,27 +131,19 @@ const CalendarScreen = forwardRef((props, ref) => {
         <View style={styles.dateContainer}>
           <TouchableOpacity 
             style={styles.icons} 
-            onPress={() => {
-              if (dayOffset <= 6) {
-                setDayOffset(dayOffset + 1)
-              }
-            }}>
+            onPress={() => changeWeek("previous")}>
             <Ionicons name="chevron-back-outline" 
               size={20} 
-              color="red"/>
+              color={(wk == 0) ? "rgb(50,50,50)" : "red"}/>
+            {/* color="red"/> */}
           </TouchableOpacity >
-          <Text style={styles.date}>{wk}</Text>
+          <Text style={styles.date}>{wkString}</Text>
           <TouchableOpacity 
             style={styles.icons} 
-            onPress={() => {
-              if (dayOffset !== 0) {
-                setDayOffset(dayOffset - 1)
-              }
-            }}>
+            onPress={() => changeWeek("next")}>
             <Ionicons name="chevron-forward-outline" 
               size={20} 
-              color="red"/>
-              {/* color={(dayOffset === 0) ? "rgb(150,150,150)" : "red"}/> */}
+              color={(wk == getCurrWeek()) ? "rgb(50,50,50)" : "red"}/>
           </TouchableOpacity >
         </View>
 {/*TEST ITEMS */}
