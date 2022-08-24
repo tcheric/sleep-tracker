@@ -4,7 +4,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const InputStart = forwardRef((props, ref) => {
   const [dayOffset, setDayOffset] = useState(0)
-  const [hour, setHour] = useState(0)
+  const [hour, setHour] = useState(-1)
   const [minute, setMinute] = useState(-1)
   const [AMPM, setAMPM] = useState("PM")
 
@@ -38,6 +38,11 @@ const InputStart = forwardRef((props, ref) => {
       setAMPM("PM")
     },
 
+    getAMPMDO() {
+      const retObj = { t0AMPM: AMPM, t0DO: dayOffset}
+      return retObj
+    },
+
     calculateDate() {
       if (minute == -1) {
         // Should catch error
@@ -68,8 +73,6 @@ const InputStart = forwardRef((props, ref) => {
     }
   }))
 
-  
-
   const getSelectedDate = () => {
     var date = new Date(Date.now() - 86400000 * dayOffset).getDate()
     var month = new Date(Date.now() - 86400000 * dayOffset).getMonth() + 1;
@@ -79,8 +82,10 @@ const InputStart = forwardRef((props, ref) => {
   }
 
   const displayHour = () => {
-    if (hour < 10) {
+    if (hour < 10 && hour > -1) {
       return "0" + hour
+    } else if (hour == -1) {
+      return "XX" 
     } else {
       return hour.toString()
     }
@@ -90,7 +95,7 @@ const InputStart = forwardRef((props, ref) => {
     if (minute < 10 && minute > -1) {
       return "0" + minute
     } else if (minute == -1) {
-      return "00" 
+      return "XX" 
     } else {
       return minute.toString()
     }

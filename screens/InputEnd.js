@@ -4,10 +4,10 @@ import { useIsFocused } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const InputEnd = forwardRef((props, ref) => {
-  const [dayOffset, setDayOffset] = useState(0)
-  const [hour, setHour] = useState(0)
+  const [dayOffset, setDayOffset] = useState(props.initDO)
+  const [hour, setHour] = useState(-1)
   const [minute, setMinute] = useState(-1)
-  const [AMPM, setAMPM] = useState("PM")
+  const [AMPM, setAMPM] = useState(props.initAMPM)
 
   const hourColor = "rgb(55,55,60)"
 
@@ -78,8 +78,10 @@ const InputEnd = forwardRef((props, ref) => {
   }
 
   const displayHour = () => {
-    if (hour < 10) {
+    if (hour < 10 && hour > -1) {
       return "0" + hour
+    } else if (hour == -1) {
+      return "XX" 
     } else {
       return hour.toString()
     }
@@ -89,7 +91,7 @@ const InputEnd = forwardRef((props, ref) => {
     if (minute < 10 && minute > -1) {
       return "0" + minute
     } else if (minute == -1) {
-      return "00" 
+      return "XX" 
     } else {
       return minute.toString()
     }

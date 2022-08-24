@@ -15,10 +15,10 @@ const db = SQLite.openDatabase("db.db");
 const InputScreen = ({calRef, navigation}) => {
 
   const [t0, setT0] = useState(0)
-  const [tn, setTn] = useState(0)
   const [flag, setFlag] = useState(0)
   const [t0String, setT0String] = useState("")
-
+  const [t0AMPM, setT0AMPM] = useState("")
+  const [t0DayOffset, setT0DayOffset] = useState(0)
 
   const startRef = useRef(null)
   const endRef = useRef(null)
@@ -216,15 +216,12 @@ const InputScreen = ({calRef, navigation}) => {
       (t, r) => {
         console.log("INSERT SUCCESS:")
         console.log(r)
-        // setTimeout(db.closeAsync(), 2000)
         calRef.current.refreshPageData()
       },
       (t, e) => {
         console.log("INSERT ERROR:")
         console.log(e)
-        // setTimeout(db.closeAsync(), 2000)
       })
-    // PUT CLOSEASYNC HERE
     })
   }
 
@@ -284,6 +281,11 @@ const InputScreen = ({calRef, navigation}) => {
     let startDate = startRef.current.calculateDate()
     setT0(startDate)
     if (startDate != null) {
+      // Pass AM/PM and dayoffset to inputend
+      const t0Data = startRef.current.getAMPMDO()
+      setT0AMPM(t0Data.t0AMPM)
+      setT0DayOffset(t0Data.t0DO)
+
       navigation.navigate("Input", {screen: "End"})
       const min= startDate.getMinutes()
       const hour = startDate.getHours()
@@ -316,9 +318,7 @@ const InputScreen = ({calRef, navigation}) => {
   const handleEndSubmit = () => {
     console.log("t(n) submit pressed")
     let endDate = endRef.current.calculateDate()
-    // console.log("endDate:",endDate)
 
-    // Check end date > start date 
     if (endDate.getTime() <= t0.getTime()) {
       alert("T(N) must be after T(0)")
       return null
@@ -327,27 +327,20 @@ const InputScreen = ({calRef, navigation}) => {
     if (endDate.getTime() - t0.getTime() > 43200000)  {
       alert("Sleep interval must be less than 12hr")
       return null
-    } else {
-      // console.log(endDate.getTime() - t0.getTime())
     }
 
-    setTn(endDate)
     if (endDate != null) {
       navigation.navigate("Calendar")
     }
-    // console.log("t0:", t0,"tN:", endDate)
     addSleepEntry(t0, endDate)
     // alert("Sleep Saved")
-    // Reset state of components IS TOO HARD
-
-    // set the var here, pass it to child, run isfocused in input end as perr plan
     setFlag(1)
   }
 
   const flagFunc = () => {
     navigation.navigate("Input", {screen: "Start"}) //call this in parent
     setFlag(0)
-    startRef.current.reset()
+    startRef.current.reset() // For resetting values after submitting
   }
 
   return (
@@ -412,7 +405,9 @@ const InputScreen = ({calRef, navigation}) => {
           navigation={navigation}
           flag={flag}
           flagFunc={flagFunc}
-          t0={t0String} />}
+          t0={t0String} 
+          initAMPM={t0AMPM}
+          initDO={t0DayOffset}/>}
       </Stack.Screen>
     </Stack.Navigator>
   );

@@ -27,13 +27,7 @@ const CalendarScreen = forwardRef((props, ref) => {
 
   useImperativeHandle(ref, () => ({
 
-    refreshPageData() {
-      // Calculate curent week
-      // const startOfUniverse = 1659276000000 // 1st Aug 2022 in milliseconds since epoch
-      // const weekInMilli = 604800000
-      // const nowMilli = new Date().getTime()
-      // const week = Math.floor((nowMilli - startOfUniverse) / weekInMilli)
-  
+    refreshPageData() { 
       setWkString(weekStrings.weeks[wk])
   
       db.transaction((tx) => {
@@ -42,9 +36,6 @@ const CalendarScreen = forwardRef((props, ref) => {
           const itemsFromDB = rows._array
           setItems(items => itemsFromDB)
           console.log("GET DATA SET IT")
-          // USE UPDATER FUNCTION HERE TO RENDER THE ELEMENTS
-
-          // SORT BY T(0) HERE AND SET IT TO ITEMS:
           setIsLoaded(isLoaded => true)
         })
         tx.executeSql(`SELECT * FROM Weeks WHERE week=?`, [wk], (_, { rows }) => {
@@ -56,23 +47,15 @@ const CalendarScreen = forwardRef((props, ref) => {
   }))
 
   const refreshPageData = () => {
-    // Calculate curent week
-    // const startOfUniverse = 1659276000000 // 1st Aug 2022 in milliseconds since epoch
-    // const weekInMilli = 604800000
-    // const nowMilli = new Date().getTime()
-    // const week = Math.floor((nowMilli - startOfUniverse) / weekInMilli)
-
     setWkString(weekStrings.weeks[wk])
 
     db.transaction((tx) => {
       tx.executeSql(`SELECT * FROM Sleeps WHERE week=?`, [wk], (_, { rows }) => {
         // Get all sleeps in the current week
         const itemsFromDB = rows._array
-        // SORT BY T(0) HERE AND SET IT TO ITEMS:
         console.log(itemsFromDB)
         setItems(items => itemsFromDB)
         console.log("GET DATA SET IT")
-        // USE UPDATER FUNCTION HERE TO RENDER THE ELEMENTS
         setIsLoaded(isLoaded => true)
       })
       tx.executeSql(`SELECT * FROM Weeks WHERE week=?`, [wk], (_, { rows }) => {
@@ -192,7 +175,8 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'red',
-    marginVertical: 10,
+    marginBottom: 10,
+    marginTop: 12,
   },
   dateContainer: {
     width: "60%",
@@ -240,8 +224,8 @@ const styles = StyleSheet.create({
     right: 6,
   },
   endBar: {
-    marginTop: 6,
-    marginBottom: 116,
+    marginTop: 8,
+    marginBottom: 120,
     backgroundColor: "rgb(25,25,25)",
     height: 4,
     width: 110,
