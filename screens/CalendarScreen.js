@@ -66,13 +66,53 @@ const CalendarScreen = forwardRef((props, ref) => {
   }
 
   const deleteSleepItem = ( t0delete ) => {
+    //SELECT ->  UPDATE week data: select from wweeks
+    db.transaction((tx) => {
+      tx.executeSql(`SELECT * FROM Sleeps WHERE t0=?`, [t0delete], (_, {rows}) => {
+        console.log("SELECT SUCCESS:")
+        const t0DelHour = rows._array[0].hours
+        const t0DelMin = rows._array[0].minutes
+        const t0DelWeek = rows._array[0].week
+        // console.log(t0DelHour, t0DelMin)
+        const t0DelDurationMilli = t0DelHour *  3600000 + t0DelMin * 60000
+
+        tx.executeSql(`SELECT * FROM Weeks WHERE week=?`, [t0DelWeek],
+          (_, {rows}) => {
+            console.log("SELECT SUCCESS:")
+            const ogTotal = rows._array[0].total
+            const newTotal = ogTotal - t0DelDurationMilli
+            const newAverage = newTotal / 7
+            tx.executeSql(`
+                UPDATE Weeks 
+                SET total = ?, average = ?
+                WHERE week = ?
+              ;`,  [newTotal, newAverage, t0DelWeek], (_, {rows}) => {
+                console.log("UPDATE SUCCESS:")  
+                console.log(rows)
+              }, (_, e) => {
+                console.log("UPDATE ERROR:")
+                console.log(e)
+              }
+            )
+          },
+          (_, e) => {
+            console.log("SELECT ERROR:")
+            console.log(e)
+          })
+      },
+      (_, e) => {
+        console.log("SELECT ERROR:")
+        console.log(e)
+      })
+    })
+
+    // DELETE
     console.log("DELETE Sleeps")
     db.transaction((tx) => {
       tx.executeSql(`DELETE FROM Sleeps WHERE t0=?`, [t0delete],
       (t, r) => {
         console.log("DELETE SUCCESS:")
         console.log(r)
-        // UPDATE week data: select from wweeks
 
       },
       (t, e) => {
