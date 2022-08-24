@@ -1,7 +1,6 @@
 import { useEffect, useState, useImperativeHandle, forwardRef, useRef } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import openLocalDatabase from "../utils/openLocalDatabase";
 import * as SQLite from 'expo-sqlite';
 import * as weekStrings from '../asset/weekStrings.json';
 import SleepItem from '../components/SleepItem.js'
@@ -150,7 +149,7 @@ const CalendarScreen = forwardRef((props, ref) => {
     <View style={styles.containsAll}>
       <View style={styles.redLine}></View>
       <ScrollView style={styles.container} contentContainerStyle={styles.scroll}>
-  {/* DATE CONTAINER */}
+{/* DATE CONTAINER */}
         <View style={styles.dateContainer}>
           <TouchableOpacity 
             style={styles.icons} 
@@ -158,7 +157,6 @@ const CalendarScreen = forwardRef((props, ref) => {
             <Ionicons name="chevron-back-outline" 
               size={20} 
               color={(wk == 0) ? "rgb(50,50,50)" : "red"}/>
-            {/* color="red"/> */}
           </TouchableOpacity >
           <Text style={styles.date}>{wkString}</Text>
           <TouchableOpacity 
