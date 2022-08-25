@@ -123,9 +123,7 @@ const CalendarScreen = forwardRef((props, ref) => {
   }
 
   const changeWeek = ( direction ) => {
-    // Calculate curent week
     const currWeek = getCurrWeek()
-
     if (direction == "previous") {
       if (wk > 0) {
         setWk(wk => wk - 1)
@@ -134,7 +132,6 @@ const CalendarScreen = forwardRef((props, ref) => {
       if (wk < currWeek) {
         setWk(wk => wk + 1)
       }
-      // CHANGE COLOR ARROW
     }
   }
 
