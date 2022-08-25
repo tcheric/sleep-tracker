@@ -8,8 +8,10 @@ import * as weekStrings from '../asset/weekStrings.json';
 const db = SQLite.openDatabase("db.db");
 
 const GraphScreen = () => {
-  const [avg, setAvg] = useState("")
-  const [total, setTotal] = useState("")
+  const [avgHr, setAvgHr] = useState("")
+  const [avgMin, setAvgMin] = useState("")
+  const [totalHr, setTotalHr] = useState("")
+  const [totalMin, setTotalMin] = useState("")
   const [wkString, setWkString] = useState("")
   const [wk, setWk] = useState(()=>{
     // Calculate curent week
@@ -59,8 +61,18 @@ const GraphScreen = () => {
           avgMin = Math.round((rows._array[0].average / 3600000 - avgHR) * 60)
         }
         // console.log(rows._array[0].average, rows._array[0].average / 3600000)
-        setTotal(totalHR + " HR " + totalMin + " MIN")
-        setAvg(avgHR + " HR " + avgMin + " MIN")
+        setTotalHr(totalHR + " HR ")
+        if (totalMin < 10) {
+          setTotalMin("0" + totalMin + " MIN")
+        } else {
+          setTotalMin(totalMin + " MIN")
+        }
+        setAvgHr(avgHR + " HR ")
+        if (avgMin < 10) {
+          setAvgMin("0" + avgMin + " MIN")
+        } else {
+          setAvgMin(avgMin + " MIN")
+        }
       })
     })
   }
@@ -119,11 +131,21 @@ const GraphScreen = () => {
 
     {/* DATA CONTAINER */}
     <View style={styles.dataContainer}>
-      <Text style={styles.dataText}>Total Sleep: {total}</Text>
-      {/* <Text style={styles.dataText}>TOTAL SLEEP: HR</Text> */}
-      <Text style={styles.dataText}>Week Average: {avg}</Text>
-      {/* <Text style={styles.dataText}>AVERAGE SLEEP: HR</Text> */}
-      {/* <TouchableOpacity onPress={() => {deleteDb()}}><Text>DELETE</Text></TouchableOpacity> */}
+      <View style={styles.dataTextContainer}>
+        <Text style={styles.dataTextLeft}>Total Sleep: </Text>
+
+        <View style={styles.rightContainer}>
+          <Text style={styles.rightItemOne}>{totalHr}</Text>
+          <Text style={styles.rightItemTwo}>{totalMin}</Text>
+        </View>
+      </View>
+      <View style={styles.dataTextContainer}>
+        <Text style={styles.dataTextLeft}>Week Average:</Text>
+        <View style={styles.rightContainer}>
+          <Text style={styles.rightItemOne}>{avgHr}</Text>
+          <Text style={styles.rightItemTwo}>{avgMin}</Text>
+        </View>
+      </View>
     </View>
 
     </View>
@@ -134,6 +156,7 @@ const styles = StyleSheet.create({
   containsAll: {
     position: "relative",
     flex: 1,
+    // backgroundColor: "rgb(40,40,40)"
   },
 
   graphContainer: {
@@ -145,21 +168,46 @@ const styles = StyleSheet.create({
   },
 
   dataContainer: {
-    backgroundColor: "blue",
+    // backgroundColor: "blue",
     height: 120,
     width: "100%",
     position:"absolute",
     bottom: 120,
-    paddingTop: 10,
-    paddingLeft: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 20,
   },
-  dataText: {
-    // marginHorizontal: 3,
-    // marginVertical: 0,
-    fontSize: 16,
+  dataTextContainer: {
+
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent:"space-between",
+  },
+  dataTextLeft: {
+    fontSize: 18,
     letterSpacing: 0.2,
     color: 'rgb(180,180,180)',
   },
+  rightContainer :{
+    display: "flex",
+    flexDirection: "row",
+    position: "relative"
+  },
+  rightItemOne:{
+    fontSize: 18,
+    color: 'rgb(180,180,180)',
+    textAlign: "right",
+    position:"absolute",
+    right: 63,
+  },
+  rightItemTwo:{
+    fontSize: 18,
+    color: 'rgb(180,180,180)',
+    textAlign: "right",
+    position:"absolute", 
+    right: 0,
+  },
+
   text: {
     color: 'red',
   },
