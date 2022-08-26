@@ -6,8 +6,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as weekStrings from '../asset/weekStrings.json';
 
 const db = SQLite.openDatabase("db.db");
-
-const GraphScreen = () => {
+const GraphScreen = forwardRef((props, ref) => {
+  const [t0ByDay, setT0ByDay] = useState({mon:0, tue:0, wed:0, thu:0, fri:0, sat:0, sun:0})
   const [avgHr, setAvgHr] = useState("")
   const [avgMin, setAvgMin] = useState("")
   const [totalHr, setTotalHr] = useState("")
@@ -26,18 +26,17 @@ const GraphScreen = () => {
     refreshPageData()
   }, [wk])
 
+  useImperativeHandle(ref, () => ({
+
+    callRefresh() { 
+      refreshPageData()
+    }
+  }))
+
   const refreshPageData = () => {
     setWkString(weekStrings.weeks[wk])
 
     db.transaction((tx) => {
-      // tx.executeSql(`SELECT * FROM Sleeps WHERE week=?`, [wk], (_, { rows }) => {
-      //   // Get all sleeps in the current week
-      //   const itemsFromDB = rows._array
-      //   console.log(itemsFromDB)
-      //   setItems(items => itemsFromDB)
-      //   console.log("GET DATA SET IT")
-      //   setIsLoaded(isLoaded => true)
-      // })
       tx.executeSql(`SELECT * FROM Weeks WHERE week=?`, [wk], (_, { rows }) => {
         console.log(JSON.stringify(rows._array))
         // Set 
@@ -75,6 +74,7 @@ const GraphScreen = () => {
         }
       })
     })
+    refreshGraph()
   }
 
   const getCurrWeek = () => {
@@ -102,6 +102,84 @@ const GraphScreen = () => {
     db.deleteAsync()
       .then((res) => console.log("DROP SUCESS:", res))
       .catch((err) => console.log("DROP ERROR:",err))
+  }
+  const logState = () => {
+    console.log(t0ByDay)
+  }
+
+  const refreshGraph = () => {
+    // Get sleep SQL data - Categorrise by t0 (probs more intuitive)
+    setT0ByDay(prevState => ({mon:0, tue:0, wed:0, thu:0, fri:0, sat:0, sun:0}))
+    db.transaction((tx) => {
+      tx.executeSql(`SELECT * FROM Sleeps WHERE week=?`, [wk], (_, { rows }) => {
+        const itemsFromDB = rows._array
+        for (const sleep of rows._array){
+          console.log(sleep)
+          const dateObj = new Date(sleep.t0)
+          // Get day of t(0)
+          if (dateObj.getDay() == 1) {
+            setT0ByDay(prevState => {
+              let newState = {
+                ...prevState,
+                mon: prevState.mon + (sleep.tn -sleep.t0)
+              }
+              return newState
+            })
+          } else if (dateObj.getDay() == 2) {
+            setT0ByDay(prevState => {
+              let newState = {
+                ...prevState,
+                tue: prevState.tue + (sleep.tn -sleep.t0)
+              }
+              return newState
+            })
+          } else if (dateObj.getDay() == 3) {
+            setT0ByDay(prevState => {
+              let newState = {
+                ...prevState,
+                wed: prevState.wed + (sleep.tn -sleep.t0)
+              }
+              return newState
+            })
+          } else if (dateObj.getDay() == 4) {
+            setT0ByDay(prevState => {
+              let newState = {
+                ...prevState,
+                thu: prevState.thu + (sleep.tn -sleep.t0)
+              }
+              return newState
+            })
+          } else if (dateObj.getDay() == 6) {
+            setT0ByDay(prevState => {
+              let newState = {
+                ...prevState,
+                fri: prevState.fri + (sleep.tn -sleep.t0)
+              }
+              return newState
+            })
+          } else if (dateObj.getDay() == 6) {
+            setT0ByDay(prevState => {
+              let newState = {
+                ...prevState,
+                sat: prevState.sat + (sleep.tn -sleep.t0)
+              }
+              return newState
+            })
+          } else if (dateObj.getDay() == 0) {
+            setT0ByDay(prevState => {
+              let newState = {
+                ...prevState,
+                sun: prevState.sun + (sleep.tn -sleep.t0)
+              }
+              return newState
+            })
+          }
+        }
+      })
+    })
+
+    // Then we have an OBJECT of 7 durations
+    // calc heoght with uselayouteffect
   }
   
   return (
@@ -146,11 +224,15 @@ const GraphScreen = () => {
           <Text style={styles.rightItemTwo}>{avgMin}</Text>
         </View>
       </View>
+
+      <TouchableOpacity onPress={() => {logState()}}><Text>CALL</Text></TouchableOpacity>
+      {/* <TouchableOpacity onPress={() => {deleteDb()}}><Text>DEL</Text></TouchableOpacity> */}
+
     </View>
 
     </View>
-  );
-};
+  )
+})
 
 const styles = StyleSheet.create({
   containsAll: {
@@ -177,7 +259,6 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   dataTextContainer: {
-
     width: "100%",
     display: "flex",
     flexDirection: "row",
@@ -189,8 +270,6 @@ const styles = StyleSheet.create({
     color: 'rgb(180,180,180)',
   },
   rightContainer :{
-    display: "flex",
-    flexDirection: "row",
     position: "relative"
   },
   rightItemOne:{

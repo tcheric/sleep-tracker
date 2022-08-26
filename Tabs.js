@@ -11,6 +11,7 @@ const Tab = createBottomTabNavigator()
 const Tabs = () => {
   
   const calendarRef = useRef(null)
+  const graphRef = useRef(null)
 
   return (
     <Tab.Navigator
@@ -78,11 +79,11 @@ const Tabs = () => {
           ),
         }}
         >
-        {(props) => <InputScreen {...props} calRef={calendarRef} />}
+        {(props) => <InputScreen {...props} calRef={calendarRef} graphRef={graphRef} />}
         {/* {() => <InputScreen calRef={calendarRef} navigation={navigation} />} */}
       </Tab.Screen>
 
-      <Tab.Screen name="Graph" component={GraphScreen}
+      <Tab.Screen name="Graph"
         options={{
           lazy: true,
           title: "GRAPH",
@@ -98,7 +99,9 @@ const Tabs = () => {
             <Ionicons name='stats-chart-outline' size={32} color={color} />
           ),
         }}
-      />
+        >
+        {(props) => <GraphScreen {...props} ref={graphRef} />}
+      </Tab.Screen>
       
     </Tab.Navigator>
   )

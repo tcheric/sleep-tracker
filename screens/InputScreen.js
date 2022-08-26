@@ -12,7 +12,7 @@ import InputEnd from "./InputEnd";
 const Stack = createNativeStackNavigator();
 const db = SQLite.openDatabase("db.db");
 
-const InputScreen = ({calRef, navigation}) => {
+const InputScreen = ({calRef, graphRef, navigation}) => {
 
   const [t0, setT0] = useState(0)
   const [flag, setFlag] = useState(0)
@@ -251,13 +251,13 @@ const InputScreen = ({calRef, navigation}) => {
 
   const calculateDay = ( time ) => {
     const index = time.getDay()
-    if (index == 0) return "MON"
-    if (index == 1) return "TUE"
-    if (index == 2) return "WED"
-    if (index == 3) return "THU"
-    if (index == 4) return "FRI"
-    if (index == 5) return "SAT"
-    if (index == 6) return "SUN"
+    if (index == 1) return "MON"
+    if (index == 2) return "TUE"
+    if (index == 3) return "WED"
+    if (index == 4) return "THU"
+    if (index == 5) return "FRI"
+    if (index == 6) return "SAT"
+    if (index == 0) return "SUN"
   } 
 
   const calculateMin = ( time ) => {
@@ -318,6 +318,9 @@ const InputScreen = ({calRef, navigation}) => {
   const handleEndSubmit = () => {
     console.log("t(n) submit pressed")
     let endDate = endRef.current.calculateDate()
+    if (endDate == null) {
+      return null
+    }
 
     if (endDate.getTime() <= t0.getTime()) {
       alert("T(N) must be after T(0)")
@@ -341,6 +344,7 @@ const InputScreen = ({calRef, navigation}) => {
     navigation.navigate("Input", {screen: "Start"}) //call this in parent
     setFlag(0)
     startRef.current.reset() // For resetting values after submitting
+    graphRef.current.callRefresh()
   }
 
   return (
