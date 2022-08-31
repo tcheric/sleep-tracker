@@ -237,7 +237,7 @@ const GraphScreen = forwardRef((props, ref) => {
         </View>
       </View>
 
-      <TouchableOpacity onPress={() => {logState()}}><Text>CALL</Text></TouchableOpacity>
+      {/* <TouchableOpacity onPress={() => {logState()}}><Text>CALL</Text></TouchableOpacity> */}
       {/* <TouchableOpacity onPress={() => {deleteDb()}}><Text>DEL</Text></TouchableOpacity> */}
 
     </View>
@@ -250,23 +250,25 @@ const styles = StyleSheet.create({
   containsAll: {
     position: "relative",
     flex: 1,
-    // backgroundColor: "rgb(40,40,40)"
+    backgroundColor: "rgb(24, 21, 22)",
+    backgroundColor: "black"
   },
 
   graphContainer: {
-    backgroundColor: "purple",
+    backgroundColor: "black",
+    // backgroundColor: "rgb(30,30,30)",
     height: 380,
     width: "100%",
     position:"absolute",
-    bottom: 240,
+    bottom: 220,
   },
 
   dataContainer: {
-    // backgroundColor: "blue",
-    height: 120,
+    backgroundColor: "rgb(24, 21, 22)",
+    height: 90,
     width: "100%",
     position:"absolute",
-    bottom: 120,
+    bottom: 130,
     paddingHorizontal: 20,
     paddingVertical: 20,
   },
@@ -313,13 +315,13 @@ const styles = StyleSheet.create({
     marginHorizontal: "20%",
     marginTop: 15,
     marginBottom: 5,
-    borderColor: "black",
     borderRadius: 10,
     backgroundColor: "rgb(30,30,30)",
     height: 40,
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
+    elevation: 0,
   },
   date: {
     fontSize: 16,
