@@ -1,9 +1,10 @@
 import * as React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import { useEffect, useState, useImperativeHandle, forwardRef, useRef } from 'react'
+import { useEffect, useState, forwardRef, useCallback } from 'react'
 import * as SQLite from 'expo-sqlite';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as weekStrings from '../asset/weekStrings.json';
+import { useFocusEffect } from '@react-navigation/native';
 
 const db = SQLite.openDatabase("db.db");
 const GraphScreen = forwardRef((props, ref) => {
@@ -24,23 +25,31 @@ const GraphScreen = forwardRef((props, ref) => {
 
   useEffect(() => {
     refreshPageData()
-  }, [wk])
+  }, [wk, props.refresh])
 
-  useImperativeHandle(ref, () => ({
-
-    callRefresh() { 
-      refreshPageData()
-    }
-  }))
+  useFocusEffect( 
+    useCallback(() => {
+      let isActive = true;
+      if (isActive) {
+        console.log("RUN EFFECT")
+        refreshPageData()
+      }
+       
+      return () => {
+        isActive = false;
+      };
+    }, [])
+  );
 
   const refreshPageData = () => {
+    console.log("REFRESH")
     setWkString(weekStrings.weeks[wk])
 
     db.transaction((tx) => {
       tx.executeSql(`SELECT * FROM Weeks WHERE week=?`, [wk], (_, { rows }) => {
-        console.log(JSON.stringify(rows._array))
+        // console.log(JSON.stringify(rows._array))
         // Set 
-        console.log(rows._array[0].total, rows._array[0].total / 3600000)
+        // console.log(rows._array[0].total, rows._array[0].total / 3600000)
         const totalHR = Math.floor(rows._array[0].total / 3600000)
         const totalMin = Math.round((rows._array[0].total / 3600000 - totalHR) * 60)
         
@@ -77,35 +86,7 @@ const GraphScreen = forwardRef((props, ref) => {
     refreshGraph()
   }
 
-  const getCurrWeek = () => {
-    const startOfUniverse = 1659276000000 // 1st Aug 2022 in milliseconds since epoch
-    const weekInMilli = 604800000
-    const nowMilli = new Date().getTime()
-    return Math.floor((nowMilli - startOfUniverse) / weekInMilli)
-  }
 
-  const changeWeek = ( direction ) => {
-    const currWeek = getCurrWeek()
-    if (direction == "previous") {
-      if (wk > 0) {
-        setWk(wk => wk - 1)
-      }
-    } else if (direction == "next") {
-      if (wk < currWeek) {
-        setWk(wk => wk + 1)
-      }
-    }
-  }
-
-  const deleteDb = () => {
-    db.closeAsync()
-    db.deleteAsync()
-      .then((res) => console.log("DROP SUCESS:", res))
-      .catch((err) => console.log("DROP ERROR:",err))
-  }
-  const logState = () => {
-    console.log(t0ByDay)
-  }
 
   const refreshGraph = () => {
     // Get sleep SQL data - Categorrise by t0 (probs more intuitive)
@@ -114,7 +95,7 @@ const GraphScreen = forwardRef((props, ref) => {
       tx.executeSql(`SELECT * FROM Sleeps WHERE week=?`, [wk], (_, { rows }) => {
         const itemsFromDB = rows._array
         for (const sleep of rows._array){
-          console.log(sleep)
+          // console.log(sleep)
           const dateObj = new Date(sleep.t0)
           // Get day of t(0)
           if (dateObj.getDay() == 1) {
@@ -180,6 +161,37 @@ const GraphScreen = forwardRef((props, ref) => {
 
     // Then we have an OBJECT of 7 durations
     // calc heoght with uselayouteffect
+  }
+
+  const getCurrWeek = () => {
+    const startOfUniverse = 1659276000000 // 1st Aug 2022 in milliseconds since epoch
+    const weekInMilli = 604800000
+    const nowMilli = new Date().getTime()
+    return Math.floor((nowMilli - startOfUniverse) / weekInMilli)
+  }
+
+  const changeWeek = ( direction ) => {
+    const currWeek = getCurrWeek()
+    if (direction == "previous") {
+      if (wk > 0) {
+        setWk(wk => wk - 1)
+      }
+    } else if (direction == "next") {
+      if (wk < currWeek) {
+        setWk(wk => wk + 1)
+      }
+    }
+  }
+
+  const deleteDb = () => {
+    db.closeAsync()
+    db.deleteAsync()
+      .then((res) => console.log("DROP SUCESS:", res))
+      .catch((err) => console.log("DROP ERROR:",err))
+  }
+  const logState = () => {
+    console.log(t0ByDay)
+    console.log(props.refresh)
   }
   
   return (

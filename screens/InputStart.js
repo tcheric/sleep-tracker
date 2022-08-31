@@ -33,7 +33,7 @@ const InputStart = forwardRef((props, ref) => {
 
     reset() {
       setDayOffset(0)
-      setHour(0)
+      setHour(-1)
       setMinute(-1)
       setAMPM("PM")
     },

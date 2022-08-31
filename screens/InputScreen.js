@@ -12,7 +12,7 @@ import InputEnd from "./InputEnd";
 const Stack = createNativeStackNavigator();
 const db = SQLite.openDatabase("db.db");
 
-const InputScreen = ({calRef, graphRef, navigation}) => {
+const InputScreen = ({calRef, setRefresh, navigation}) => {
 
   const [t0, setT0] = useState(0)
   const [flag, setFlag] = useState(0)
@@ -217,6 +217,7 @@ const InputScreen = ({calRef, graphRef, navigation}) => {
         console.log("INSERT SUCCESS:")
         console.log(r)
         calRef.current.refreshPageData()
+        setRefresh(refresh => refresh+1)
       },
       (t, e) => {
         console.log("INSERT ERROR:")
@@ -344,7 +345,6 @@ const InputScreen = ({calRef, graphRef, navigation}) => {
     navigation.navigate("Input", {screen: "Start"}) //call this in parent
     setFlag(0)
     startRef.current.reset() // For resetting values after submitting
-    graphRef.current.callRefresh()
   }
 
   return (

@@ -4,14 +4,14 @@ import InputScreen from './screens/InputScreen'
 import GraphScreen from './screens/GraphScreen'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { View, StyleSheet } from "react-native";
-import { useEffect, useRef } from "react"
+import { useState, useEffect, useRef } from "react"
 
 const Tab = createBottomTabNavigator()
 
 const Tabs = () => {
+  const [refresh, setRefresh] = useState(0)
   
   const calendarRef = useRef(null)
-  const graphRef = useRef(null)
 
   return (
     <Tab.Navigator
@@ -79,7 +79,7 @@ const Tabs = () => {
           ),
         }}
         >
-        {(props) => <InputScreen {...props} calRef={calendarRef} graphRef={graphRef} />}
+        {(props) => <InputScreen {...props} calRef={calendarRef} setRefresh={setRefresh} />}
         {/* {() => <InputScreen calRef={calendarRef} navigation={navigation} />} */}
       </Tab.Screen>
 
@@ -100,7 +100,7 @@ const Tabs = () => {
           ),
         }}
         >
-        {(props) => <GraphScreen {...props} ref={graphRef} />}
+        {(props) => <GraphScreen {...props} refresh={refresh} />}
       </Tab.Screen>
       
     </Tab.Navigator>
