@@ -3,6 +3,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 
 // const [t0, setT0] = useState(0)
+const hourColor = "rgb(55,55,60)"
+const charcoal = "#252525";
 
 const SleepItem = ({ t0, t0String, tnString, hours, minutes, onDelete }) => {
   return (
@@ -23,6 +25,8 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 78,
     backgroundColor: "rgb(24, 21, 22)",
+    backgroundColor: "rgb(26,25,28)",
+    // backgroundColor: charcoal,
     color: "green",
     marginVertical: 10,
     paddingVertical: 8,

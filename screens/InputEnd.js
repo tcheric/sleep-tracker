@@ -9,7 +9,7 @@ const InputEnd = forwardRef((props, ref) => {
   const [minute, setMinute] = useState(-1)
   const [AMPM, setAMPM] = useState(props.initAMPM)
 
-  const hourColor = "rgb(55,55,60)"
+  const hourColor = "rgb(55,55,62)"
 
   const minuteView0 = useRef(null);
   const minuteView1 = useRef(null);

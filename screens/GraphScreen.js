@@ -1,10 +1,10 @@
-import * as React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { useEffect, useState, forwardRef, useCallback } from 'react'
 import * as SQLite from 'expo-sqlite';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as weekStrings from '../asset/weekStrings.json';
 import { useFocusEffect } from '@react-navigation/native';
+import Graph from "../components/Graph";
 
 const db = SQLite.openDatabase("db.db");
 const GraphScreen = forwardRef((props, ref) => {
@@ -217,12 +217,14 @@ const GraphScreen = forwardRef((props, ref) => {
       </View>
 
     {/* GRAPH CONTAINER */}
-    <View style={styles.graphContainer}></View>
+    <View style={styles.graphContainer}>
+      <Graph></Graph>
+    </View>
 
     {/* DATA CONTAINER */}
     <View style={styles.dataContainer}>
       <View style={styles.dataTextContainer}>
-        <Text style={styles.dataTextLeft}>Total Sleep: </Text>
+        <Text style={styles.dataTextLeft}>TOTAL SLEEP: </Text>
 
         <View style={styles.rightContainer}>
           <Text style={styles.rightItemOne}>{totalHr}</Text>
@@ -230,7 +232,7 @@ const GraphScreen = forwardRef((props, ref) => {
         </View>
       </View>
       <View style={styles.dataTextContainer}>
-        <Text style={styles.dataTextLeft}>Week Average:</Text>
+        <Text style={styles.dataTextLeft}>WEEK AVERAGE:</Text>
         <View style={styles.rightContainer}>
           <Text style={styles.rightItemOne}>{avgHr}</Text>
           <Text style={styles.rightItemTwo}>{avgMin}</Text>
@@ -257,18 +259,20 @@ const styles = StyleSheet.create({
   graphContainer: {
     backgroundColor: "black",
     // backgroundColor: "rgb(30,30,30)",
-    height: 380,
+    height: 390,
     width: "100%",
     position:"absolute",
     bottom: 220,
+    paddingBottom: 20,
   },
 
   dataContainer: {
-    backgroundColor: "rgb(24, 21, 22)",
+    backgroundColor: "rgb(26,25,28)",
+    // backgroundColor: "black",
     height: 90,
     width: "100%",
     position:"absolute",
-    bottom: 130,
+    bottom: 125,
     paddingHorizontal: 20,
     paddingVertical: 20,
   },
@@ -279,23 +283,25 @@ const styles = StyleSheet.create({
     justifyContent:"space-between",
   },
   dataTextLeft: {
-    fontSize: 18,
+    fontSize: 17,
     letterSpacing: 0.2,
-    color: 'rgb(180,180,180)',
+    color: 'rgb(210,210,210)',
+    // color: 'white',
+    // fontFamily: "sans-serif-light"
   },
   rightContainer :{
     position: "relative"
   },
   rightItemOne:{
-    fontSize: 18,
-    color: 'rgb(180,180,180)',
+    fontSize: 17,
+    color: 'rgb(210,210,210)',
     textAlign: "right",
     position:"absolute",
     right: 63,
   },
   rightItemTwo:{
     fontSize: 18,
-    color: 'rgb(180,180,180)',
+    color: 'rgb(210,210,210)',
     textAlign: "right",
     position:"absolute", 
     right: 0,
