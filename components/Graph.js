@@ -3,10 +3,10 @@ import { StyleSheet, View } from "react-native";
 import { VictoryBar, VictoryChart, VictoryTheme, VictoryAxis } from "victory-native";
 import { custom } from "../utils/customTheme";
 
-const Graph = () => {
+const Graph = ({ data }) => {
   const hourColor = "rgb(55,55,60)"
 
-  const data = [
+  const dataEx = [
     { day: "Mo", hours: 8 },
     { day: "Tu", hours: 9 },
     { day: "We", hours: 10 },
@@ -16,6 +16,7 @@ const Graph = () => {
     { day: "Su", hours: 8.6 },
   ]
 
+  console.log(data)
   return (
     <View style={styles.container}>
       <VictoryChart style={styles.graph} width={400} height={420} theme={custom} domainPadding={30}>

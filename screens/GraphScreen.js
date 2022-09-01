@@ -8,6 +8,15 @@ import Graph from "../components/Graph";
 
 const db = SQLite.openDatabase("db.db");
 const GraphScreen = forwardRef((props, ref) => {
+  const [graphData, setGraphData] = useState([
+    { day: "Mo", hours: 0 },
+    { day: "Tu", hours: 0 },
+    { day: "We", hours: 0 },
+    { day: "Th", hours: 0 },
+    { day: "Fr", hours: 0 },
+    { day: "Sa", hours: 0 },
+    { day: "Su", hours: 0 },
+  ])
   const [t0ByDay, setT0ByDay] = useState({mon:0, tue:0, wed:0, thu:0, fri:0, sat:0, sun:0})
   const [avgHr, setAvgHr] = useState("")
   const [avgMin, setAvgMin] = useState("")
@@ -25,7 +34,7 @@ const GraphScreen = forwardRef((props, ref) => {
 
   useEffect(() => {
     refreshPageData()
-  }, [wk, props.refresh])
+  }, [wk])
 
   useFocusEffect( 
     useCallback(() => {
@@ -41,8 +50,51 @@ const GraphScreen = forwardRef((props, ref) => {
     }, [])
   );
 
+  // useEffect(() => {
+  //   setGraphData(prevState => ([
+  //     { day: "Mo", hours: 0 },
+  //     { day: "Tu", hours: 0 },
+  //     { day: "We", hours: 0 },
+  //     { day: "Th", hours: 0 },
+  //     { day: "Fr", hours: 0 },
+  //     { day: "Sa", hours: 0 },
+  //     { day: "Su", hours: 0 },
+  //   ]))
+  //   for (var prop in t0ByDay) {
+  //     if (Object.prototype.hasOwnProperty.call(t0ByDay, prop)) {
+  //       let dayIndex = -1
+  //       if (prop == "mon") {
+  //         dayIndex = 0
+  //       } else if (prop == "tue") {
+  //         dayIndex = 1
+  //       } else if (prop == "wed") {
+  //         dayIndex = 2
+  //       } else if (prop == "thu") {
+  //         dayIndex = 3
+  //       } else if (prop == "fri") {
+  //         dayIndex = 4
+  //       } else if (prop == "sat") {
+  //         dayIndex = 5
+  //       } else if (prop == "sun") {
+  //         dayIndex = 6
+  //       }
+  //       setGraphData(prevState => {
+  //         let newState = prevState
+  //         newState[dayIndex].hours = Math.round(((t0ByDay[prop] / 3600000) * 10) / 10)
+  //         return newState
+  //       })
+  //     }
+  //   }
+  // }, [t0ByDay])
+
   const refreshPageData = () => {
     console.log("REFRESH")
+    refreshData()
+    refreshGraph() // Returns a promise wwith state value
+    // console.log(t0ByDay)
+  }
+
+  const refreshData = () => {
     setWkString(weekStrings.weeks[wk])
 
     db.transaction((tx) => {
@@ -83,75 +135,77 @@ const GraphScreen = forwardRef((props, ref) => {
         }
       })
     })
-    refreshGraph()
   }
-
-
 
   const refreshGraph = () => {
     // Get sleep SQL data - Categorrise by t0 (probs more intuitive)
-    setT0ByDay(prevState => ({mon:0, tue:0, wed:0, thu:0, fri:0, sat:0, sun:0}))
+    // setT0ByDay(prevState => ({mon:0, tue:0, wed:0, thu:0, fri:0, sat:0, sun:0}))
+
     db.transaction((tx) => {
       tx.executeSql(`SELECT * FROM Sleeps WHERE week=?`, [wk], (_, { rows }) => {
         const itemsFromDB = rows._array
+        // console.log(rows._array)
+
+        if (rows._array.length == 0) {
+          console.log("No sleeps in week")
+        }
+
+        setGraphData(prevState => ([
+          { day: "Mo", hours: 0 },
+          { day: "Tu", hours: 0 },
+          { day: "We", hours: 0 },
+          { day: "Th", hours: 0 },
+          { day: "Fr", hours: 0 },
+          { day: "Sa", hours: 0 },
+          { day: "Su", hours: 0 },
+        ]))
+        
         for (const sleep of rows._array){
           // console.log(sleep)
           const dateObj = new Date(sleep.t0)
-          // Get day of t(0)
+
+          // recursiveStateUpdate
+
           if (dateObj.getDay() == 1) {
-            setT0ByDay(prevState => {
-              let newState = {
-                ...prevState,
-                mon: prevState.mon + (sleep.tn -sleep.t0)
-              }
+            setGraphData(prevState => {
+              let newState = prevState
+              newState[0].hours += Math.round((((sleep.tn -sleep.t0) / 3600000) * 10) / 10)
               return newState
             })
           } else if (dateObj.getDay() == 2) {
-            setT0ByDay(prevState => {
-              let newState = {
-                ...prevState,
-                tue: prevState.tue + (sleep.tn -sleep.t0)
-              }
+            setGraphData(prevState => {
+              let newState = prevState
+              newState[1].hours += Math.round((((sleep.tn -sleep.t0) / 3600000) * 10) / 10)
               return newState
             })
           } else if (dateObj.getDay() == 3) {
-            setT0ByDay(prevState => {
-              let newState = {
-                ...prevState,
-                wed: prevState.wed + (sleep.tn -sleep.t0)
-              }
+            setGraphData(prevState => {
+              let newState = prevState
+              newState[2].hours += Math.round((((sleep.tn -sleep.t0) / 3600000) * 10) / 10)
               return newState
             })
           } else if (dateObj.getDay() == 4) {
-            setT0ByDay(prevState => {
-              let newState = {
-                ...prevState,
-                thu: prevState.thu + (sleep.tn -sleep.t0)
-              }
+            setGraphData(prevState => {
+              let newState = prevState
+              newState[3].hours += Math.round((((sleep.tn -sleep.t0) / 3600000) * 10) / 10)
               return newState
             })
           } else if (dateObj.getDay() == 6) {
-            setT0ByDay(prevState => {
-              let newState = {
-                ...prevState,
-                fri: prevState.fri + (sleep.tn -sleep.t0)
-              }
+            setGraphData(prevState => {
+              let newState = prevState
+              newState[4].hours += Math.round((((sleep.tn -sleep.t0) / 3600000) * 10) / 10)
               return newState
             })
           } else if (dateObj.getDay() == 6) {
-            setT0ByDay(prevState => {
-              let newState = {
-                ...prevState,
-                sat: prevState.sat + (sleep.tn -sleep.t0)
-              }
+            setGraphData(prevState => {
+              let newState = prevState
+              newState[5].hours += Math.round((((sleep.tn -sleep.t0) / 3600000) * 10) / 10)
               return newState
             })
           } else if (dateObj.getDay() == 0) {
-            setT0ByDay(prevState => {
-              let newState = {
-                ...prevState,
-                sun: prevState.sun + (sleep.tn -sleep.t0)
-              }
+            setGraphData(prevState => {
+              let newState = prevState
+              newState[6].hours += Math.round((((sleep.tn -sleep.t0) / 3600000) * 10) / 10)
               return newState
             })
           }
@@ -159,8 +213,7 @@ const GraphScreen = forwardRef((props, ref) => {
       })
     })
 
-    // Then we have an OBJECT of 7 durations
-    // calc heoght with uselayouteffect
+    // Then we have an OBJECT of 7 durations - convert to dataEx format
   }
 
   const getCurrWeek = () => {
@@ -191,9 +244,8 @@ const GraphScreen = forwardRef((props, ref) => {
   }
   const logState = () => {
     console.log(t0ByDay)
-    console.log(props.refresh)
   }
-  
+    
   return (
     <View style={styles.containsAll}>
       <View style={styles.redLine}></View>
@@ -216,33 +268,34 @@ const GraphScreen = forwardRef((props, ref) => {
         </TouchableOpacity >
       </View>
 
-    {/* GRAPH CONTAINER */}
-    <View style={styles.graphContainer}>
-      <Graph></Graph>
-    </View>
-
-    {/* DATA CONTAINER */}
-    <View style={styles.dataContainer}>
-      <View style={styles.dataTextContainer}>
-        <Text style={styles.dataTextLeft}>TOTAL SLEEP: </Text>
-
-        <View style={styles.rightContainer}>
-          <Text style={styles.rightItemOne}>{totalHr}</Text>
-          <Text style={styles.rightItemTwo}>{totalMin}</Text>
-        </View>
-      </View>
-      <View style={styles.dataTextContainer}>
-        <Text style={styles.dataTextLeft}>WEEK AVERAGE:</Text>
-        <View style={styles.rightContainer}>
-          <Text style={styles.rightItemOne}>{avgHr}</Text>
-          <Text style={styles.rightItemTwo}>{avgMin}</Text>
-        </View>
+      {/* GRAPH CONTAINER */}
+      <View style={styles.graphContainer}>
+        <Graph data={graphData}></Graph>
       </View>
 
-      {/* <TouchableOpacity onPress={() => {logState()}}><Text>CALL</Text></TouchableOpacity> */}
-      {/* <TouchableOpacity onPress={() => {deleteDb()}}><Text>DEL</Text></TouchableOpacity> */}
+      {/* DATA CONTAINER */}
+      <View style={styles.dataContainer}>
+        <View style={styles.dataTextContainer}>
+          <Text style={styles.dataTextLeft}>TOTAL SLEEP: </Text>
 
-    </View>
+          <View style={styles.rightContainer}>
+            <Text style={styles.rightItemOne}>{totalHr}</Text>
+            <Text style={styles.rightItemTwo}>{totalMin}</Text>
+          </View>
+        </View>
+        <View style={styles.dataTextContainer}>
+          <Text style={styles.dataTextLeft}>WEEK AVERAGE:</Text>
+          <View style={styles.rightContainer}>
+            <Text style={styles.rightItemOne}>{avgHr}</Text>
+            <Text style={styles.rightItemTwo}>{avgMin}</Text>
+          </View>
+        </View>
+
+        {/* <TouchableOpacity onPress={() => {logState()}}><Text>CALL</Text></TouchableOpacity> */}
+        <Text>{graphData[0].hours} {graphData[1].hours} {graphData[2].hours} {graphData[3].hours}</Text>
+        {/* <TouchableOpacity onPress={() => {deleteDb()}}><Text>DEL</Text></TouchableOpacity> */}
+
+      </View>
 
     </View>
   )
