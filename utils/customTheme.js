@@ -43,7 +43,14 @@ const baseLabelStyles = {
   stroke: "transparent",
 };
 
-const centeredLabelStyles = assign({ textAnchor: "middle" }, baseLabelStyles);
+const centeredLabelStyles = assign({ textAnchor: "middle" }, {
+  fontFamily: sansSerif,
+  fontSize: 12,
+  letterSpacing,
+  padding: 10,
+  fill: "red",
+  stroke: "transparent",
+},);
 // *
 // * Strokes
 // *
@@ -87,14 +94,14 @@ export const custom = {
           stroke: "transparent",
         },
         // tickLabels: baseLabelStyles,
-        tickLabels: {
-          fontFamily: sansSerif,
-          fontSize: 12,
-          letterSpacing,
-          padding: 10,
-          fill: "red",
-          stroke: "transparent",
-        },
+        // tickLabels: {
+        //   fontFamily: sansSerif,
+        //   fontSize: 12,
+        //   letterSpacing,
+        //   padding: 10,
+        //   fill: "green",
+        //   stroke: "transparent",
+        // },
       },
     },
     baseProps,
@@ -112,40 +119,6 @@ export const custom = {
     },
     baseProps,
   ),
-  boxplot: assign(
-    {
-      style: {
-        max: { padding: 8, stroke: charcoal, strokeWidth: 1 },
-        maxLabels: assign({}, baseLabelStyles, { padding: 3 }),
-        median: { padding: 8, stroke: charcoal, strokeWidth: 1 },
-        medianLabels: assign({}, baseLabelStyles, { padding: 3 }),
-        min: { padding: 8, stroke: charcoal, strokeWidth: 1 },
-        minLabels: assign({}, baseLabelStyles, { padding: 3 }),
-        q1: { padding: 8, fill: grey },
-        q1Labels: assign({}, baseLabelStyles, { padding: 3 }),
-        q3: { padding: 8, fill: grey },
-        q3Labels: assign({}, baseLabelStyles, { padding: 3 }),
-      },
-      boxWidth: 20,
-    },
-    baseProps,
-  ),
-  candlestick: assign(
-    {
-      style: {
-        data: {
-          stroke: charcoal,
-          strokeWidth: 1,
-        },
-        labels: assign({}, baseLabelStyles, { padding: 5 }),
-      },
-      candleColors: {
-        positive: "#ffffff",
-        negative: charcoal,
-      },
-    },
-    baseProps,
-  ),
   chart: baseProps,
   errorbar: assign(
     {
@@ -153,108 +126,10 @@ export const custom = {
       style: {
         data: {
           fill: "transparent",
-          stroke: charcoal,
+          stroke: "white",
           strokeWidth: 2,
         },
         labels: baseLabelStyles,
-      },
-    },
-    baseProps,
-  ),
-  group: assign(
-    {
-      colorScale: colors,
-    },
-    baseProps,
-  ),
-  histogram: assign(
-    {
-      style: {
-        data: {
-          fill: grey,
-          stroke: charcoal,
-          strokeWidth: 2,
-        },
-        labels: baseLabelStyles,
-      },
-    },
-    baseProps,
-  ),
-  legend: {
-    colorScale: colors,
-    gutter: 10,
-    orientation: "vertical",
-    titleOrientation: "top",
-    style: {
-      data: {
-        type: "circle",
-      },
-      labels: baseLabelStyles,
-      title: assign({}, baseLabelStyles, { padding: 5 }),
-    },
-  },
-  line: assign(
-    {
-      style: {
-        data: {
-          fill: "transparent",
-          stroke: charcoal,
-          strokeWidth: 2,
-        },
-        labels: baseLabelStyles,
-      },
-    },
-    baseProps,
-  ),
-  scatter: assign(
-    {
-      style: {
-        data: {
-          fill: charcoal,
-          stroke: "transparent",
-          strokeWidth: 0,
-        },
-        labels: baseLabelStyles,
-      },
-    },
-    baseProps,
-  ),
-  stack: assign(
-    {
-      colorScale: colors,
-    },
-    baseProps,
-  ),
-  tooltip: {
-    style: assign({}, baseLabelStyles, { padding: 0, pointerEvents: "none" }),
-    flyoutStyle: {
-      stroke: charcoal,
-      strokeWidth: 1,
-      fill: "#f0f0f0",
-      pointerEvents: "none",
-    },
-    flyoutPadding: 5,
-    cornerRadius: 5,
-    pointerLength: 10,
-  },
-  voronoi: assign(
-    {
-      style: {
-        data: {
-          fill: "transparent",
-          stroke: "transparent",
-          strokeWidth: 0,
-        },
-        labels: assign({}, baseLabelStyles, {
-          padding: 5,
-          pointerEvents: "none",
-        }),
-        flyout: {
-          stroke: charcoal,
-          strokeWidth: 1,
-          fill: "#f0f0f0",
-          pointerEvents: "none",
-        },
       },
     },
     baseProps,

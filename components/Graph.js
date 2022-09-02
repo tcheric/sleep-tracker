@@ -18,16 +18,16 @@ const Graph = ({ data }) => {
   
   return (
     <View style={styles.container}>
-      <VictoryChart style={styles.graph} width={400} height={420} theme={custom} domainPadding={30}>
+      <VictoryChart style={styles.graph} width={400} height={400} theme={custom} domainPadding={25}>
         
         <VictoryBar 
-          animate={{ onLoad: { delay: 0, duration: 1 }, duration: 500 }} 
+          animate={{ onLoad: { delay: 0, duration: 1 }, duration: 2280 }} 
           data={data} 
           labels={({ datum }) => (Math.round((datum._y)*10)/10).toString()}
           x="day" 
           y="hours" 
         />
-        <VictoryAxis style={{ tickLabels: { fill: hourColor, padding: 10 } }}/>
+        <VictoryAxis style={{ tickLabels: { padding: 10 } }}/>
       </VictoryChart>
     </View>
   )
