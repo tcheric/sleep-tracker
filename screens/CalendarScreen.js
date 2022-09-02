@@ -1,5 +1,6 @@
-import { useEffect, useState, useImperativeHandle, forwardRef, useRef } from 'react'
+import { useEffect, useState, useImperativeHandle, forwardRef, useCallback } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
+import { useFocusEffect } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as SQLite from 'expo-sqlite';
 import * as weekStrings from '../asset/weekStrings.json';
@@ -27,43 +28,37 @@ const CalendarScreen = forwardRef((props, ref) => {
   let deleting = 0
 
   useImperativeHandle(ref, () => ({
-
-    refreshPageData() { 
-      setWkString(weekStrings.weeks[wk])
-  
-      db.transaction((tx) => {
-        tx.executeSql(`SELECT * FROM Sleeps WHERE week=?`, [wk], (_, { rows }) => {
-          // Get all sleeps in the current week
-          const itemsFromDB = rows._array
-          setItems(items => itemsFromDB)
-          console.log("GET DATA SET IT")
-          setIsLoaded(isLoaded => true)
-        })
-        tx.executeSql(`SELECT * FROM Weeks WHERE week=?`, [wk], (_, { rows }) => {
-          // console.log(JSON.stringify(rows._array))
-        })
-      })
-      console.log(items)
+    callRefresh() {
+      setWk(getCurrWeek)
     }
   }))
 
+  useFocusEffect( 
+    useCallback(() => {
+      let isActive = true;
+      if (isActive) {
+        setWk(getCurrWeek)
+        refreshPageData()
+      }
+      return () => {
+        isActive = false;
+      };
+    }, [])
+  );
+
+  // Doesn't change week to currweek
   const refreshPageData = () => {
     setWkString(weekStrings.weeks[wk])
 
     db.transaction((tx) => {
       tx.executeSql(`SELECT * FROM Sleeps WHERE week=?`, [wk], (_, { rows }) => {
-        // Get all sleeps in the current week
         const itemsFromDB = rows._array
-        // console.log(itemsFromDB)
         setItems(items => itemsFromDB)
-        // console.log("GET DATA SET IT")
         setIsLoaded(isLoaded => true)
       })
       tx.executeSql(`SELECT * FROM Weeks WHERE week=?`, [wk], (_, { rows }) => {
-        // console.log(JSON.stringify(rows._array))
       })
     })
-    // console.log(items)
   }
 
   const deleteSleepItem = ( t0delete ) => {
@@ -125,6 +120,7 @@ const CalendarScreen = forwardRef((props, ref) => {
         (t, r) => {
           console.log("DELETE SUCCESS:")
           console.log(r)
+          // setWk(getCurrWeek)
           refreshPageData()
           deleting = 0
         },

@@ -216,7 +216,7 @@ const InputScreen = ({calRef, setRefresh, navigation}) => {
       (t, r) => {
         console.log("INSERT SUCCESS:")
         console.log(r)
-        calRef.current.refreshPageData()
+        calRef.current.callRefresh()
         setRefresh(refresh => refresh+1)
       },
       (t, e) => {

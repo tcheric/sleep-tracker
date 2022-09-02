@@ -213,7 +213,7 @@ const GraphScreen = forwardRef((props, ref) => {
 
         {/* <TouchableOpacity onPress={() => {logState()}}><Text>CALL</Text></TouchableOpacity> */}
         {/* <Text>{graphData[0].hours} {graphData[1].hours} {graphData[2].hours} {graphData[3].hours}</Text> */}
-        {/* <TouchableOpacity onPress={() => {deleteDb()}}><Text>DEL</Text></TouchableOpacity> */}
+        {/* <TouchableOpacity onPress={() => {deleteDb()}}><Text>RESET DB</Text></TouchableOpacity> */}
 
       </View>
     </View>
