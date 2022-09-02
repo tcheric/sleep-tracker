@@ -42,6 +42,7 @@ const GraphScreen = forwardRef((props, ref) => {
       let isActive = true;
       if (isActive) {
         console.log("RUN EFFECT")
+        setWk(getCurrWeek)
         refreshPageData()
       }
        
