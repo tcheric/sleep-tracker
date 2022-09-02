@@ -18,10 +18,10 @@ const Graph = ({ data }) => {
   
   return (
     <View style={styles.container}>
-      <VictoryChart style={styles.graph} width={400} height={400} theme={custom} domainPadding={25}>
+      <VictoryChart style={styles.graph} width={400} height={370} theme={custom} domainPadding={25}>
         
         <VictoryBar 
-          animate={{ onLoad: { delay: 0, duration: 1 }, duration: 2280 }} 
+          animate={{ onLoad: { delay: 0, duration: 1 }, duration: 1280 }} 
           data={data} 
           labels={({ datum }) => (Math.round((datum._y)*10)/10).toString()}
           x="day" 

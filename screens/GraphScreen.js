@@ -5,6 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as weekStrings from '../asset/weekStrings.json';
 import { useFocusEffect } from '@react-navigation/native';
 import Graph from "../components/Graph";
+import GraphSVG from "../components/GraphSVG";
 
 const db = SQLite.openDatabase("db.db");
 const GraphScreen = forwardRef((props, ref) => {
@@ -188,6 +189,7 @@ const GraphScreen = forwardRef((props, ref) => {
       {/* GRAPH CONTAINER */}
       <View style={styles.graphContainer}>
         <Graph data={graphData}></Graph>
+        {/* <GraphSVG></GraphSVG> */}
       </View>
 
       {/* DATA CONTAINER */}
@@ -228,11 +230,12 @@ const styles = StyleSheet.create({
   graphContainer: {
     backgroundColor: "black",
     // backgroundColor: "rgb(30,30,30)",
-    height: 390,
+    height: 400,
     width: "100%",
     position:"absolute",
-    bottom: 220,
+    bottom: 210,
     paddingBottom: 20,
+    // paddingHorizontal: 30,
   },
 
   dataContainer: {

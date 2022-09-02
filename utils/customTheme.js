@@ -15,10 +15,9 @@ const colors = [
 
 const charcoal = "#252525";
 const grey = "#969696";
-// const red = "red"
-const red = "rgb(253,190,190)"
-// const red = "rgb(255,50,50)"
-const hourColor = "rgb(55,55,60)"
+// const red = "rgb(253,190,190)"
+const red = "rgb(200,10,8)"
+const hourColor = "rgb(155,155,160)"
   // *
 // * Typography
 // *
@@ -36,10 +35,10 @@ const baseProps = {
 // *
 const baseLabelStyles = {
   fontFamily: sansSerif,
-  fontSize,
+  fontSize: 14,
   letterSpacing,
   padding: 10,
-  fill: hourColor,
+  fill: "rgb(210,210,210)",
   stroke: "transparent",
 };
 
@@ -93,15 +92,14 @@ export const custom = {
           size: 1,
           stroke: "transparent",
         },
-        // tickLabels: baseLabelStyles,
-        // tickLabels: {
-        //   fontFamily: sansSerif,
-        //   fontSize: 12,
-        //   letterSpacing,
-        //   padding: 10,
-        //   fill: "green",
-        //   stroke: "transparent",
-        // },
+        tickLabels: {
+          fontFamily: sansSerif,
+          fontSize: 13,
+          letterSpacing,
+          padding: 10,
+          fill: "rgb(110,110,110)",
+          stroke: "transparent",
+        },
       },
     },
     baseProps,
