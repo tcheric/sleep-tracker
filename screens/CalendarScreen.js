@@ -1,5 +1,5 @@
 import { useEffect, useState, useImperativeHandle, forwardRef, useCallback } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as SQLite from 'expo-sqlite';
@@ -9,6 +9,7 @@ import SleepItem from '../components/SleepItem.js'
 const db = SQLite.openDatabase("db.db");
 
 const CalendarScreen = forwardRef((props, ref) => {
+  const [showSpinner, setShowSpinner] = useState("red")
   const [wk, setWk] = useState(()=>{
     // Calculate curent week
     const startOfUniverse = 1659276000000 // 1st Aug 2022 in milliseconds since epoch
@@ -55,6 +56,7 @@ const CalendarScreen = forwardRef((props, ref) => {
         const itemsFromDB = rows._array
         setItems(items => itemsFromDB)
         setIsLoaded(isLoaded => true)
+        setShowSpinner("transparent")
       })
       tx.executeSql(`SELECT * FROM Weeks WHERE week=?`, [wk], (_, { rows }) => {
       })
@@ -77,6 +79,7 @@ const CalendarScreen = forwardRef((props, ref) => {
     let t0DelMin
 
     const nestedSelect = ( t0DelWeek, t0DelDurationMilli ) => {
+      setShowSpinner("red")
       db.transaction((tx) => {
         tx.executeSql(`SELECT * FROM Weeks WHERE week=?`, [t0DelWeek],
         (_, {rows}) => {
@@ -158,10 +161,12 @@ const CalendarScreen = forwardRef((props, ref) => {
     if (direction == "previous") {
       if (wk > 0) {
         setWk(wk => wk - 1)
+        setShowSpinner("red")
       }
     } else if (direction == "next") {
       if (wk < currWeek) {
         setWk(wk => wk + 1)
+        setShowSpinner("red")
       }
     }
   }
@@ -176,6 +181,9 @@ const CalendarScreen = forwardRef((props, ref) => {
   return (
     <View style={styles.containsAll}>
       <View style={styles.redLine}></View>
+      <ActivityIndicator style={styles.Lspinner} size="large" color={showSpinner} />
+      <ActivityIndicator style={styles.Rspinner} size="large" color={showSpinner} />
+
       <ScrollView style={styles.container} contentContainerStyle={styles.scroll}>
 {/* DATE CONTAINER */}
         <View style={styles.dateContainer}>
@@ -300,7 +308,27 @@ const styles = StyleSheet.create({
   scroll: {
     justifyContent: "center",
     alignItems: "center",
-  }
+  },
+  Rspinner: {
+    position: "absolute",
+    top: 35,
+    left: "50%",
+    zIndex: 2,
+    transform:[
+      {translateX: 120},
+      {translateY: -18},
+    ]
+  },
+  Lspinner: {
+    position: "absolute",
+    top: 35,
+    left: "50%",
+    zIndex: 2,
+    transform:[
+      {translateX: -160},
+      {translateY: -18},
+    ]
+  },
 })
 
 export default CalendarScreen

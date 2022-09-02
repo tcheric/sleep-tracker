@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
 import { useEffect, useState, forwardRef, useCallback } from 'react'
 import * as SQLite from 'expo-sqlite';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -9,6 +9,7 @@ import GraphSVG from "../components/GraphSVG";
 
 const db = SQLite.openDatabase("db.db");
 const GraphScreen = forwardRef((props, ref) => {
+  const [showSpinner, setShowSpinner] = useState("red")
   const [graphData, setGraphData] = useState([
     { day: "Mo", hours: 0 },
     { day: "Tu", hours: 0 },
@@ -54,6 +55,7 @@ const GraphScreen = forwardRef((props, ref) => {
 
   const refreshPageData = () => {
     console.log("REFRESH")
+    setShowSpinner("red")
     refreshData()
     refreshGraph() 
   }
@@ -131,7 +133,10 @@ const GraphScreen = forwardRef((props, ref) => {
           }
         }
         // console.log(graphDataObj)
-        setGraphData(graphDataObj)
+        setGraphData(prev => {
+          setShowSpinner("transparent")
+          return graphDataObj
+        })
       })
     })
   }
@@ -169,6 +174,9 @@ const GraphScreen = forwardRef((props, ref) => {
   return (
     <View style={styles.containsAll}>
       <View style={styles.redLine}></View>
+      <ActivityIndicator style={styles.Lspinner} size="large" color={showSpinner} />
+      <ActivityIndicator style={styles.Rspinner} size="large" color={showSpinner} />
+
       {/* DATE CONTAINER */}
       <View style={styles.dateContainer}>
         <TouchableOpacity 
@@ -211,6 +219,7 @@ const GraphScreen = forwardRef((props, ref) => {
             <Text style={styles.rightItemTwo}>{avgMin}</Text>
           </View>
         </View>
+
 
         {/* <TouchableOpacity onPress={() => {logState()}}><Text>CALL</Text></TouchableOpacity> */}
         {/* <Text>{graphData[0].hours} {graphData[1].hours} {graphData[2].hours} {graphData[3].hours}</Text> */}
@@ -260,7 +269,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     letterSpacing: 0.2,
     color: 'rgb(210,210,210)',
-    // color: 'white',
     // fontFamily: "sans-serif-light"
   },
   rightContainer :{
@@ -313,6 +321,26 @@ const styles = StyleSheet.create({
     height: 30,
     justifyContent: "center",
     alignItems: "center",
+  },
+  Rspinner: {
+    position: "absolute",
+    top: 35,
+    left: "50%",
+    zIndex: 2,
+    transform:[
+      {translateX: 120},
+      {translateY: -18},
+    ]
+  },
+  Lspinner: {
+    position: "absolute",
+    top: 35,
+    left: "50%",
+    zIndex: 2,
+    transform:[
+      {translateX: -160},
+      {translateY: -18},
+    ]
   },
 });
 
