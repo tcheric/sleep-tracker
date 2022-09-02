@@ -64,6 +64,7 @@ const GraphScreen = forwardRef((props, ref) => {
       tx.executeSql(`SELECT * FROM Weeks WHERE week=?`, [wk], (_, { rows }) => {
         const totalHR = Math.floor(rows._array[0].total / 3600000)
         const totalMin = Math.round((rows._array[0].total / 3600000 - totalHR) * 60)
+        console.log(totalHR, totalMin)
         
         let avgHR
         let avgMin
@@ -128,7 +129,7 @@ const GraphScreen = forwardRef((props, ref) => {
             graphDataObj[dayJS - 1].hours += Math.round((((sleep.tn -sleep.t0) / 3600000) * 10)) / 10
           }
         }
-        console.log(graphDataObj)
+        // console.log(graphDataObj)
         setGraphData(graphDataObj)
       })
     })

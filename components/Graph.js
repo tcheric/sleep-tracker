@@ -19,7 +19,7 @@ const Graph = ({ data }) => {
   return (
     <View style={styles.container}>
       <VictoryChart style={styles.graph} width={400} height={370} theme={custom} domainPadding={25}>
-        
+        {/* COLOR ISSUE SEEMS TO BE RELATED TO HEIGHT ATTRIBUTE */}
         <VictoryBar 
           animate={{ onLoad: { delay: 0, duration: 1 }, duration: 1280 }} 
           data={data} 

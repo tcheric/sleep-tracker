@@ -16,7 +16,7 @@ const colors = [
 const charcoal = "#252525";
 const grey = "#969696";
 // const red = "rgb(253,190,190)"
-const red = "rgb(200,10,8)"
+const red = "rgb(190,10,8)"
 const hourColor = "rgb(155,155,160)"
   // *
 // * Typography
