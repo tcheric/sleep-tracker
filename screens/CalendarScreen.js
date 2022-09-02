@@ -81,39 +81,70 @@ const CalendarScreen = forwardRef((props, ref) => {
     let t0DelHour
     let t0DelMin
 
-    const nestedSelect = ( t0DelWeek ) => {
+    const nestedSelect = ( t0DelWeek, t0DelDurationMilli ) => {
+      db.transaction((tx) => {
+        tx.executeSql(`SELECT * FROM Weeks WHERE week=?`, [t0DelWeek],
+        (_, {rows}) => {
+          console.log("SELECT 2 SUCCESS:")
+          ogTotal = rows._array[0].total
+          newTotal = ogTotal - t0DelDurationMilli
+          newAverage = newTotal / 7
+          nestedUpdate( newTotal, newAverage, t0DelWeek)
+        },
+        (_, e) => {
+          console.log("SELECT 2 ERROR:")
+          console.log(e)
+          console.log(t0DelWeek)
+        })
+      })
+    }
 
+    const nestedUpdate = ( newTotal, newAverage, t0DelWeek ) => {
+      db.transaction((tx) => {
+        tx.executeSql(`
+            UPDATE Weeks 
+            SET total = ?, average = ?
+            WHERE week = ?
+          ;`,  [newTotal, newAverage, t0DelWeek], (_, {rows}) => {
+            console.log("UPDATE SUCCESS:")  
+            console.log("newtotal", newTotal, "newavg", newAverage, "delweek", t0DelWeek)
+            // console.log(rows)
+            nestedDelete(t0delete)
+          }, (_, e) => {
+            console.log("UPDATE ERROR:")
+            console.log(e)
+          }
+        )
+      })
+    }
+
+    const nestedDelete = ( t0delete ) => {
+      console.log("DELETE Sleeps")
+      db.transaction((tx) => {
+        tx.executeSql(`DELETE FROM Sleeps WHERE t0=?`, [t0delete],
+        (t, r) => {
+          console.log("DELETE SUCCESS:")
+          console.log(r)
+          refreshPageData()
+          deleting = 0
+        },
+        (t, e) => {
+          console.log("DELETE ERROR:")
+          console.log(e)
+        })
+      })
     }
 
     //SELECT ->  UPDATE week data: select from wweeks
     db.transaction((tx) => {
       tx.executeSql(`SELECT * FROM Sleeps WHERE t0=?`, [t0delete], (_, {rows}) => {
         console.log("SELECT 1 SUCCESS:")
-        // if (typeof rows._array[0].week == "null") {
-        //   return
-        // }
         try {
           t0DelWeek = rows._array[0].week
           t0DelHour = rows._array[0].hours
           t0DelMin = rows._array[0].minutes
-          // console.log(t0DelHour, t0DelMin)
           t0DelDurationMilli = t0DelHour *  3600000 + t0DelMin * 60000
-          db.transaction((tx) => {
-            tx.executeSql(`SELECT * FROM Weeks WHERE week=?`, [t0DelWeek],
-            (_, {rows}) => {
-              console.log("SELECT 2 SUCCESS:")
-              console.log("RUNRUNRUNRUNRUNRUNRUNRUNRUNRUN")
-              ogTotal = rows._array[0].total
-              newTotal = ogTotal - t0DelDurationMilli
-              newAverage = newTotal / 7
-              console.log(newTotal, ogTotal, t0DelDurationMilli)
-            },
-            (_, e) => {
-              console.log("SELECT 2 ERROR:")
-              console.log(e)
-              console.log(t0DelWeek)
-            })
-          })
+          nestedSelect(t0DelWeek, t0DelDurationMilli)
         } catch (e) {
           console.log("SELECT 1 FAILED")
           return
@@ -123,41 +154,7 @@ const CalendarScreen = forwardRef((props, ref) => {
         console.log("SELECT 1 ERROR:")
         console.log(e)
       })
-
-
-
-
-      tx.executeSql(`
-          UPDATE Weeks 
-          SET total = ?, average = ?
-          WHERE week = ?
-        ;`,  [newTotal, newAverage, t0DelWeek], (_, {rows}) => {
-          console.log("UPDATE SUCCESS:")  
-          console.log("newtotal", newTotal, "newavg", newAverage, "delweek", t0DelWeek)
-          // console.log(rows)
-        }, (_, e) => {
-          console.log("UPDATE ERROR:")
-          console.log(e)
-        }
-      )
     })
-
-    // DELETE
-    console.log("DELETE Sleeps")
-    db.transaction((tx) => {
-      tx.executeSql(`DELETE FROM Sleeps WHERE t0=?`, [t0delete],
-      (t, r) => {
-        console.log("DELETE SUCCESS:")
-        console.log(r)
-
-      },
-      (t, e) => {
-        console.log("DELETE ERROR:")
-        console.log(e)
-      })
-    })
-    refreshPageData()
-    deleting = 0
   }
 
   const changeWeek = ( direction ) => {
