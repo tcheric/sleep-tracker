@@ -19,10 +19,10 @@ const GraphScreen = forwardRef((props, ref) => {
     { day: "Su", hours: 0 },
   ])
   const [t0ByDay, setT0ByDay] = useState({mon:0, tue:0, wed:0, thu:0, fri:0, sat:0, sun:0})
-  const [avgHr, setAvgHr] = useState("")
-  const [avgMin, setAvgMin] = useState("")
-  const [totalHr, setTotalHr] = useState("")
-  const [totalMin, setTotalMin] = useState("")
+  const [avgHr, setAvgHr] = useState("X HR ")
+  const [avgMin, setAvgMin] = useState("XX MIN")
+  const [totalHr, setTotalHr] = useState("X HR ")
+  const [totalMin, setTotalMin] = useState("XX MIN")
   const [wkString, setWkString] = useState("")
   const [wk, setWk] = useState(()=>{
     // Calculate curent week
