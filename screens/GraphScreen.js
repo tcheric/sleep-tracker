@@ -84,7 +84,6 @@ const GraphScreen = forwardRef((props, ref) => {
           avgHR = Math.floor(rows._array[0].average / 3600000)
           avgMin = Math.round((rows._array[0].average / 3600000 - avgHR) * 60)
         }
-        // console.log(rows._array[0].average, rows._array[0].average / 3600000)
         setTotalHr(totalHR + " HR ")
         if (totalMin < 10) {
           setTotalMin("0" + totalMin + " MIN")
@@ -107,10 +106,6 @@ const GraphScreen = forwardRef((props, ref) => {
       tx.executeSql(`SELECT * FROM Sleeps WHERE week=?`, [wk], (_, { rows }) => {
         const itemsFromDB = rows._array
 
-        if (rows._array.length == 0) {
-          console.log("No sleeps in week")
-        }
-
         let graphDataObj = [
           { day: "Mo", hours: 0 },
           { day: "Tu", hours: 0 },
@@ -124,7 +119,6 @@ const GraphScreen = forwardRef((props, ref) => {
         for (const sleep of rows._array){
           const dateObj = new Date(sleep.t0)
 
-          // INSTEAD OF CALLING SETSTAE A BILLION TIMES< JUST MAKE THE OBJECT WITH FOR LOOP AND CALL SETSTATE ONCE
           const dayJS = dateObj.getDay()
           if (dayJS == 0) {
             graphDataObj[6].hours += Math.round((((sleep.tn -sleep.t0) / 3600000) * 10)) / 10
@@ -132,7 +126,6 @@ const GraphScreen = forwardRef((props, ref) => {
             graphDataObj[dayJS - 1].hours += Math.round((((sleep.tn -sleep.t0) / 3600000) * 10)) / 10
           }
         }
-        // console.log(graphDataObj)
         setGraphData(prev => {
           setShowSpinner("transparent")
           return graphDataObj
