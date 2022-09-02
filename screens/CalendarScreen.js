@@ -24,6 +24,8 @@ const CalendarScreen = forwardRef((props, ref) => {
     refreshPageData()
   }, [wk])
 
+  let deleting = 0
+
   useImperativeHandle(ref, () => ({
 
     refreshPageData() { 
@@ -65,13 +67,20 @@ const CalendarScreen = forwardRef((props, ref) => {
   }
 
   const deleteSleepItem = ( t0delete ) => {
+    if (deleting == 1) {
+      return
+    }
+    deleting = 1
     //SELECT ->  UPDATE week data: select from wweeks
     db.transaction((tx) => {
       tx.executeSql(`SELECT * FROM Sleeps WHERE t0=?`, [t0delete], (_, {rows}) => {
         console.log("SELECT SUCCESS:")
+        if (typeof t0DelWeek == "undefined") {
+          return
+        }
+        const t0DelWeek = rows._array[0].week
         const t0DelHour = rows._array[0].hours
         const t0DelMin = rows._array[0].minutes
-        const t0DelWeek = rows._array[0].week
         // console.log(t0DelHour, t0DelMin)
         const t0DelDurationMilli = t0DelHour *  3600000 + t0DelMin * 60000
 
@@ -103,7 +112,7 @@ const CalendarScreen = forwardRef((props, ref) => {
         console.log("SELECT ERROR:")
         console.log(e)
       })
-    })
+    }, err => {console.log(err)})
 
     // DELETE
     console.log("DELETE Sleeps")
@@ -120,6 +129,7 @@ const CalendarScreen = forwardRef((props, ref) => {
       })
     })
     refreshPageData()
+    deleting = 0
   }
 
   const changeWeek = ( direction ) => {

@@ -50,48 +50,10 @@ const GraphScreen = forwardRef((props, ref) => {
     }, [])
   );
 
-  // useEffect(() => {
-  //   setGraphData(prevState => ([
-  //     { day: "Mo", hours: 0 },
-  //     { day: "Tu", hours: 0 },
-  //     { day: "We", hours: 0 },
-  //     { day: "Th", hours: 0 },
-  //     { day: "Fr", hours: 0 },
-  //     { day: "Sa", hours: 0 },
-  //     { day: "Su", hours: 0 },
-  //   ]))
-  //   for (var prop in t0ByDay) {
-  //     if (Object.prototype.hasOwnProperty.call(t0ByDay, prop)) {
-  //       let dayIndex = -1
-  //       if (prop == "mon") {
-  //         dayIndex = 0
-  //       } else if (prop == "tue") {
-  //         dayIndex = 1
-  //       } else if (prop == "wed") {
-  //         dayIndex = 2
-  //       } else if (prop == "thu") {
-  //         dayIndex = 3
-  //       } else if (prop == "fri") {
-  //         dayIndex = 4
-  //       } else if (prop == "sat") {
-  //         dayIndex = 5
-  //       } else if (prop == "sun") {
-  //         dayIndex = 6
-  //       }
-  //       setGraphData(prevState => {
-  //         let newState = prevState
-  //         newState[dayIndex].hours = Math.round(((t0ByDay[prop] / 3600000) * 10) / 10)
-  //         return newState
-  //       })
-  //     }
-  //   }
-  // }, [t0ByDay])
-
   const refreshPageData = () => {
     console.log("REFRESH")
     refreshData()
-    refreshGraph() // Returns a promise wwith state value
-    // console.log(t0ByDay)
+    refreshGraph() 
   }
 
   const refreshData = () => {
@@ -99,9 +61,6 @@ const GraphScreen = forwardRef((props, ref) => {
 
     db.transaction((tx) => {
       tx.executeSql(`SELECT * FROM Weeks WHERE week=?`, [wk], (_, { rows }) => {
-        // console.log(JSON.stringify(rows._array))
-        // Set 
-        // console.log(rows._array[0].total, rows._array[0].total / 3600000)
         const totalHR = Math.floor(rows._array[0].total / 3600000)
         const totalMin = Math.round((rows._array[0].total / 3600000 - totalHR) * 60)
         
@@ -139,12 +98,9 @@ const GraphScreen = forwardRef((props, ref) => {
 
   const refreshGraph = () => {
     // Get sleep SQL data - Categorrise by t0 (probs more intuitive)
-    // setT0ByDay(prevState => ({mon:0, tue:0, wed:0, thu:0, fri:0, sat:0, sun:0}))
-
     db.transaction((tx) => {
       tx.executeSql(`SELECT * FROM Sleeps WHERE week=?`, [wk], (_, { rows }) => {
         const itemsFromDB = rows._array
-        // console.log(rows._array)
 
         if (rows._array.length == 0) {
           console.log("No sleeps in week")
@@ -161,19 +117,20 @@ const GraphScreen = forwardRef((props, ref) => {
         ]
 
         for (const sleep of rows._array){
-          // console.log(sleep)
           const dateObj = new Date(sleep.t0)
 
           // INSTEAD OF CALLING SETSTAE A BILLION TIMES< JUST MAKE THE OBJECT WITH FOR LOOP AND CALL SETSTATE ONCE
           const dayJS = dateObj.getDay()
-          graphDataObj[dayJS - 1].hours += Math.round((((sleep.tn -sleep.t0) / 3600000) * 10)) / 10
+          if (dayJS == 0) {
+            graphDataObj[6].hours += Math.round((((sleep.tn -sleep.t0) / 3600000) * 10)) / 10
+          } else {
+            graphDataObj[dayJS - 1].hours += Math.round((((sleep.tn -sleep.t0) / 3600000) * 10)) / 10
+          }
         }
         console.log(graphDataObj)
         setGraphData(graphDataObj)
       })
     })
-
-    // Then we have an OBJECT of 7 durations - convert to dataEx format
   }
 
   const getCurrWeek = () => {
@@ -256,7 +213,6 @@ const GraphScreen = forwardRef((props, ref) => {
         {/* <TouchableOpacity onPress={() => {deleteDb()}}><Text>DEL</Text></TouchableOpacity> */}
 
       </View>
-
     </View>
   )
 })

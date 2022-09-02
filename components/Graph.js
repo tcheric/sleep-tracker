@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { StyleSheet, View } from "react-native";
-import { VictoryBar, VictoryChart, VictoryTheme, VictoryAxis } from "victory-native";
+import { VictoryBar, VictoryChart, VictoryTheme, VictoryAxis, VictoryAnimation  } from "victory-native";
 import { custom } from "../utils/customTheme";
 
 const Graph = ({ data }) => {
@@ -15,14 +15,18 @@ const Graph = ({ data }) => {
     { day: "Sa", hours: 11 },
     { day: "Su", hours: 8.6 },
   ]
-
-  console.log(data)
+  
   return (
     <View style={styles.container}>
       <VictoryChart style={styles.graph} width={400} height={420} theme={custom} domainPadding={30}>
         
-        <VictoryBar data={data} labels={({ datum }) => `${datum._y}`}
-        x="day" y="hours" />
+        <VictoryBar 
+          animate={{ onLoad: { delay: 0, duration: 1 }, duration: 500 }} 
+          data={data} 
+          labels={({ datum }) => (Math.round((datum._y)*10)/10).toString()}
+          x="day" 
+          y="hours" 
+        />
         <VictoryAxis style={{ tickLabels: { fill: hourColor, padding: 10 } }}/>
       </VictoryChart>
     </View>
