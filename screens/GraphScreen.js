@@ -150,7 +150,7 @@ const GraphScreen = forwardRef((props, ref) => {
           console.log("No sleeps in week")
         }
 
-        setGraphData(prevState => ([
+        let graphDataObj = [
           { day: "Mo", hours: 0 },
           { day: "Tu", hours: 0 },
           { day: "We", hours: 0 },
@@ -158,58 +158,18 @@ const GraphScreen = forwardRef((props, ref) => {
           { day: "Fr", hours: 0 },
           { day: "Sa", hours: 0 },
           { day: "Su", hours: 0 },
-        ]))
-        
+        ]
+
         for (const sleep of rows._array){
           // console.log(sleep)
           const dateObj = new Date(sleep.t0)
 
-          // recursiveStateUpdate
-
-          if (dateObj.getDay() == 1) {
-            setGraphData(prevState => {
-              let newState = prevState
-              newState[0].hours += Math.round((((sleep.tn -sleep.t0) / 3600000) * 10) / 10)
-              return newState
-            })
-          } else if (dateObj.getDay() == 2) {
-            setGraphData(prevState => {
-              let newState = prevState
-              newState[1].hours += Math.round((((sleep.tn -sleep.t0) / 3600000) * 10) / 10)
-              return newState
-            })
-          } else if (dateObj.getDay() == 3) {
-            setGraphData(prevState => {
-              let newState = prevState
-              newState[2].hours += Math.round((((sleep.tn -sleep.t0) / 3600000) * 10) / 10)
-              return newState
-            })
-          } else if (dateObj.getDay() == 4) {
-            setGraphData(prevState => {
-              let newState = prevState
-              newState[3].hours += Math.round((((sleep.tn -sleep.t0) / 3600000) * 10) / 10)
-              return newState
-            })
-          } else if (dateObj.getDay() == 6) {
-            setGraphData(prevState => {
-              let newState = prevState
-              newState[4].hours += Math.round((((sleep.tn -sleep.t0) / 3600000) * 10) / 10)
-              return newState
-            })
-          } else if (dateObj.getDay() == 6) {
-            setGraphData(prevState => {
-              let newState = prevState
-              newState[5].hours += Math.round((((sleep.tn -sleep.t0) / 3600000) * 10) / 10)
-              return newState
-            })
-          } else if (dateObj.getDay() == 0) {
-            setGraphData(prevState => {
-              let newState = prevState
-              newState[6].hours += Math.round((((sleep.tn -sleep.t0) / 3600000) * 10) / 10)
-              return newState
-            })
-          }
+          // INSTEAD OF CALLING SETSTAE A BILLION TIMES< JUST MAKE THE OBJECT WITH FOR LOOP AND CALL SETSTATE ONCE
+          const dayJS = dateObj.getDay()
+          graphDataObj[dayJS - 1].hours += Math.round((((sleep.tn -sleep.t0) / 3600000) * 10)) / 10
         }
+        console.log(graphDataObj)
+        setGraphData(graphDataObj)
       })
     })
 
@@ -292,7 +252,7 @@ const GraphScreen = forwardRef((props, ref) => {
         </View>
 
         {/* <TouchableOpacity onPress={() => {logState()}}><Text>CALL</Text></TouchableOpacity> */}
-        <Text>{graphData[0].hours} {graphData[1].hours} {graphData[2].hours} {graphData[3].hours}</Text>
+        {/* <Text>{graphData[0].hours} {graphData[1].hours} {graphData[2].hours} {graphData[3].hours}</Text> */}
         {/* <TouchableOpacity onPress={() => {deleteDb()}}><Text>DEL</Text></TouchableOpacity> */}
 
       </View>
