@@ -197,11 +197,6 @@ const InputScreen = ({calRef, setRefresh, navigation}) => {
     const newtnString = 
       `${endDayString} ${endHourString}:${endMinString}${endAMPMString} [${endDateString}]` 
 
-    console.log(newt0String, newtnString)
-    console.log(newt0, newtn)
-    console.log(newHours, newMin)
-    console.log(week)
-
     console.log("INSERT Sleeps")
     console.log(newt0, newtn, newt0String, newtnString, newHours, newMin, week)
 
@@ -313,6 +308,20 @@ const InputScreen = ({calRef, setRefresh, navigation}) => {
       let monthString = (month < 10) ? ("0" + month.toString()) : month.toString()
   
       setT0String("T(0) : "+hourString+":"+minString+AMPMString+" ["+dateString+"/"+monthString+"]" )
+
+      // CHECK START DATE
+      let newt0 = startDate.getTime()
+      db.transaction((tx) => {
+          tx.executeSql(`SELECT * FROM Sleeps WHERE t0=?`, [newt0], (_, { rows }) => {
+            if (rows._array.length != 0) {
+              alert("T(0) already exists in database")
+              navigation.navigate("Input", {screen: "Start"})
+            }
+          }, (_, err) => {
+            console.log("SELECT SLEEPS ERROR", err)
+          }
+        )
+      })
     }
   }
 
