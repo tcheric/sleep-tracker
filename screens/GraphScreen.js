@@ -5,7 +5,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as weekStrings from '../asset/weekStrings.json';
 import { useFocusEffect } from '@react-navigation/native';
 import Graph from "../components/Graph";
-import GraphSVG from "../components/GraphSVG";
 
 const db = SQLite.openDatabase("db.db");
 const GraphScreen = forwardRef((props, ref) => {
@@ -19,11 +18,10 @@ const GraphScreen = forwardRef((props, ref) => {
     { day: "Sa", hours: 0 },
     { day: "Su", hours: 0 },
   ])
-  const [t0ByDay, setT0ByDay] = useState({mon:0, tue:0, wed:0, thu:0, fri:0, sat:0, sun:0})
-  const [avgHr, setAvgHr] = useState("X HR ")
-  const [avgMin, setAvgMin] = useState("XX MIN")
-  const [totalHr, setTotalHr] = useState("X HR ")
-  const [totalMin, setTotalMin] = useState("XX MIN")
+  const [avgHr, setAvgHr] = useState("Z HR ")
+  const [avgMin, setAvgMin] = useState("ZZ MIN")
+  const [totalHr, setTotalHr] = useState("Z HR ")
+  const [totalMin, setTotalMin] = useState("ZZ MIN")
   const [wkString, setWkString] = useState("")
   const [wk, setWk] = useState(()=>{
     // Calculate curent week

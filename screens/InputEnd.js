@@ -81,7 +81,7 @@ const InputEnd = forwardRef((props, ref) => {
     if (hour < 10 && hour > -1) {
       return "0" + hour
     } else if (hour == -1) {
-      return "XX" 
+      return "ZZ" 
     } else {
       return hour.toString()
     }
@@ -91,7 +91,7 @@ const InputEnd = forwardRef((props, ref) => {
     if (minute < 10 && minute > -1) {
       return "0" + minute
     } else if (minute == -1) {
-      return "XX" 
+      return "ZZ" 
     } else {
       return minute.toString()
     }
