@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Sleep Logger",
-    "slug": "sleep-logger",
+    "name": "Z Sleep Tracker",
+    "slug": "z-sleep-tracker",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,11 +21,12 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.sleepyguy.zsleeptracker",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#000000"
-      },
-      "package": "com.tcheric.sleeplogger"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
