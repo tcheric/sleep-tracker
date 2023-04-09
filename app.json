@@ -1,10 +1,11 @@
 {
   "expo": {
+    "owner": "tcheric",
     "name": "Z Sleep Tracker",
     "slug": "z-sleep-tracker",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon-sleep-1024.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -24,12 +25,17 @@
       "package": "com.sleepyguy.zsleeptracker",
       "versionCode": 1,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#000000"
+        "foregroundImage": "./assets/adaptive-sleep-1024.png",
+        "backgroundColor": "#eeeeee"
       }
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b3f3b94a-b742-497b-a7bd-736c5e49f99d"
+      }
     }
   }
 }

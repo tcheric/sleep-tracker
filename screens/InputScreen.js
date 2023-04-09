@@ -362,7 +362,7 @@ const InputScreen = ({calRef, setRefresh, navigation}) => {
       <Stack.Screen
         name="Start"
         options={{
-          title: "T(0)",
+          title: "SLEEP START",
           headerStyle: {
             backgroundColor: 'rgb(25,25,25)',
             height: 100,
@@ -386,7 +386,7 @@ const InputScreen = ({calRef, setRefresh, navigation}) => {
       <Stack.Screen
         name="End"
         options={{
-          title: "T(N)",
+          title: "SlEEP END",
           headerStyle: {
             backgroundColor: 'rgb(25,25,25)',
             height: 100,
