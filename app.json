@@ -5,7 +5,7 @@
     "slug": "z-sleep-tracker",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon-sleep-1024.png",
+    "icon": "./assets/zoomed-icon-1024.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -25,7 +25,7 @@
       "package": "com.sleepyguy.zsleeptracker",
       "versionCode": 1,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-sleep-1024.png",
+        "foregroundImage": "./assets/adaptive-icon-1024.png",
         "backgroundColor": "#eeeeee"
       }
     },

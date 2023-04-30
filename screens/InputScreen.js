@@ -307,7 +307,7 @@ const InputScreen = ({calRef, setRefresh, navigation}) => {
       let dateString = (date < 10) ? ("0" + date.toString()) : date.toString()
       let monthString = (month < 10) ? ("0" + month.toString()) : month.toString()
   
-      setT0String("T(0) : "+hourString+":"+minString+AMPMString+" ["+dateString+"/"+monthString+"]" )
+      setT0String("Start Time : "+hourString+":"+minString+AMPMString+" ["+dateString+"/"+monthString+"]" )
 
       // CHECK START DATE
       let newt0 = startDate.getTime()
@@ -368,7 +368,7 @@ const InputScreen = ({calRef, setRefresh, navigation}) => {
             height: 100,
           },
           headerTitleStyle: {
-            fontSize: 20,
+            fontSize: 19,
             color: 'white',
           },
           headerRight: () => (
@@ -386,13 +386,13 @@ const InputScreen = ({calRef, setRefresh, navigation}) => {
       <Stack.Screen
         name="End"
         options={{
-          title: "SlEEP END",
+          title: "SLEEP END",
           headerStyle: {
             backgroundColor: 'rgb(25,25,25)',
             height: 100,
           },
           headerTitleStyle: {
-            fontSize: 18,
+            fontSize: 19,
             color: 'white',
           },
           headerLeft: () => (

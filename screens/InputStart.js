@@ -549,296 +549,298 @@ const InputStart = forwardRef((props, ref) => {
 
   return (
     <Animated.View style={styles.container}>
-      <View style={styles.redLine}></View>
-{/* DATE */}
-      <View style={styles.dateContainer}>
-        <TouchableOpacity 
-          style={styles.icons} 
-          onPress={() => {
-            if (dayOffset <= 6) {
-              setDayOffset(dayOffset + 1)
-            }
-          }}>
-          <Ionicons name="chevron-back-outline" 
-            size={20} 
-            color={(dayOffset > 6) ? "rgb(50,50,50)" : "red"}/>
-        </TouchableOpacity >
-        <Text style={styles.date}>{getSelectedDate()}</Text>
-        <TouchableOpacity 
-          style={styles.icons} 
-          onPress={() => {
-            if (dayOffset !== 0) {
-              setDayOffset(dayOffset - 1)
-            }
-          }}>
-          <Ionicons name="chevron-forward-outline" 
-            size={20} 
-            color={(dayOffset === 0) ? "rgb(150,150,150)" : "red"}/>
-        </TouchableOpacity >
-      </View>
-{/* CLOCK */}
-      <View style={styles.outerClockContainer}> 
-        <View style={styles.innerClockContainer}> 
-{/* HOURS */}
-          <Animated.View style={[{
-              transform: [{ translateX: prObj.pans[11].x }, { translateY: prObj.pans[11].y }],
-              top: "0%",
-              left: "50%",
-            }, overwriteStyle]} {...pr11.panHandlers}>
-            <View style={[styles.hour, {backgroundColor: (hour == 12) ? "red" : hourColor}]}></View>
-          </Animated.View>
-          <TouchableOpacity style={[styles.twelve, overwriteStyleUnder]}>
-            <View style={styles.hourUnder}></View>
-          </TouchableOpacity>
-
-          <Animated.View style={[{
-              transform: [{ translateX: prObj.pans[0].x }, { translateY: prObj.pans[0].y }],
-              top: "6.7%",
-              left: "75%",
-            }, overwriteStyle]} {...pr0.panHandlers}>
-            <View style={[styles.hour, {backgroundColor: (hour == 1) ? "red" : hourColor}]}></View>
-          </Animated.View>
-          <TouchableOpacity style={[styles.one, overwriteStyleUnder]}>
-            <View style={styles.hourUnder}></View>
-          </TouchableOpacity>
-
-          <Animated.View style={[{
-              transform: [{ translateX: prObj.pans[1].x }, { translateY: prObj.pans[1].y }],
-              top: "25%",
-              left: "93.3%",
-            }, overwriteStyle]} {...pr1.panHandlers}>
-            <View style={[styles.hour, {backgroundColor: (hour == 2) ? "red" : hourColor}]}></View>
-          </Animated.View>
-          <TouchableOpacity style={[styles.two, overwriteStyleUnder]}>
-            <View style={styles.hourUnder}></View>
-          </TouchableOpacity>
-
-          <Animated.View style={[{
-              transform: [{ translateX: prObj.pans[2].x }, { translateY: prObj.pans[2].y }],
-              top: "50%",
-              left: "100%",
-            }, overwriteStyle]} {...pr2.panHandlers}>
-            <View style={[styles.hour, {backgroundColor: (hour == 3) ? "red" : hourColor}]}></View>
-          </Animated.View>
-          <TouchableOpacity style={[styles.three, overwriteStyleUnder]}>
-            <View style={styles.hourUnder}></View>
-          </TouchableOpacity>
-
-          <Animated.View style={[{
-              transform: [{ translateX: prObj.pans[3].x }, { translateY: prObj.pans[3].y }],
-              top: "75%",
-              left: "93.3%",
-            }, overwriteStyle]} {...pr3.panHandlers}>
-            <View style={[styles.hour, {backgroundColor: (hour == 4) ? "red" : hourColor}]}></View>
-          </Animated.View>
-          <TouchableOpacity style={[styles.four, overwriteStyleUnder]}>
-            <View style={styles.hourUnder}></View>
-          </TouchableOpacity>
-
-          <Animated.View style={[{
-              transform: [{ translateX: prObj.pans[4].x }, { translateY: prObj.pans[4].y }],
-              top: "93.3%",
-              left: "75%",
-            }, overwriteStyle]} {...pr4.panHandlers}>
-            <View style={[styles.hour, {backgroundColor: (hour == 5) ? "red" : hourColor}]}></View>
-          </Animated.View>
-          <TouchableOpacity style={[styles.five, overwriteStyleUnder]}>
-            <View style={styles.hourUnder}></View>
-          </TouchableOpacity>
-
-          <Animated.View style={[{
-              transform: [{ translateX: prObj.pans[5].x }, { translateY: prObj.pans[5].y }],
-              top: "100%",
-              left: "50%",
-            }, overwriteStyle]} {...pr5.panHandlers}>
-            <View style={[styles.hour, {backgroundColor: (hour == 6) ? "red" : hourColor}]}></View>
-          </Animated.View>
-          <TouchableOpacity style={[styles.six, overwriteStyleUnder]}>
-            <View style={styles.hourUnder}></View>
-          </TouchableOpacity>
-
-          <Animated.View style={[{
-              transform: [{ translateX: prObj.pans[6].x }, { translateY: prObj.pans[6].y }],
-              top: "93.3%",
-              left: "25%",
-            }, overwriteStyle]} {...pr6.panHandlers}>
-            <View style={[styles.hour, {backgroundColor: (hour == 7) ? "red" : hourColor}]}></View>
-          </Animated.View>
-          <TouchableOpacity style={[styles.seven, overwriteStyleUnder]}>
-            <View style={styles.hourUnder}></View>
-          </TouchableOpacity>
-
-          <Animated.View style={[{
-              transform: [{ translateX: prObj.pans[7].x }, { translateY: prObj.pans[7].y }],
-              top: "75%",
-              left: "6.7%",
-            }, overwriteStyle]} {...pr7.panHandlers}>
-            <View style={[styles.hour, {backgroundColor: (hour == 8) ? "red" : hourColor}]}></View>
-          </Animated.View>
-
-          <TouchableOpacity style={[styles.eight, overwriteStyleUnder]}>
-            <View style={styles.hourUnder}></View>
-          </TouchableOpacity>
-          <Animated.View style={[{
-              transform: [{ translateX: prObj.pans[8].x }, { translateY: prObj.pans[8].y }],
-              top: "50%",
-              left: "0%",
-            }, overwriteStyle]} {...pr8.panHandlers}>
-            <View style={[styles.hour, {backgroundColor: (hour == 9) ? "red" : hourColor}]}></View>
-          </Animated.View>
-          <TouchableOpacity style={[styles.nine, overwriteStyleUnder]}>
-            <View style={styles.hourUnder}></View>
-          </TouchableOpacity>
-
-          <Animated.View style={[{
-              transform: [{ translateX: prObj.pans[9].x }, { translateY: prObj.pans[9].y }],
-              top: "25%",
-              left: "6.7%",
-            }, overwriteStyle]} {...pr9.panHandlers}>
-            <View style={[styles.hour, {backgroundColor: (hour == 10) ? "red" : hourColor}]}></View>
-          </Animated.View>
-          <TouchableOpacity style={[styles.ten, overwriteStyleUnder]}>
-            <View style={styles.hourUnder}></View>
-          </TouchableOpacity>
-
-          <Animated.View style={[{
-              transform: [{ translateX: prObj.pans[10].x }, { translateY: prObj.pans[10].y }],
-              top: "6.7%",
-              left: "25%",
-            }, overwriteStyle]} {...pr10.panHandlers}>
-            <View style={[styles.hour, {backgroundColor: (hour == 11) ? "red" : hourColor}]}></View>
-          </Animated.View>
-          <TouchableOpacity style={[styles.eleven, overwriteStyleUnder]}>
-            <View style={styles.hourUnder}></View>
-          </TouchableOpacity>
-
-          {/* <Text style={styles.text}>AM / PM</Text> */}
-          <Text style={styles.text}>{displayHour() + " : " + displayMin()}</Text>
+      <Animated.View style={styles.fixedWidthContainer}>
+        <View style={styles.redLine}></View>
+  {/* DATE */}
+        <View style={styles.dateContainer}>
+          <TouchableOpacity 
+            style={styles.icons} 
+            onPress={() => {
+              if (dayOffset <= 6) {
+                setDayOffset(dayOffset + 1)
+              }
+            }}>
+            <Ionicons name="chevron-back-outline" 
+              size={20} 
+              color={(dayOffset > 6) ? "rgb(50,50,50)" : "red"}/>
+          </TouchableOpacity >
+          <Text style={styles.date}>{getSelectedDate()}</Text>
+          <TouchableOpacity 
+            style={styles.icons} 
+            onPress={() => {
+              if (dayOffset !== 0) {
+                setDayOffset(dayOffset - 1)
+              }
+            }}>
+            <Ionicons name="chevron-forward-outline" 
+              size={20} 
+              color={(dayOffset === 0) ? "rgb(150,150,150)" : "red"}/>
+          </TouchableOpacity >
         </View>
+  {/* CLOCK */}
+        <View style={styles.outerClockContainer}> 
+          <View style={styles.innerClockContainer}> 
+  {/* HOURS */}
+            <Animated.View style={[{
+                transform: [{ translateX: prObj.pans[11].x }, { translateY: prObj.pans[11].y }],
+                top: "0%",
+                left: "50%",
+              }, overwriteStyle]} {...pr11.panHandlers}>
+              <View style={[styles.hour, {backgroundColor: (hour == 12) ? "red" : hourColor}]}></View>
+            </Animated.View>
+            <TouchableOpacity style={[styles.twelve, overwriteStyleUnder]}>
+              <View style={styles.hourUnder}></View>
+            </TouchableOpacity>
 
-{/* MINUTES */}
-        <TouchableOpacity style={[styles.minute, styles.twelve]} onLayout={event => {
-          const layout = event.nativeEvent.layout;
-           dropZoneObj.dropZone00.xOffset = layout.x
-           dropZoneObj.dropZone00.yOffset = layout.y
-        }} >
-            <Text style={{ color: (minute == 0) ? "red" : "white"}}>00</Text>
-            {/* <Text style={{ color: (minute == 0) ? "white" : "red"}}>00</Text> */}
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.minute, styles.one]} onLayout={event => {
-          const layout = event.nativeEvent.layout;
-           dropZoneObj.dropZone05.xOffset = layout.x
-           dropZoneObj.dropZone05.yOffset = layout.y
-        }} >
-            <Text style={{color: (minute == 5) ? "red" : "white"}}>05</Text>
-            {/* <Text style={{color: (minute == 5) ? "white" : "red"}}>05</Text> */}
-        </TouchableOpacity> 
-        <TouchableOpacity style={[styles.minute, styles.two]} onLayout={event => {
-          const layout = event.nativeEvent.layout;
-           dropZoneObj.dropZone10.xOffset = layout.x
-           dropZoneObj.dropZone10.yOffset = layout.y
-        }} >
-            <Text style={{color: (minute == 10) ? "red" : "white"}}>10</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.minute, styles.three]} onLayout={event => {
-          const layout = event.nativeEvent.layout;
-           dropZoneObj.dropZone15.xOffset = layout.x
-           dropZoneObj.dropZone15.yOffset = layout.y
-        }} > 
-          <Text style={{color: (minute == 15) ? "red" : "white"}}>15</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.minute, styles.four]} onLayout={event => {
-          const layout = event.nativeEvent.layout;
-           dropZoneObj.dropZone20.xOffset = layout.x
-           dropZoneObj.dropZone20.yOffset = layout.y
-        }} >  
-          <Text style={{color: (minute == 20) ? "red" : "white"}}>20</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.minute, styles.five]} onLayout={event => {
-          const layout = event.nativeEvent.layout;
-           dropZoneObj.dropZone25.xOffset = layout.x
-           dropZoneObj.dropZone25.yOffset = layout.y
-        }} >  
-         <Text style={{color: (minute == 25) ? "red" : "white"}}>25</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.minute, styles.six]} onLayout={event => {
-          const layout = event.nativeEvent.layout;
-           dropZoneObj.dropZone30.xOffset = layout.x
-           dropZoneObj.dropZone30.yOffset = layout.y
-        }} >  
-          <Text style={{color: (minute == 30) ? "red" : "white"}}>30</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.minute, styles.seven]} onLayout={event => {
-          const layout = event.nativeEvent.layout;
-           dropZoneObj.dropZone35.xOffset = layout.x
-           dropZoneObj.dropZone35.yOffset = layout.y
-        }} >  
-          <Text style={{color: (minute == 35) ? "red" : "white"}}>35</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.minute, styles.eight]} onLayout={event => {
-          const layout = event.nativeEvent.layout;
-           dropZoneObj.dropZone40.xOffset = layout.x
-           dropZoneObj.dropZone40.yOffset = layout.y
-        }} >  
-          <Text style={{color: (minute == 40) ? "red" : "white"}}>40</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.minute, styles.nine]} onLayout={event => {
-          const layout = event.nativeEvent.layout;
-           dropZoneObj.dropZone45.xOffset = layout.x
-           dropZoneObj.dropZone45.yOffset = layout.y
-        }} >  
-          <Text style={{color: (minute == 45) ? "red" : "white"}}>45</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.minute, styles.ten]} onLayout={event => {
-          const layout = event.nativeEvent.layout;
-           dropZoneObj.dropZone50.xOffset = layout.x
-           dropZoneObj.dropZone50.yOffset = layout.y
-        }} >  
-          <Text style={{color: (minute == 50) ? "red" : "white"}}>50</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.minute, styles.eleven]} onLayout={event => {
-          const layout = event.nativeEvent.layout;
-           dropZoneObj.dropZone55.xOffset = layout.x
-           dropZoneObj.dropZone55.yOffset = layout.y
-        }} >  
-          <Text style={{color: (minute == 55) ? "red" : "white"}}>55</Text>
-        </TouchableOpacity>
-        <View style={styles.minuteCircle}/>
-        <View style={styles.northBar}/>
-        <View style={styles.eastBar}/>
-        <View style={styles.southBar}/>
-        <View style={styles.westBar}/>
-      </View>
-{/* AM / PM */}
-      <View style={styles.AMPMContainer}>
-        <TouchableOpacity 
-          style={styles.icons} 
-          onPress={() => {
-            if (AMPM == "AM") {
-              setAMPM("PM")
-            } else {
-              setAMPM("AM")
-            }
-          }}>
-          <Ionicons name="chevron-back-outline" 
-            size={20} 
-            color={"red"}/>
-        </TouchableOpacity >
-        <Text style={styles.date}>{AMPM}</Text>
-        <TouchableOpacity 
-          style={styles.icons} 
-          onPress={() => {
-            if (AMPM == "AM") {
-              setAMPM("PM")
-            } else {
-              setAMPM("AM")
-            }
-          }}>
-          <Ionicons name="chevron-forward-outline" 
-            size={20} 
-            color={"red"}/>
-        </TouchableOpacity >
-      </View>
+            <Animated.View style={[{
+                transform: [{ translateX: prObj.pans[0].x }, { translateY: prObj.pans[0].y }],
+                top: "6.7%",
+                left: "75%",
+              }, overwriteStyle]} {...pr0.panHandlers}>
+              <View style={[styles.hour, {backgroundColor: (hour == 1) ? "red" : hourColor}]}></View>
+            </Animated.View>
+            <TouchableOpacity style={[styles.one, overwriteStyleUnder]}>
+              <View style={styles.hourUnder}></View>
+            </TouchableOpacity>
+
+            <Animated.View style={[{
+                transform: [{ translateX: prObj.pans[1].x }, { translateY: prObj.pans[1].y }],
+                top: "25%",
+                left: "93.3%",
+              }, overwriteStyle]} {...pr1.panHandlers}>
+              <View style={[styles.hour, {backgroundColor: (hour == 2) ? "red" : hourColor}]}></View>
+            </Animated.View>
+            <TouchableOpacity style={[styles.two, overwriteStyleUnder]}>
+              <View style={styles.hourUnder}></View>
+            </TouchableOpacity>
+
+            <Animated.View style={[{
+                transform: [{ translateX: prObj.pans[2].x }, { translateY: prObj.pans[2].y }],
+                top: "50%",
+                left: "100%",
+              }, overwriteStyle]} {...pr2.panHandlers}>
+              <View style={[styles.hour, {backgroundColor: (hour == 3) ? "red" : hourColor}]}></View>
+            </Animated.View>
+            <TouchableOpacity style={[styles.three, overwriteStyleUnder]}>
+              <View style={styles.hourUnder}></View>
+            </TouchableOpacity>
+
+            <Animated.View style={[{
+                transform: [{ translateX: prObj.pans[3].x }, { translateY: prObj.pans[3].y }],
+                top: "75%",
+                left: "93.3%",
+              }, overwriteStyle]} {...pr3.panHandlers}>
+              <View style={[styles.hour, {backgroundColor: (hour == 4) ? "red" : hourColor}]}></View>
+            </Animated.View>
+            <TouchableOpacity style={[styles.four, overwriteStyleUnder]}>
+              <View style={styles.hourUnder}></View>
+            </TouchableOpacity>
+
+            <Animated.View style={[{
+                transform: [{ translateX: prObj.pans[4].x }, { translateY: prObj.pans[4].y }],
+                top: "93.3%",
+                left: "75%",
+              }, overwriteStyle]} {...pr4.panHandlers}>
+              <View style={[styles.hour, {backgroundColor: (hour == 5) ? "red" : hourColor}]}></View>
+            </Animated.View>
+            <TouchableOpacity style={[styles.five, overwriteStyleUnder]}>
+              <View style={styles.hourUnder}></View>
+            </TouchableOpacity>
+
+            <Animated.View style={[{
+                transform: [{ translateX: prObj.pans[5].x }, { translateY: prObj.pans[5].y }],
+                top: "100%",
+                left: "50%",
+              }, overwriteStyle]} {...pr5.panHandlers}>
+              <View style={[styles.hour, {backgroundColor: (hour == 6) ? "red" : hourColor}]}></View>
+            </Animated.View>
+            <TouchableOpacity style={[styles.six, overwriteStyleUnder]}>
+              <View style={styles.hourUnder}></View>
+            </TouchableOpacity>
+
+            <Animated.View style={[{
+                transform: [{ translateX: prObj.pans[6].x }, { translateY: prObj.pans[6].y }],
+                top: "93.3%",
+                left: "25%",
+              }, overwriteStyle]} {...pr6.panHandlers}>
+              <View style={[styles.hour, {backgroundColor: (hour == 7) ? "red" : hourColor}]}></View>
+            </Animated.View>
+            <TouchableOpacity style={[styles.seven, overwriteStyleUnder]}>
+              <View style={styles.hourUnder}></View>
+            </TouchableOpacity>
+
+            <Animated.View style={[{
+                transform: [{ translateX: prObj.pans[7].x }, { translateY: prObj.pans[7].y }],
+                top: "75%",
+                left: "6.7%",
+              }, overwriteStyle]} {...pr7.panHandlers}>
+              <View style={[styles.hour, {backgroundColor: (hour == 8) ? "red" : hourColor}]}></View>
+            </Animated.View>
+
+            <TouchableOpacity style={[styles.eight, overwriteStyleUnder]}>
+              <View style={styles.hourUnder}></View>
+            </TouchableOpacity>
+            <Animated.View style={[{
+                transform: [{ translateX: prObj.pans[8].x }, { translateY: prObj.pans[8].y }],
+                top: "50%",
+                left: "0%",
+              }, overwriteStyle]} {...pr8.panHandlers}>
+              <View style={[styles.hour, {backgroundColor: (hour == 9) ? "red" : hourColor}]}></View>
+            </Animated.View>
+            <TouchableOpacity style={[styles.nine, overwriteStyleUnder]}>
+              <View style={styles.hourUnder}></View>
+            </TouchableOpacity>
+
+            <Animated.View style={[{
+                transform: [{ translateX: prObj.pans[9].x }, { translateY: prObj.pans[9].y }],
+                top: "25%",
+                left: "6.7%",
+              }, overwriteStyle]} {...pr9.panHandlers}>
+              <View style={[styles.hour, {backgroundColor: (hour == 10) ? "red" : hourColor}]}></View>
+            </Animated.View>
+            <TouchableOpacity style={[styles.ten, overwriteStyleUnder]}>
+              <View style={styles.hourUnder}></View>
+            </TouchableOpacity>
+
+            <Animated.View style={[{
+                transform: [{ translateX: prObj.pans[10].x }, { translateY: prObj.pans[10].y }],
+                top: "6.7%",
+                left: "25%",
+              }, overwriteStyle]} {...pr10.panHandlers}>
+              <View style={[styles.hour, {backgroundColor: (hour == 11) ? "red" : hourColor}]}></View>
+            </Animated.View>
+            <TouchableOpacity style={[styles.eleven, overwriteStyleUnder]}>
+              <View style={styles.hourUnder}></View>
+            </TouchableOpacity>
+
+            {/* <Text style={styles.text}>AM / PM</Text> */}
+            <Text style={styles.text}>{displayHour() + " : " + displayMin()}</Text>
+          </View>
+
+  {/* MINUTES */}
+          <TouchableOpacity style={[styles.minute, styles.twelve]} onLayout={event => {
+            const layout = event.nativeEvent.layout;
+            dropZoneObj.dropZone00.xOffset = layout.x
+            dropZoneObj.dropZone00.yOffset = layout.y
+          }} >
+              <Text style={{ color: (minute == 0) ? "red" : "white"}}>00</Text>
+              {/* <Text style={{ color: (minute == 0) ? "white" : "red"}}>00</Text> */}
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.minute, styles.one]} onLayout={event => {
+            const layout = event.nativeEvent.layout;
+            dropZoneObj.dropZone05.xOffset = layout.x
+            dropZoneObj.dropZone05.yOffset = layout.y
+          }} >
+              <Text style={{color: (minute == 5) ? "red" : "white"}}>05</Text>
+              {/* <Text style={{color: (minute == 5) ? "white" : "red"}}>05</Text> */}
+          </TouchableOpacity> 
+          <TouchableOpacity style={[styles.minute, styles.two]} onLayout={event => {
+            const layout = event.nativeEvent.layout;
+            dropZoneObj.dropZone10.xOffset = layout.x
+            dropZoneObj.dropZone10.yOffset = layout.y
+          }} >
+              <Text style={{color: (minute == 10) ? "red" : "white"}}>10</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.minute, styles.three]} onLayout={event => {
+            const layout = event.nativeEvent.layout;
+            dropZoneObj.dropZone15.xOffset = layout.x
+            dropZoneObj.dropZone15.yOffset = layout.y
+          }} > 
+            <Text style={{color: (minute == 15) ? "red" : "white"}}>15</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.minute, styles.four]} onLayout={event => {
+            const layout = event.nativeEvent.layout;
+            dropZoneObj.dropZone20.xOffset = layout.x
+            dropZoneObj.dropZone20.yOffset = layout.y
+          }} >  
+            <Text style={{color: (minute == 20) ? "red" : "white"}}>20</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.minute, styles.five]} onLayout={event => {
+            const layout = event.nativeEvent.layout;
+            dropZoneObj.dropZone25.xOffset = layout.x
+            dropZoneObj.dropZone25.yOffset = layout.y
+          }} >  
+          <Text style={{color: (minute == 25) ? "red" : "white"}}>25</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.minute, styles.six]} onLayout={event => {
+            const layout = event.nativeEvent.layout;
+            dropZoneObj.dropZone30.xOffset = layout.x
+            dropZoneObj.dropZone30.yOffset = layout.y
+          }} >  
+            <Text style={{color: (minute == 30) ? "red" : "white"}}>30</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.minute, styles.seven]} onLayout={event => {
+            const layout = event.nativeEvent.layout;
+            dropZoneObj.dropZone35.xOffset = layout.x
+            dropZoneObj.dropZone35.yOffset = layout.y
+          }} >  
+            <Text style={{color: (minute == 35) ? "red" : "white"}}>35</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.minute, styles.eight]} onLayout={event => {
+            const layout = event.nativeEvent.layout;
+            dropZoneObj.dropZone40.xOffset = layout.x
+            dropZoneObj.dropZone40.yOffset = layout.y
+          }} >  
+            <Text style={{color: (minute == 40) ? "red" : "white"}}>40</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.minute, styles.nine]} onLayout={event => {
+            const layout = event.nativeEvent.layout;
+            dropZoneObj.dropZone45.xOffset = layout.x
+            dropZoneObj.dropZone45.yOffset = layout.y
+          }} >  
+            <Text style={{color: (minute == 45) ? "red" : "white"}}>45</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.minute, styles.ten]} onLayout={event => {
+            const layout = event.nativeEvent.layout;
+            dropZoneObj.dropZone50.xOffset = layout.x
+            dropZoneObj.dropZone50.yOffset = layout.y
+          }} >  
+            <Text style={{color: (minute == 50) ? "red" : "white"}}>50</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.minute, styles.eleven]} onLayout={event => {
+            const layout = event.nativeEvent.layout;
+            dropZoneObj.dropZone55.xOffset = layout.x
+            dropZoneObj.dropZone55.yOffset = layout.y
+          }} >  
+            <Text style={{color: (minute == 55) ? "red" : "white"}}>55</Text>
+          </TouchableOpacity>
+          <View style={styles.minuteCircle}/>
+          <View style={styles.northBar}/>
+          <View style={styles.eastBar}/>
+          <View style={styles.southBar}/>
+          <View style={styles.westBar}/>
+        </View>
+  {/* AM / PM */}
+        <View style={styles.AMPMContainer}>
+          <TouchableOpacity 
+            style={styles.icons} 
+            onPress={() => {
+              if (AMPM == "AM") {
+                setAMPM("PM")
+              } else {
+                setAMPM("AM")
+              }
+            }}>
+            <Ionicons name="chevron-back-outline" 
+              size={20} 
+              color={"red"}/>
+          </TouchableOpacity >
+          <Text style={styles.date}>{AMPM}</Text>
+          <TouchableOpacity 
+            style={styles.icons} 
+            onPress={() => {
+              if (AMPM == "AM") {
+                setAMPM("PM")
+              } else {
+                setAMPM("AM")
+              }
+            }}>
+            <Ionicons name="chevron-forward-outline" 
+              size={20} 
+              color={"red"}/>
+          </TouchableOpacity >
+        </View>
+      </Animated.View>
     </Animated.View>
   )
 })
@@ -849,7 +851,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     alignItems: 'center',
     justifyContent: 'center',
-    
+  },
+  fixedWidthContainer: {
+    flex: 1,
+    backgroundColor: "black",
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 360,
   },
   text: {
     color: 'rgb(220,220,220)',
