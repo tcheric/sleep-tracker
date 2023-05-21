@@ -307,7 +307,7 @@ const InputScreen = ({calRef, setRefresh, navigation}) => {
       let dateString = (date < 10) ? ("0" + date.toString()) : date.toString()
       let monthString = (month < 10) ? ("0" + month.toString()) : month.toString()
   
-      setT0String("Start Time : "+hourString+":"+minString+AMPMString+" ["+dateString+"/"+monthString+"]" )
+      setT0String("Start Time: "+hourString+":"+minString+AMPMString+" ["+dateString+"/"+monthString+"]" )
 
       // CHECK START DATE
       let newt0 = startDate.getTime()

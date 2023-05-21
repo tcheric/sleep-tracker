@@ -185,7 +185,7 @@ const CalendarScreen = forwardRef((props, ref) => {
       <ActivityIndicator style={styles.Rspinner} size="large" color={showSpinner} />
 
       <ScrollView style={styles.container} contentContainerStyle={styles.scroll}>
-{/* DATE CONTAINER */}
+  {/* DATE CONTAINER */}
         <View style={styles.dateContainer}>
           <TouchableOpacity 
             style={styles.icons} 
@@ -203,7 +203,7 @@ const CalendarScreen = forwardRef((props, ref) => {
               color={(wk == getCurrWeek()) ? "rgb(50,50,50)" : "red"}/>
           </TouchableOpacity >
         </View>
-{/*TEST ITEMS */}
+  {/*TEST ITEMS */}
         {!items.length && <Text style={styles.text} >NO SLEEPS</Text>}
         {isLoaded && items.map((item, index) => 
           <SleepItem
@@ -234,8 +234,10 @@ const CalendarScreen = forwardRef((props, ref) => {
 const styles = StyleSheet.create({
   containsAll: {
     position: "relative",
-    backgroundColor: "green",
-    flex: 1,
+    backgroundColor: "black",
+    flex: 1, 
+    alignItems: 'center',
+    justifyContent: "center",
   },
   redLine: {
     width: "100%",
@@ -246,6 +248,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'black',
+    width: 354,
   },
   text: {
     color: 'red',

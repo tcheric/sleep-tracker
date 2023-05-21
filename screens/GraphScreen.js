@@ -163,70 +163,78 @@ const GraphScreen = forwardRef((props, ref) => {
   }
     
   return (
-    <View style={styles.containsAll}>
-      <View style={styles.redLine}></View>
-      <ActivityIndicator style={styles.Lspinner} size="large" color={showSpinner} />
-      <ActivityIndicator style={styles.Rspinner} size="large" color={showSpinner} />
+    <View style={styles.blackBg}>
+      <View style={styles.containsAll}>
+        <View style={styles.redLine}></View>
+        <ActivityIndicator style={styles.Lspinner} size="large" color={showSpinner} />
+        <ActivityIndicator style={styles.Rspinner} size="large" color={showSpinner} />
 
-      {/* DATE CONTAINER */}
-      <View style={styles.dateContainer}>
-        <TouchableOpacity 
-          style={styles.icons} 
-          onPress={() => changeWeek("previous")}>
-          <Ionicons name="chevron-back-outline" 
-            size={20} 
-            color={(wk == 0) ? "rgb(50,50,50)" : "red"}/>
-        </TouchableOpacity >
-        <Text style={styles.date}>{wkString}</Text>
-        <TouchableOpacity 
-          style={styles.icons} 
-          onPress={() => changeWeek("next")}>
-          <Ionicons name="chevron-forward-outline" 
-            size={20} 
-            color={(wk == getCurrWeek()) ? "rgb(50,50,50)" : "red"}/>
-        </TouchableOpacity >
-      </View>
-
-      {/* GRAPH CONTAINER */}
-      <View style={styles.graphContainer}>
-        <Graph data={graphData}></Graph>
-        {/* <GraphSVG></GraphSVG> */}
-      </View>
-
-      {/* DATA CONTAINER */}
-      <View style={styles.dataContainer}>
-        <View style={styles.dataTextContainer}>
-          <Text style={styles.dataTextLeft}>TOTAL SLEEP: </Text>
-
-          <View style={styles.rightContainer}>
-            <Text style={styles.rightItemOne}>{totalHr}</Text>
-            <Text style={styles.rightItemTwo}>{totalMin}</Text>
-          </View>
-        </View>
-        <View style={styles.dataTextContainer}>
-          <Text style={styles.dataTextLeft}>WEEK AVERAGE:</Text>
-          <View style={styles.rightContainer}>
-            <Text style={styles.rightItemOne}>{avgHr}</Text>
-            <Text style={styles.rightItemTwo}>{avgMin}</Text>
-          </View>
+        {/* DATE CONTAINER */}
+        <View style={styles.dateContainer}>
+          <TouchableOpacity 
+            style={styles.icons} 
+            onPress={() => changeWeek("previous")}>
+            <Ionicons name="chevron-back-outline" 
+              size={20} 
+              color={(wk == 0) ? "rgb(50,50,50)" : "red"}/>
+          </TouchableOpacity >
+          <Text style={styles.date}>{wkString}</Text>
+          <TouchableOpacity 
+            style={styles.icons} 
+            onPress={() => changeWeek("next")}>
+            <Ionicons name="chevron-forward-outline" 
+              size={20} 
+              color={(wk == getCurrWeek()) ? "rgb(50,50,50)" : "red"}/>
+          </TouchableOpacity >
         </View>
 
+        {/* GRAPH CONTAINER */}
+        <View style={styles.graphContainer}>
+          <Graph data={graphData}></Graph>
+          {/* <GraphSVG></GraphSVG> */}
+        </View>
 
-        {/* <TouchableOpacity onPress={() => {logState()}}><Text>CALL</Text></TouchableOpacity> */}
-        {/* <Text>{graphData[0].hours} {graphData[1].hours} {graphData[2].hours} {graphData[3].hours}</Text> */}
-        {/* <TouchableOpacity onPress={() => {deleteDb()}}><Text>RESET DB</Text></TouchableOpacity> */}
+        {/* DATA CONTAINER */}
+        <View style={styles.dataContainer}>
+          <View style={styles.dataTextContainer}>
+            <Text style={styles.dataTextLeft}>TOTAL SLEEP: </Text>
 
+            <View style={styles.rightContainer}>
+              <Text style={styles.rightItemOne}>{totalHr}</Text>
+              <Text style={styles.rightItemTwo}>{totalMin}</Text>
+            </View>
+          </View>
+          <View style={styles.dataTextContainer}>
+            <Text style={styles.dataTextLeft}>WEEK AVERAGE:</Text>
+            <View style={styles.rightContainer}>
+              <Text style={styles.rightItemOne}>{avgHr}</Text>
+              <Text style={styles.rightItemTwo}>{avgMin}</Text>
+            </View>
+          </View>
+
+
+          {/* <TouchableOpacity onPress={() => {logState()}}><Text>CALL</Text></TouchableOpacity> */}
+          {/* <Text>{graphData[0].hours} {graphData[1].hours} {graphData[2].hours} {graphData[3].hours}</Text> */}
+          {/* <TouchableOpacity onPress={() => {deleteDb()}}><Text>RESET DB</Text></TouchableOpacity> */}
+
+        </View>
       </View>
     </View>
   )
 })
 
 const styles = StyleSheet.create({
+  blackBg: {
+    flex: 1,
+    backgroundColor: "black",
+    alignItems: 'center',
+    justifyContent: "center",
+  },
   containsAll: {
     position: "relative",
     flex: 1,
-    backgroundColor: "rgb(24, 21, 22)",
-    backgroundColor: "black"
+    backgroundColor: "black",
+    width: 354,
   },
 
   graphContainer: {

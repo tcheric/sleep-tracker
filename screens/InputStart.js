@@ -857,7 +857,7 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     alignItems: 'center',
     justifyContent: 'center',
-    width: 360,
+    width: 354,
   },
   text: {
     color: 'rgb(220,220,220)',
