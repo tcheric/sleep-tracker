@@ -4,7 +4,7 @@ Z sleep tracker was an android app to track sleep data. The idea was to make a f
 * An input screen for what times you slept
 * A calendar screen to display weekly sleeps in scrollable list format
 * A graph screen to display weekly sleeps in a fancy graph format
-The app was also black and red so that you wouldn't laser your eyes using the app at night.
+* The app was also black and red so that you wouldn't laser your eyes using the app at night.
 
 
 ![image](https://github.com/tcheric/sleep-tracker/assets/70047300/16c18248-3c84-440a-87ec-c78ee809240c)
